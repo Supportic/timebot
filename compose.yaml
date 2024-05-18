@@ -39,6 +39,8 @@ services:
     platform: linux/amd64
     container_name: ${NGINX_CONTAINER_NAME:-nginx}
     restart: unless-stopped
+    depends_on:
+      - php
     ports:
       - ${NGINX_PORT_HOST:-80}:80
     volumes:
@@ -127,13 +129,16 @@ services:
     user: ${UID:-1000}
     hostname: localhost
     entrypoint: /bin/bash
-    working_dir: ${WORKDIR:-/var/www/app}
+    working_dir: /app
     volumes:
-      - ./app:${WORKDIR:-/var/www/app}
+      - ./app:/app
+      - node_modules:/app/node_modules
 
 volumes:
   dbdata:
     name: ${PROJECT_NAME}_dbdata
+  node_modules:
+    name: ${PROJECT_NAME}_node_modules
 
 networks:
   default:

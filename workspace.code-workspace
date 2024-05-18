@@ -2,13 +2,13 @@
 {
   "folders": [
     {
+      "path": "./app",
+      "name": "App"
+    },
+    {
       "path": ".",
       "name": "Project"
     },
-    {
-      "path": "./app",
-      "name": "App"
-    }
   ],
   "settings": {
     "search.exclude": {

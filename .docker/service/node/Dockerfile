@@ -40,7 +40,7 @@ RUN printf "PS1='\u@\h:\w\$ '" >> "${HOME}/.bashrc" \
 
 RUN npm install -g npm@latest @types/node
 
-WORKDIR /var/www/app
+WORKDIR /app
 RUN mkdir -p node_modules
 COPY --chown="${UID}:${GID}" package*.json .
 COPY --chown="${UID}:${GID}" yarn.lock* .
@@ -50,7 +50,7 @@ FROM base as develop
 ENV NODE_ENV=development
 
 # install modules inside image
-WORKDIR /var/www/app
+WORKDIR /app
 RUN if [ -f "package.json" ]; then npm install; fi
 
 # COPY --chown=${UID}:${GID} app .
@@ -62,7 +62,7 @@ FROM base as prod
 ENV NODE_ENV=production
 
 # install but do not update package-lock
-WORKDIR /var/www/app
+WORKDIR /app
 RUN npm clean-install && npm cache clean --force
 
 # /usr/local/bin/docker-entrypoint.sh

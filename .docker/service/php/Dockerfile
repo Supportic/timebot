@@ -57,12 +57,18 @@ RUN mkdir -p /etc/sudoers.d &&\
 # RUN echo ${UNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${UNAME} &&\
 #   chmod 0440 /etc/sudoers.d/${UNAME}
 
-# RUN sed -i "s/user = www-data/user = ${UNAME}/g" $PHP_INI_DIR/php-fpm.d/www.conf
-# RUN sed -i "s/group = www-data/group = ${GNAME}/g" $PHP_INI_DIR/php-fpm.d/www.conf
+# RUN sed -i "s/user = www-data/user = ${UNAME}/g" /usr/local/etc/php-fpm.d/www.conf
+# RUN sed -i "s/group = www-data/group = ${GNAME}/g" /usr/local/etc/php-fpm.d/www.conf
 
 # install Symfony CLI
 RUN curl -sS https://get.symfony.com/cli/installer | bash
 RUN mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
+
+USER "${UID}"
+
+# shell alias
+RUN printf "PS1='\u@\h:\w\$ '" >> "${HOME}/.bashrc" \
+  && printf "\nalias ll=\"ls -la\"" >> "${HOME}/.bashrc"
 
 FROM base as production
 

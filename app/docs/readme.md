@@ -1,8 +1,12 @@
 # Timebot
 
+## Workflow
+
+1. Fetch data from API
+
 ## 3rd Party Packages
 
-Holidays: https://www.yasumi.dev/docs/getting-started/  
+Holidays: https://www.yasumi.dev/docs/getting-started/
 Google API: https://github.com/googleapis/google-api-php-client
 
 ## Personio API
@@ -27,6 +31,30 @@ List all cache pools (from config/packages/cache.yaml):
 
 Delete cached auth token:  
 `php bin/console cache:pool:delete personio.auth.cache personio.api.auth_token`
+
+## Performance
+
+In order to track performance of certain functions we use the [symfony/stopwatch](https://symfony.com/components/Stopwatch) component. It also works with Twig templates.
+
+The start(), stop() and getEvent() methods return a StopwatchEvent object that provides information about the current event.
+
+https://symfony.com/doc/6.4/performance.html#profiling-with-symfony-stopwatch
+
+```php
+// the argument is the name of the "profiling event"
+$this->stopwatch->start('export-data', 'exporter');
+
+// ...do heavy work...
+
+// reset the stopwatch to delete all the data measured so far
+// $this->stopwatch->reset();
+
+$evt = $this->stopwatch->stop('export-data', 'exporter');
+
+dump($evt->__toString());
+dump((string) $evt);
+dump((string) $this->stopwatch->getEvent('export-data'));
+```
 
 ### fetching the API
 
