@@ -23,7 +23,6 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "TheNouillet.symfony-vscode",
         "nadim-vscode.symfony-code-snippets",
         "bmewburn.vscode-intelephense-client",
         "xdebug.php-debug",
@@ -33,7 +32,7 @@
         "stylelint.vscode-stylelint",
         "syler.sass-indented",
         "mhutchie.git-graph",
-        "ms-azuretools.vscode-docker"
+        "ms-azuretools.vscode-docker",
         "Vue.volar",
         "hollowtree.vue-snippets",
         "dbaeumer.vscode-eslint",
@@ -46,14 +45,13 @@
         "intelephense.telemetry.enabled": false,
         "intelephense.format.enable": true,
 
+        "php.debug.ideKey": "VSCODE",
+
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "[php]": {
           "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
         },
 
-        "symfony-vscode.shellExecutable": "/bin/bash",
-        "symfony-vscode.consolePath": "/usr/local/bin/symfony",
-        "symfony-vscode.phpExecutablePath": "/usr/local/bin/php",
         "files.associations": {
           "**/views/**/*.html": "twig",
           "*.tpl": "twig"
