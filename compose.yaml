@@ -96,9 +96,9 @@ services:
   ########################
   # Mail Receiver
   ########################
-  mailhog:
-    image: mailhog/mailhog:latest
-    container_name: ${MAILHOG_CONTAINER_NAME:-mailhog}
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: ${MAILPIT_CONTAINER_NAME:-mailpit}
     restart: unless-stopped
     logging:
       driver: 'none' # disable saving logs

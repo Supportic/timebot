@@ -16,7 +16,7 @@ shell-node:
 	$(NODE)
 
 start:
-	docker compose up -d nginx php db adminer mailhog
+	docker compose up -d nginx php db adminer mailpit
 stop:
 	docker compose stop
 down:
@@ -28,7 +28,7 @@ install: install-container install-deps
 
 install-container:
 	docker compose build php node adminer || exit 1
-	docker compose up -d nginx php db adminer mailhog || exit 1
+	docker compose up -d nginx php db adminer mailpit || exit 1
 	@docker rmi $$(docker images -q -f "dangling=true" -f "label=autodelete=true") 2> /dev/null || true
 
 install-deps:
