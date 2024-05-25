@@ -7,26 +7,15 @@
   // The .devcontainer/docker-compose.yml file contains any overrides you need/want to make.
   "dockerComposeFile": ["../compose.yaml", "compose.yaml"],
 
-  // The 'service' property is the name of the service for the container that VS Code should use. Update this value and .devcontainer/docker-compose.yml to the real service name.
+  // The 'service' property is the name of the service for the container that VS Code should use. Update this value and .devcontainer/docker-composev.yml to the real service name.
   "service": "devcontainer",
   // start specific services in your Docker Compose config.
-  "runServices": ["nginx", "php", "adminer", "db", "mailhog"],
+  "runServices": ["nginx", "php", "adminer", "db", "mailpit"],
 
-  // Uncomment to connect as a non-root user if you've added one. Default is last USER statement in Dockerfile. See https://aka.ms/vscode-remote/containers/non-root.
-  "remoteUser": "docker",
-  // "containerUser": "docker",
-
-  // dont create extra image to match UID/GUID of host, we do it ourselfs: https://github.com/microsoft/vscode-remote-release/issues/3264#issuecomment-651084059
-  "updateRemoteUserUID": false,
-
-  // docker-outside-of-docker
-  "overrideCommand": true,
-
-  // Uncomment to use Docker from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
-  // allow control of the host's docker daemon from the container
-  // "mounts": [
-  // "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
-  // ],
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+  },
 
   // The optional 'workspaceFolder' property is the path VS Code should open by default when connected. This is typically a file mount in .devcontainer/docker-compose.yml
   "workspaceFolder": "/workspace",
@@ -45,6 +34,10 @@
         "syler.sass-indented",
         "mhutchie.git-graph",
         "ms-azuretools.vscode-docker"
+        "Vue.volar",
+        "hollowtree.vue-snippets",
+        "dbaeumer.vscode-eslint",
+        "jock.svg"
       ],
       "settings": {
         "php.validate.executablePath": "/usr/local/bin/php",
@@ -84,4 +77,14 @@
 
   // run commands after the CONTAINER IS CREATED
   // "postCreateCommand": ""
+
+  // Uncomment to connect as a non-root user if you've added one. Default is last USER statement in Dockerfile. See https://aka.ms/vscode-remote/containers/non-root.
+  // "remoteUser": "docker"
+  // "containerUser": "root"
+
+  // dont create extra image to match UID/GUID of host, we do it ourselfs: https://github.com/microsoft/vscode-remote-release/issues/3264#issuecomment-651084059
+  // "updateRemoteUserUID": false
+
+  // docker-outside-of-docker
+  // "overrideCommand": true
 }
