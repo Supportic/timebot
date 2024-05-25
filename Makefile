@@ -2,7 +2,7 @@
 .ONESHELL:
 SHELL = /bin/bash
 TERMINAL = docker compose exec php bash
-NODE = docker compose run --rm node
+NODE = docker compose run --rm --service-ports node
 SYMFONY = docker compose run --rm --entrypoint symfony php
 COMPOSER = docker compose run --rm php composer
 NPM = docker compose run --rm --entrypoint npm node
