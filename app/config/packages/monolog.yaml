@@ -5,10 +5,6 @@ monolog:
     handlers:
         main:
             formatter: monolog.formatter.default
-        http_client:
-            formatter: monolog.formatter.default
-        performance:
-            formatter: monolog.formatter.default
 
 when@dev:
     monolog:
@@ -35,11 +31,13 @@ when@dev:
                 path: "%kernel.logs_dir%/%kernel.environment%.requests.log"
                 level: debug
                 channels: ["http_client"]
+                formatter: monolog.formatter.default
             performance:
                 type: stream
                 path: "%kernel.logs_dir%/%kernel.environment%.performance.log"
                 level: debug
                 channels: ["performance"]
+                formatter: monolog.formatter.default
 
 when@test:
     monolog:
@@ -78,3 +76,15 @@ when@prod:
                 channels: [deprecation]
                 path: php://stderr
                 formatter: monolog.formatter.json
+            http_client:
+                type: stream
+                path: "%kernel.logs_dir%/%kernel.environment%.requests.log"
+                level: debug
+                channels: ["http_client"]
+                formatter: monolog.formatter.default
+            performance:
+                type: stream
+                path: "%kernel.logs_dir%/%kernel.environment%.performance.log"
+                level: debug
+                channels: ["performance"]
+                formatter: monolog.formatter.default
