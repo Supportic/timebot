@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 defineProps({
   msg: {
     type: String,
@@ -11,5 +11,4 @@ defineProps({
   <h1>{{ msg }}</h1>
 </template>
 
-<style scoped>
-</style>
+<style lang="scss" scoped></style>
