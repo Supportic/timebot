@@ -36,7 +36,8 @@
         "Vue.volar",
         "hollowtree.vue-snippets",
         "dbaeumer.vscode-eslint",
-        "jock.svg"
+        "jock.svg",
+        "bradlc.vscode-tailwindcss"
       ],
       "settings": {
         "php.validate.executablePath": "/usr/local/bin/php",

@@ -7,5 +7,5 @@ const app = startStimulusApp();
 // with vite
 registerControllers(
   app,
-  import.meta.glob('./controllers/*_(lazy)\?controller.[jt]s(x)\?')
-)
+  import.meta.glob('./controllers/*_(lazy)?controller.[jt]s(x)?')
+);
