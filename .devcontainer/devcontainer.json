@@ -77,7 +77,7 @@
   // "postCreateCommand": ""
 
   // Uncomment to connect as a non-root user if you've added one. Default is last USER statement in Dockerfile. See https://aka.ms/vscode-remote/containers/non-root.
-  // "remoteUser": "docker"
+  // "remoteUser": "symfony"
   // "containerUser": "root"
 
   // dont create extra image to match UID/GUID of host, we do it ourselfs: https://github.com/microsoft/vscode-remote-release/issues/3264#issuecomment-651084059

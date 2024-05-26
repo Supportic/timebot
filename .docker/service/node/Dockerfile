@@ -32,7 +32,7 @@ ENV PATH="${PATH}:${NPM_CONFIG_PREFIX}/bin"
 RUN corepack enable \
   && corepack prepare yarn@stable --activate
 
-USER "${UID}"
+USER ${UNAME}
 
 # shell alias
 RUN printf "PS1='\u@\h:\w\$ '" >> "${HOME}/.bashrc" \
@@ -63,7 +63,7 @@ ENV NODE_ENV=production
 
 # install but do not update package-lock
 WORKDIR /app
-RUN npm clean-install && npm cache clean --force
+RUN if [ -f "package-lock.json" ]; then npm clean-install && npm cache clean --force; fi
 
 # /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT docker-entrypoint.sh

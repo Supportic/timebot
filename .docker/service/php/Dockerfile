@@ -64,7 +64,7 @@ RUN mkdir -p /etc/sudoers.d &&\
 RUN curl -sS https://get.symfony.com/cli/installer | bash
 RUN mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
 
-USER "${UID}"
+USER ${UNAME}
 
 # shell alias
 RUN printf "PS1='\u@\h:\w\$ '" >> "${HOME}/.bashrc" \

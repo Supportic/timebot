@@ -1,13 +1,14 @@
 ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
+LABEL autodelete="true"
 
 USER root
 
 ARG UNAME=docker
 
 # [Optional SUDO] Let user execute sudo without password prompt.
-# RUN echo ${UNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${UNAME} &&\
-#   chmod 0440 /etc/sudoers.d/${UNAME}
+RUN echo ${UNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${UNAME} &&\
+  chmod 0440 /etc/sudoers.d/${UNAME}
 
 # allow user to use root program without password (default: ALL)
 # required for docker-init script to initialize docker group
@@ -36,8 +37,5 @@ RUN set -ex && mkdir -p "${NVM_DIR}" \
 
 ENV NODE_PATH="${NVM_DIR}/v${NODE_VERSION}/lib/node_modules"
 ENV PATH="${NVM_DIR}/versions/node/v${NODE_VERSION}/bin:$PATH"
-
-# needs to be root again at the end to run docker-outside-docker commands
-# USER root
 
 CMD [ "sleep", "infinity" ]
