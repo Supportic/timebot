@@ -33,10 +33,14 @@
       "app": true
     },
 
+    "[twig]": {
+      "editor.defaultFormatter": "junstyle.twig-language"
+    },
+
     "files.associations": {
       "*.css": "tailwindcss",
-      "*.scss": "tailwindcss",
     },
+    "scss.lint.unknownAtRules": "ignore",
 
     "debug.inlineValues": "off",
     "[php]": {

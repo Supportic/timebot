@@ -21,7 +21,7 @@
     "noEmit": true,
     "jsx": "preserve",
     "sourceMap": true,
-    "types": ["vite/client"],
+    "types": ["vite/client", "unplugin-fonts/client"],
 
     /* Linting */
     "strict": true,
@@ -35,6 +35,8 @@
     "assets/vue/**/*.ts",
     "assets/vue/**/*.tsx",
     "assets/vue/**/*.vue",
+    ".d.ts",
+    "vite-env.d.ts",
     // "tests/**/*.ts",
     // "tests/**/*.tsx"
   ],

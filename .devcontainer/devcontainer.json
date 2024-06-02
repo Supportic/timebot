@@ -52,6 +52,9 @@
         "[php]": {
           "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
         },
+        "[vue]": {
+          "editor.defaultFormatter": "Vue.volar"
+        },
 
         "files.associations": {
           "**/views/**/*.html": "twig",

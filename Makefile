@@ -24,7 +24,7 @@ down:
 erase:
 	docker compose down -v --rmi all
 
-install: install-container install-deps
+install: install-container install-deps setup-database
 
 install-container:
 	docker compose build php node adminer || exit 1
@@ -34,6 +34,10 @@ install-container:
 install-deps:
 	$(COMPOSER) install
 	$(NPM) ci
+
+setup-database:
+	$(SYMFONY) console doctrine:migrations:migrate --no-interaction
+	$(SYMFONY) console doctrine:fixtures:load --no-interaction
 
 update:
 	$(COMPOSER) update
