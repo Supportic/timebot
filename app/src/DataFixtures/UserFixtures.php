@@ -13,21 +13,50 @@ class UserFixtures extends Fixture
     {
     }
 
+    /**
+     * @var array<int, array{
+     *  username: string,
+     *  password: string,
+     *  roles: string[]
+     * }>
+     */
+    private array $users = [
+        [
+            'username' => 'superadmin',
+            'password' => 'superadmin',
+            'roles' => ['ROLE_SUPER_ADMIN'],
+        ],
+        [
+            'username' => 'admin',
+            'password' => 'admin',
+            'roles' => ['ROLE_ADMIN'],
+        ],
+        [
+            'username' => 'api',
+            'password' => 'api',
+            'roles' => ['ROLE_API'],
+        ],
+    ];
+
     public function load(ObjectManager $manager): void
     {
-        $user = (new User())
-            ->setUsername('admin')
-            ->setRoles(['ROLE_ADMIN', 'ROLE_SUPER_ADMIN']);
-        $plaintextPassword = 'admin';
 
-        $hashedPassword = $this->passwordHasher->hashPassword(
-            $user,
-            $plaintextPassword
-        );
+        foreach ($this->users as $user) {
+            $newUser = (new User())
+                ->setUsername($user['username'])
+                ->setRoles($user['roles']);
+            $plaintextPassword = $user['password'];
 
-        $user->setPassword($hashedPassword);
+            $hashedPassword = $this->passwordHasher->hashPassword(
+                $newUser,
+                $plaintextPassword
+            );
 
-        $manager->persist($user);
+            $newUser->setPassword($hashedPassword);
+
+            $manager->persist($newUser);
+        }
+
         $manager->flush();
     }
 }
