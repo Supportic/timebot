@@ -37,7 +37,18 @@
         "hollowtree.vue-snippets",
         "dbaeumer.vscode-eslint",
         "jock.svg",
-        "bradlc.vscode-tailwindcss"
+        "bradlc.vscode-tailwindcss",
+        "EditorConfig.EditorConfig",
+        "oouo-diogo-perdigao.docthis",
+        "DavidAnson.vscode-markdownlint",
+        "shd101wyy.markdown-preview-enhanced",
+        "yzhang.markdown-all-in-one",
+        "MykhailoKushnir.vscode-php-getter-setter",
+        "christian-kohler.npm-intellisense",
+        "cipchk.cssrem",
+        "mrmlnc.vscode-scss",
+        "gencer.html-slim-scss-css-class-completion",
+        "meganrogge.template-string-converter"
       ],
       "settings": {
         "php.validate.executablePath": "/usr/local/bin/php",
