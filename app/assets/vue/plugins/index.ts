@@ -7,13 +7,14 @@
 // Plugins
 // import vuetify from './vuetify';
 import './vuetify';
+import { PrimeVue, Aura } from './primevue';
 
 // Types
 import type { App } from 'vue';
 
 const registerPlugins = (app: App) => {
   // app.use(vuetify);
-  app.version
+  app.use(PrimeVue, { theme: { preset: Aura } });
 };
 
 export { registerPlugins };

@@ -6,13 +6,16 @@
 
 {% block stylesheets %}
   {{ parent() }}
+  {# {{ vite_entry_link_tags('main') }} #}
 {% endblock %}
 
 {% block javascripts %}
   {{ parent() }}
+  {# {{ vite_entry_script_tags('main') }} #}
 {% endblock %}
 
 {% block body %}
+  {# <div id="app"></div> #}
   <form method="post">
     {% if error %}
       <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>

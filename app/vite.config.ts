@@ -118,6 +118,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         app: './assets/app.ts',
+        main: './assets/vue/main.ts',
         theme: './assets/styles/theme.scss',
       },
       output: {
