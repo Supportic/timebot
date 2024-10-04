@@ -1,5 +1,5 @@
-ARG NODE_VER=20.10-alpine
-FROM node:${NODE_VER} as base
+ARG NODE_VER=20.17-alpine
+FROM node:${NODE_VER} AS base
 LABEL autodelete="true"
 
 USER root
@@ -45,7 +45,7 @@ RUN mkdir -p node_modules
 COPY --chown="${UID}:${GID}" package*.json .
 COPY --chown="${UID}:${GID}" yarn.lock* .
 
-FROM base as develop
+FROM base AS develop
 
 ENV NODE_ENV=development
 
@@ -57,7 +57,7 @@ RUN if [ -f "package.json" ]; then npm install; fi
 
 ENTRYPOINT [ "bash" ]
 
-FROM base as prod
+FROM base AS prod
 
 ENV NODE_ENV=production
 

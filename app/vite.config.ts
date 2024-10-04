@@ -4,7 +4,6 @@ import { fileURLToPath, URL } from 'node:url';
 import vue from '@vitejs/plugin-vue';
 import symfonyPlugin from 'vite-plugin-symfony';
 import Components from 'unplugin-vue-components/vite';
-import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 import Unfonts from 'unplugin-fonts/vite';
 
 const pathResolve = (dir: string) => {
@@ -46,11 +45,7 @@ const fontFamilies = [
 
 export default defineConfig({
   plugins: [
-    vue({
-      template: { transformAssetUrls },
-    }),
-    // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
-    Vuetify(),
+    vue(),
     Components({}),
     Unfonts({
       custom: {
@@ -105,8 +100,17 @@ export default defineConfig({
       '@components': pathResolve('./assets/vue/components'),
       '@styles': pathResolve('./assets/styles'),
       '@fonts': pathResolve('./assets/fonts'),
+      '@types': pathResolve('./assets/scripts/types'),
+      '@interfaces': pathResolve('./assets/scripts/interfaces'),
     },
     extensions: ['.js', '.json', '.jsx', '.mjs', '.ts', '.tsx', '.vue'],
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler',
+      },
+    },
   },
   build: {
     assetsInlineLimit: 512,
@@ -114,9 +118,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         app: './assets/app.ts',
-        'vue-app': './assets/vue/main.ts',
         theme: './assets/styles/theme.scss',
-        login: './assets/scripts/pages/login.ts',
       },
       output: {
         manualChunks: {

@@ -1,12 +1,12 @@
 import { registerPlugins } from '@/vue/plugins';
 
-import App from './App.vue';
-
 // Composables
 import { createApp } from 'vue';
+
+import App from './App.vue';
 
 const app = createApp(App);
 
 registerPlugins(app);
 
-app.mount('#app');
+// app.mount('#app');

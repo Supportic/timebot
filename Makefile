@@ -35,9 +35,14 @@ install-deps:
 	$(COMPOSER) install
 	$(NPM) ci
 
+build-assets:
+	$(NPM) run build
+watch-assets:
+	$(NPM) run dev
+
 setup-database:
-	$(SYMFONY) console doctrine:migrations:migrate --no-interaction
 	$(SYMFONY) console doctrine:fixtures:load --no-interaction
+	$(SYMFONY) console doctrine:migrations:migrate --no-interaction
 
 update:
 	$(COMPOSER) update

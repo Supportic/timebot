@@ -1,5 +1,5 @@
-ARG PHP_VER=8.2-fpm-bookworm
-FROM php:${PHP_VER} as base
+ARG PHP_VER=8.3-fpm-bookworm
+FROM php:${PHP_VER} AS base
 LABEL autodelete="true"
 
 USER root
@@ -32,7 +32,7 @@ ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/do
 RUN chmod +x /usr/local/bin/install-php-extensions && \
   install-php-extensions zip intl opcache pcntl pdo pdo_mysql apcu
 
-FROM base as develop
+FROM base AS develop
 
 # php -r 'phpinfo();' | grep -i conf
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
@@ -70,6 +70,6 @@ USER ${UNAME}
 RUN printf "PS1='\u@\h:\w\$ '" >> "${HOME}/.bashrc" \
   && printf "\nalias ll=\"ls -la\"" >> "${HOME}/.bashrc"
 
-FROM base as production
+FROM base AS production
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"

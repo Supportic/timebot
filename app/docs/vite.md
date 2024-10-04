@@ -9,6 +9,7 @@ Install @vitejs/plugin-vue to handle .vue files.
 ## Symfony UX
 
 Is made to work with stimulus and has nothing todo with regular vue.
+It can directly call vue components via a twig function and pass data to the component which gets set on the rendered div.
 
 - Vue: https://symfony-vite.pentatrion.com/stimulus/symfony-ux.html
 

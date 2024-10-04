@@ -5,13 +5,15 @@
  */
 
 // Plugins
-import vuetify from './vuetify';
+// import vuetify from './vuetify';
+import './vuetify';
 
 // Types
 import type { App } from 'vue';
 
 const registerPlugins = (app: App) => {
-  app.use(vuetify);
+  // app.use(vuetify);
+  app.version
 };
 
 export { registerPlugins };

@@ -9,6 +9,8 @@
     "paths": {
       "@/*": ["assets/*"],
       "@components/*": ["assets/vue/components/*"],
+      "@types/*": ["assets/scripts/types/*"],
+      "@interfaces/*": ["assets/scripts/interfaces/*"],
       // "@assets/*": ["assets/vue/assets/*"],
       // "@store/*": ["assets/vue/store/*"]
     },
@@ -32,9 +34,9 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "assets/vue/**/*.ts",
-    "assets/vue/**/*.tsx",
-    "assets/vue/**/*.vue",
+    "assets/**/*.ts",
+    "assets/**/*.tsx",
+    "assets/**/*.vue",
     ".d.ts",
     "vite-env.d.ts",
     // "tests/**/*.ts",

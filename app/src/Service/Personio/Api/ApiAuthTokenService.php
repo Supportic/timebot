@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\Personio\Api;
 
-use AuthToken;
+use App\Model\Personio\Api\AuthToken;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
