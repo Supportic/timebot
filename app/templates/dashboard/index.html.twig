@@ -1,20 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}
+  Log in!
+{% endblock %}
 
-{# {% block stylesheets %}
-    {{ parent() }}
+{% block stylesheets %}
+  {{ parent() }}
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}  
-{% endblock %} #}
+  {{ parent() }}
+{% endblock %}
 
 {% block body %}
-<h1>Dashboard</h1>
-{% if app.user %}
+
+  <h1>Dashboard</h1>
+  {% if app.user %}
     <div class="mb-3">
-        You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+      You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
     </div>
-{% endif %}
+
+    {% if is_granted('ROLE_ADMIN') %}
+      <h2>Hello ROLE_ADMIN</h2>
+    {% endif %}
+
+    {% if is_granted('IS_IMPERSONATOR') %}
+      <a href="{{ impersonation_exit_path(path('app_index')) }}">Exit impersonation</a>
+    {% endif %}
+  {% endif %}
+
 {% endblock %}

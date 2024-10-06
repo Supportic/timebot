@@ -17,8 +17,10 @@ security:
       lazy: true
       provider: app_user_provider
       remember_me:
+        name: REMEMBERME # cookie name
         secret: "%kernel.secret%" # required
         lifetime: 604800 # 1 week in seconds
+        signature_properties: ['password', 'updatedAt'] # cookie no longer valid if these properties are changing
         # by default, the feature is enabled by checking a
         # checkbox in the login form (see below), uncomment the
         # following line to always enable it.

@@ -6,46 +6,99 @@
 
 {% block stylesheets %}
   {{ parent() }}
-  {# {{ vite_entry_link_tags('main') }} #}
+  {{ vite_entry_link_tags('login') }}
 {% endblock %}
 
 {% block javascripts %}
   {{ parent() }}
-  {# {{ vite_entry_script_tags('main') }} #}
+  {{ vite_entry_script_tags('login') }}
 {% endblock %}
 
 {% block body %}
-  {# <div id="app"></div> #}
-  <form method="post">
-    {% if error %}
-      <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+  <div class="gradient-bg flex flex-col items-center justify-center">
+    <div class="p-2 sm:p-6 max-w-xl w-full z-10 backdrop-blur-xl bg-white/30 rounded-4xl shadow">
+      <div class="p-6 backdrop-blur-lg bg-white/80 rounded-4xl shadow">
+        <main>
+          <h1 class="text-gray-900 text-center text-3xl font-bold">Timebot</h1>
 
-    {% if app.user %}
-      <div class="mb-3">
-        You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-      </div>
-    {% endif %}
-
-    <h1>Please sign in</h1>
-    <label for="username">Username</label>
-    <input type="text" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="username" required autofocus />
-    <label for="password">Password</label>
-    <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required />
-
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
-
-    {#
-            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-            See https://symfony.com/doc/current/security/remember_me.html
-
-            <div class="checkbox mb-3">
-                <label>
-                    <input type="checkbox" name="_remember_me"> Remember me
-                </label>
+          {% if app.user %}
+            <div class="mt-4 bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded flex flex-row justify-between" role="alert">
+              <span class="block sm:inline">You are logged in as <span class="font-bold">{{ app.user.userIdentifier }}</span>.</span>
+              <a title="logout" href="{{ path('app_logout') }}">
+                <svg class="fill-current w-6 h-6" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                  <path fill="currentColor" d="m17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5M4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4z" />
+                </svg>
+              </a>
             </div>
-        #}
+          {% else %}
+            {% if error %}
+              <div class="mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ error.messageKey|trans(error.messageData, 'security') }}</span>
+              </div>
+            {% endif %}
+            <form class="mt-4 space-y-4" action="{{ path('app_login') }}" method="post">
+              <label for="username" class="text-gray-900 text-sm mb-2 block">Username</label>
+              <div class="relative flex items-center">
+                <input type="text" id="username" name="_username" value="{{ last_username }}" required autofocus class="w-full focus:ring-1 text-gray-900 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600" placeholder="Enter username" />
 
-    <button type="submit">Sign in</button>
-  </form>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" class="w-4 h-4 absolute right-4" viewBox="0 0 24 24">
+                  <circle cx="10" cy="7" r="6"></circle>
+                  <path d="M14 15H6a5 5 0 0 0-5 5 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 5 5 0 0 0-5-5zm8-4z"></path>
+                </svg>
+              </div>
+
+              <label for="password" class="text-gray-900 text-sm mb-2 block">Password</label>
+              <div class="relative flex items-center">
+                <input id="password" for="password" name="_password" type="password" autocomplete="current-password" required class="w-full text-gray-900 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600" placeholder="Enter password" />
+
+                <button class="w-4 h-4 absolute right-4" type="button" onclick="const pw = document.getElementById('password'); pw.type === 'password' ? pw.type = 'text' : pw.type = 'password'" title="uncover password">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" viewBox="0 0 128 128">
+                    <path d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z"></path>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center">
+                  <input id="remember-me" name="_remember_me" type="checkbox" class="h-4 w-4 shrink-0 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
+
+                  <label for="remember-me" class="ml-3 block text-sm text-gray-900">Remember me</label>
+                </div>
+
+                {# <div class="text-sm">
+                <a href="jajvascript:void(0);" class="text-blue-600 hover:underline font-semibold">Forgot your password?</a>
+              </div> #}
+              </div>
+
+              <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+
+              <div class="!mt-8">
+                <button type="submit" class="w-full py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-6 focus:ring-blue-300 transition ease-in">Sign in</button>
+              </div>
+
+              {# <p class="text-gray-900 text-sm !mt-8 text-center">
+              Don't have an account? <a href="javascript:void(0);" class="text-blue-600 hover:underline ml-1 whitespace-nowrap font-semibold">Register here</a>
+            </p> #}
+            </form>
+          {% endif %}
+        </main>
+      </div>
+    </div>
+    <svg xmlns="http://www.w3.org/2000/svg" class="svgBlur">
+      <defs>
+        <filter id="goo">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+          <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="goo" />
+          <feBlend in="SourceGraphic" in2="goo" />
+        </filter>
+      </defs>
+    </svg>
+    <div class="gradients-container">
+      <div class="g1"></div>
+      <div class="g2"></div>
+      <div class="g3"></div>
+      <div class="g4"></div>
+      <div class="g5"></div>
+    </div>
+  </div>
 {% endblock %}

@@ -5,7 +5,18 @@ export default {
     "./templates/**/*.html.twig",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'primary': 'rgb(15 23 42)',
+        'danger': '#e64848'
+      },
+      borderRadius: {
+        '4xl': '2rem',
+      },
+      ringWidth: {
+        '6': '6px',
+      }
+    },
   },
   plugins: [
   ],
