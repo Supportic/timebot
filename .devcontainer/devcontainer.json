@@ -48,7 +48,9 @@
         "cipchk.cssrem",
         "mrmlnc.vscode-scss",
         "gencer.html-slim-scss-css-class-completion",
-        "meganrogge.template-string-converter"
+        "meganrogge.template-string-converter",
+        "mansoorkhan96.php-cs-fixer",
+        "sleistner.vscode-fileutils"
       ],
       "settings": {
         "php.validate.executablePath": "/usr/local/bin/php",

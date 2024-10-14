@@ -5,6 +5,7 @@ import vue from '@vitejs/plugin-vue';
 import symfonyPlugin from 'vite-plugin-symfony';
 import Components from 'unplugin-vue-components/vite';
 import Unfonts from 'unplugin-fonts/vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 const pathResolve = (dir: string) => {
   return resolve(__dirname, dir);
@@ -93,20 +94,10 @@ export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
         // we must explicitly set the server host name
         viteDevServerHostname: 'localhost',
       }),
+      tsconfigPaths(),
     ],
     publicDir: false,
     base: command === 'serve' ? '/' : '/build',
-    resolve: {
-      alias: {
-        '@': fileURLToPath(new URL('./assets', import.meta.url)),
-        '@components': pathResolve('./assets/vue/components'),
-        '@styles': pathResolve('./assets/styles'),
-        '@fonts': pathResolve('./assets/fonts'),
-        '@types': pathResolve('./assets/scripts/types'),
-        '@interfaces': pathResolve('./assets/scripts/interfaces'),
-      },
-      extensions: ['.js', '.json', '.jsx', '.mjs', '.ts', '.tsx', '.vue'],
-    },
     css: {
       preprocessorOptions: {
         scss: {
@@ -119,10 +110,11 @@ export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
       manifest: true,
       rollupOptions: {
         input: {
-          app: './assets/app.ts',
+          login: './assets/scripts/pages/login.ts', // has login.scss
           main: './assets/vue/main.ts',
+
+          app: './assets/app.ts',
           theme: './assets/styles/theme.scss',
-          login: './assets/styles/pages/login.scss',
         },
         output: {
           manualChunks: {
@@ -138,6 +130,9 @@ export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
       // hmr: {
       //     protocol: "ws"
       // }
+      fs: {
+        allow: ['.'],
+      },
       watch: {
         ignored: ['**/.idea/**', '**/tests/**', '**/var/**', '**/vendor/**'],
       },

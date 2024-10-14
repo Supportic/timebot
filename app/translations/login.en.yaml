@@ -1,0 +1,15 @@
+login:
+  form_field:
+    username:
+      label: Username
+      placeholder: Enter username
+    password:
+      label: Password
+      placeholder: Enter password
+    remember_me:
+      label: Remember Me
+    reveal_password_button:
+      title_reveal: reveal password
+      title_conceal: conceal password
+    submit_button:
+      label: Sign in

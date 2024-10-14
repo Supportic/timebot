@@ -1,0 +1,15 @@
+login:
+  form_field:
+    username:
+      label: Nutzername
+      placeholder: Nutzername eingeben
+    password:
+      label: Passwort
+      placeholder: Passwort eingeben
+    remember_me:
+      label: Angemeldet bleiben
+    reveal_password_button:
+      title_reveal: Passwort anzeigen
+      title_conceal: Passwort verbergen
+    submit_button:
+      label: Anmelden

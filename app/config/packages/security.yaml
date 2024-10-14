@@ -20,7 +20,7 @@ security:
         name: REMEMBERME # cookie name
         secret: "%kernel.secret%" # required
         lifetime: 604800 # 1 week in seconds
-        signature_properties: ['password', 'updatedAt'] # cookie no longer valid if these properties are changing
+        signature_properties: ["password", "updatedAt"] # cookie no longer valid if these properties are changing
         # by default, the feature is enabled by checking a
         # checkbox in the login form (see below), uncomment the
         # following line to always enable it.
@@ -31,8 +31,9 @@ security:
         enable_csrf: true
       logout:
         path: app_logout
+        # enable_csrf: true
         # where to redirect after logout
-        # target: app_any_route
+        target: app_login
 
       # activate different ways to authenticate
       # https://symfony.com/doc/current/security.html#the-firewall
@@ -45,12 +46,12 @@ security:
   # Users with the ROLE_ADMIN role will also have the ROLE_USER role.
   # Users with ROLE_SUPER_ADMIN, will automatically have ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH and ROLE_USER (inherited from ROLE_ADMIN).
   role_hierarchy:
-    ROLE_ADMIN:       ROLE_USER
+    ROLE_ADMIN: ROLE_USER
     ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used
   access_control:
-    - { path: ^/dashboard, roles: ROLE_ADMIN }
+    - { path: '^/admin', roles: ROLE_ADMIN }
     - { path: ^/api/auth, roles: [IS_AUTHENTICATED_ANONYMOUSLY] }
     - { path: ^/api, roles: [IS_AUTHENTICATED_FULLY] }
 
@@ -66,3 +67,6 @@ when@test:
         cost: 4 # Lowest possible value for bcrypt
         time_cost: 3 # Lowest possible value for argon
         memory_cost: 10 # Lowest possible value for argon
+    firewalls:
+      main:
+        http_basic: ~

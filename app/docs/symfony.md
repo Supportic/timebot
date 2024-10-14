@@ -2,6 +2,13 @@
 
 ## Services
 
+## Translations
+
+Manage translations with twig: [Symfony Translations](https://symfony.com/doc/current/translation.html)
+
+If you want to share/use the translation files with/in JavaScript, use this library: [Symfony UX Translator](https://symfony.com/bundles/ux-translator/current/index.html)  
+[https://ux.symfony.com/translator](https://ux.symfony.com/translator)
+
 ## Security
 
 [https://symfony.com/doc/current/security.html#roles](https://symfony.com/doc/current/security.html#roles)

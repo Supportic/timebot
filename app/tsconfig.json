@@ -6,11 +6,15 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
     "baseUrl": ".",
+    "allowJs": true, // added to resolve Vue files
+    "checkJs": true,
     "paths": {
       "@/*": ["assets/*"],
       "@components/*": ["assets/vue/components/*"],
       "@types/*": ["assets/scripts/types/*"],
       "@interfaces/*": ["assets/scripts/interfaces/*"],
+      "@styles/*": ["assets/styles/*"],
+      "@fonts/*": ["assets/fonts/*"],
       // "@assets/*": ["assets/vue/assets/*"],
       // "@store/*": ["assets/vue/store/*"]
     },

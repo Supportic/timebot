@@ -25,8 +25,10 @@
     "@babel/types": "^7.25.7",
     "@hotwired/stimulus": "^3.2.2",
     "@symfony/stimulus-bridge": "^3.2.2",
+    "@symfony/ux-translator": "file:vendor/symfony/ux-translator/assets",
     "@types/node": "^20.14.2",
     "autoprefixer": "^10.4.20",
+    "intl-messageformat": "^10.5.11",
     "postcss": "^8.4.47",
     "postcss-import": "^16.1.0",
     "sass": "^1.79.4",
@@ -35,6 +37,7 @@
     "unplugin-fonts": "^1.1.1",
     "unplugin-vue-components": "^0.27.4",
     "vite": "^5.4.8",
+    "vite-tsconfig-paths": "^5.0.1",
     "vitest": "^2.1.2",
     "vue-tsc": "^2.1.6"
   }
