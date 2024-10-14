@@ -1,15 +1,9 @@
 import { defineConfig } from 'vite';
-import { resolve } from 'node:path';
-import { fileURLToPath, URL } from 'node:url';
 import vue from '@vitejs/plugin-vue';
 import symfonyPlugin from 'vite-plugin-symfony';
 import Components from 'unplugin-vue-components/vite';
 import Unfonts from 'unplugin-fonts/vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
-
-const pathResolve = (dir: string) => {
-  return resolve(__dirname, dir);
-};
 
 const fontFamilies = [
   {

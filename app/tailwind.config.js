@@ -15,6 +15,9 @@ export default {
       },
       ringWidth: {
         '6': '6px',
+      },
+      scale: {
+        '140': '1.4',
       }
     },
   },

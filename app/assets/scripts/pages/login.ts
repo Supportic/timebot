@@ -15,6 +15,8 @@ window.addEventListener('DOMContentLoaded', (_: Event) => {
 class PasswordFieldToggler {
   private passwordInput: HTMLInputElement | null | undefined;
   private revealPasswordButton: HTMLButtonElement | null | undefined;
+  private revealPasswordIconShow: SVGElement | null | undefined;
+  private revealPasswordIconHide: SVGElement | null | undefined;
 
   constructor(inputId: string, buttonId: string) {
     this.passwordInput = document.getElementById(
@@ -31,6 +33,13 @@ class PasswordFieldToggler {
       return;
     }
 
+    this.revealPasswordIconShow = document.getElementById(
+      'reveal-password-icon-show'
+    ) as SVGElement | null;
+    this.revealPasswordIconHide = document.getElementById(
+      'reveal-password-icon-hide'
+    ) as SVGElement | null;
+
     this.revealPasswordButton.addEventListener('click', this.clickHandler);
   }
 
@@ -40,8 +49,12 @@ class PasswordFieldToggler {
       this.revealPasswordButton!.title = trans(
         LOGIN_FORM_FIELD_REVEAL_PASSWORD_BUTTON_TITLE_CONCEAL,
         {},
-        'login',
+        'login'
       );
+
+      this.revealPasswordIconHide!.classList.remove('hidden');
+      this.revealPasswordIconShow!.classList.add('hidden');
+
       return;
     }
 
@@ -49,7 +62,10 @@ class PasswordFieldToggler {
     this.revealPasswordButton!.title = trans(
       LOGIN_FORM_FIELD_REVEAL_PASSWORD_BUTTON_TITLE_REVEAL,
       {},
-      'login',
+      'login'
     );
+
+    this.revealPasswordIconShow!.classList.remove('hidden');
+    this.revealPasswordIconHide!.classList.add('hidden');
   };
 }
