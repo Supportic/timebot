@@ -1,8 +1,15 @@
 controllers:
   resource:
-    path: ../../src/Controller/
-    namespace: App\Controller
+    path: ../../src/Controller/App
+    namespace: App\Controller\App
   type: attribute
+  prefix:
+    'en': '' # don't prefix URLs for English, the default locale
+    'de' : '/de'
+  # defaults:
+  #   _locale: '%app.default_locale%' # already set via default_locale
+  # requirements:
+  #   _locale: '%app.supported_locales%' # already set via enabled_locales
 
 kernel:
   resource: App\Kernel

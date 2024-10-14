@@ -31,7 +31,7 @@ security:
         enable_csrf: true
       logout:
         path: app_logout
-        # enable_csrf: true
+        enable_csrf: true
         # where to redirect after logout
         target: app_login
 
@@ -42,6 +42,8 @@ security:
       switch_user:
         role: ROLE_ALLOWED_TO_SWITCH
         parameter: _pretend_to_be_user
+    api:
+      stateless: true
 
   # Users with the ROLE_ADMIN role will also have the ROLE_USER role.
   # Users with ROLE_SUPER_ADMIN, will automatically have ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH and ROLE_USER (inherited from ROLE_ADMIN).

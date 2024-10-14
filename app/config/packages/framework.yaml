@@ -6,7 +6,7 @@ framework:
   http_method_override: false
   handle_all_throwables: true
 
-  # this defines the codes of the locales (languages) available in the application
+  # sets the privided locales als requirement for every route when {_locale} is specified
   # https://symfony.com/doc/current/reference/configuration/framework.html#enabled-locales
   enabled_locales: '%app.supported_locales%'
 

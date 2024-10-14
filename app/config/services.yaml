@@ -6,8 +6,8 @@
 parameters:
   app.api.key: "abc"
   app.personio.api.base_uri: "https://api.personio.de/v1"
-  app.supported_locales: ['en','de']
   app.default_locale : 'en'
+  app.supported_locales: ['en','de']
 
 services:
   # default configuration for services in *this* file

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Dashboard;
+namespace App\Controller\App\Dashboard;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -11,11 +11,19 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(new Expression(
     '"ROLE_ADMIN" in role_names or (is_authenticated() and user.isSuperAdmin())'
 ))]
+
+#[Route(path: '/admin')]
 class IndexController extends AbstractController
 {
-    #[Route(path: '/dashboard', name: 'app_dashboard')]
+    #[Route(path: '/', name: 'app_admin')]
     public function index(): Response
     {
-        return $this->render('dashboard/index.html.twig');
+        return $this->redirectToRoute('app_admin_dashboard');
+    }
+
+    #[Route(path: '/dashboard', name: 'app_admin_dashboard')]
+    public function dashboard(): Response
+    {
+        return $this->render('admin/dashboard/index.html.twig');
     }
 }

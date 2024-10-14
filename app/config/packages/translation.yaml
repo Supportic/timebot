@@ -1,4 +1,5 @@
 framework:
+  # guarantee that a locale is set on each user's request
   default_locale: '%app.default_locale%'
   translator:
     default_path: "%kernel.project_dir%/translations"
