@@ -24,7 +24,7 @@ down:
 erase:
 	docker compose down -v --rmi all
 
-install: install-container install-deps setup-database
+install: install-container install-deps setup-database build-assets
 
 install-container:
 	docker compose build php node adminer || exit 1

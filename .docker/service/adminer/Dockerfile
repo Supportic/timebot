@@ -1,8 +1,8 @@
-ARG ADMINER_VER
+ARG ADMINER_VER=
 FROM adminer:$ADMINER_VER
 LABEL autodelete="true"
 
-USER root 
+USER root
 
 COPY index.php /var/www/html/index.php
 

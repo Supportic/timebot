@@ -10,6 +10,10 @@
   --blending: hard-light;
 }
 
+html {
+  min-height: 100%;
+}
+
 body {
   overflow: hidden;
   height: 100vh;
@@ -27,14 +31,19 @@ body {
 
   .gradients-container {
     position: absolute;
-    filter: url(#goo) blur(40px) ;
+    filter: url(#goo) blur(40px);
     min-width: 100%;
     min-height: 100%;
   }
 
   .g1 {
     position: absolute;
-    background: radial-gradient(circle at center, rgba(var(--color1), 0.8) 0, rgba(var(--color1), 0) 50%) no-repeat;
+    background: radial-gradient(
+        circle at center,
+        rgba(var(--color1), 0.8) 0,
+        rgba(var(--color1), 0) 50%
+      )
+      no-repeat;
     mix-blend-mode: var(--blending);
 
     width: var(--circle-size);
@@ -50,7 +59,12 @@ body {
 
   .g2 {
     position: absolute;
-    background: radial-gradient(circle at center, rgba(var(--color2), 0.8) 0, rgba(var(--color2), 0) 50%) no-repeat;
+    background: radial-gradient(
+        circle at center,
+        rgba(var(--color2), 0.8) 0,
+        rgba(var(--color2), 0) 50%
+      )
+      no-repeat;
     mix-blend-mode: var(--blending);
 
     width: var(--circle-size);
@@ -66,7 +80,12 @@ body {
 
   .g3 {
     position: absolute;
-    background: radial-gradient(circle at center, rgba(var(--color3), 0.8) 0, rgba(var(--color3), 0) 50%) no-repeat;
+    background: radial-gradient(
+        circle at center,
+        rgba(var(--color3), 0.8) 0,
+        rgba(var(--color3), 0) 50%
+      )
+      no-repeat;
     mix-blend-mode: var(--blending);
 
     width: var(--circle-size);
@@ -82,7 +101,12 @@ body {
 
   .g4 {
     position: absolute;
-    background: radial-gradient(circle at center, rgba(var(--color4), 0.8) 0, rgba(var(--color4), 0) 50%) no-repeat;
+    background: radial-gradient(
+        circle at center,
+        rgba(var(--color4), 0.8) 0,
+        rgba(var(--color4), 0) 50%
+      )
+      no-repeat;
     mix-blend-mode: var(--blending);
 
     width: var(--circle-size);
@@ -98,7 +122,12 @@ body {
 
   .g5 {
     position: absolute;
-    background: radial-gradient(circle at center, rgba(var(--color5), 0.8) 0, rgba(var(--color5), 0) 50%) no-repeat;
+    background: radial-gradient(
+        circle at center,
+        rgba(var(--color5), 0.8) 0,
+        rgba(var(--color5), 0) 50%
+      )
+      no-repeat;
     mix-blend-mode: var(--blending);
 
     width: calc(var(--circle-size) * 2);
