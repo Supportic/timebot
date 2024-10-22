@@ -2,7 +2,9 @@ pentatrion_vite:
   public_directory: public
   build_directory: build
   throw_on_missing_entry: true
+  crossorigin: true
   script_attributes:
+    defer: true
     # you can define your attributes that you want to apply
     # for all your script tags
     # 'data-turbo-track': reload
@@ -10,3 +12,7 @@ pentatrion_vite:
     # you can define your attributes that you want to apply
     # for all your link tags
     # 'data-turbo-track': reload
+
+when@prod:
+  pentatrion_vite:
+    cache: true

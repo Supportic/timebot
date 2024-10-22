@@ -1,4 +1,17 @@
-import { startStimulusApp, registerControllers } from 'vite-plugin-symfony/stimulus/helpers';
+import {
+  startStimulusApp,
+  registerControllers,
+} from 'vite-plugin-symfony/stimulus/helpers';
+
+import {
+  type VueModule,
+  registerVueControllerComponents,
+} from 'vite-plugin-symfony/stimulus/helpers/vue';
+
+// register Vue components before startStimulusApp
+registerVueControllerComponents(
+  import.meta.glob<VueModule>('./vue/controllers/**/*.vue')
+);
 
 const app = startStimulusApp();
 // register any custom, 3rd party controllers here
@@ -7,6 +20,11 @@ const app = startStimulusApp();
 // with vite
 registerControllers(
   app,
-  // @ts-expect-error
-  import.meta.glob('./controllers/*_(lazy)?controller.[jt]s(x)?')
+  import.meta.glob<StimulusControllerInfosImport>(
+    './controllers/*_controller.ts',
+    {
+      query: '?stimulus',
+      eager: true,
+    }
+  )
 );

@@ -30,7 +30,6 @@
         "junstyle.twig-language",
         "esbenp.prettier-vscode",
         "stylelint.vscode-stylelint",
-        "syler.sass-indented",
         "mhutchie.git-graph",
         "ms-azuretools.vscode-docker",
         "Vue.volar",
@@ -50,7 +49,9 @@
         "gencer.html-slim-scss-css-class-completion",
         "meganrogge.template-string-converter",
         "mansoorkhan96.php-cs-fixer",
-        "sleistner.vscode-fileutils"
+        "sleistner.vscode-fileutils",
+        "zyrong.node-modules",
+        "codeandstuff.package-json-upgrade"
       ],
       "settings": {
         "php.validate.executablePath": "/usr/local/bin/php",

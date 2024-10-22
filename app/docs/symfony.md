@@ -1,6 +1,22 @@
 # Symfony
 
+## Libs
+
+| Libraries                                   |
+| ------------------------------------------- |
+| symfony/ux-icons                            |
+| symfony/ux-translator                       |
+| symfony/ux-vue with symfony-vite            |
+| unplugin-icons with unplugin-vue-components |
+
 ## Services
+
+## Icons
+
+install: [https://symfony.com/bundles/ux-icons/current/index.html](https://symfony.com/bundles/ux-icons/current/index.html)  
+catalogue: [https://ux.symfony.com/icons](https://ux.symfony.com/icons)
+
+use in vue files: [https://github.com/unplugin/unplugin-icons](https://github.com/unplugin/unplugin-icons)
 
 ## Translations
 
@@ -9,9 +25,15 @@ Manage translations with twig: [Symfony Translations](https://symfony.com/doc/cu
 If you want to share/use the translation files with/in JavaScript, use this library: [Symfony UX Translator](https://symfony.com/bundles/ux-translator/current/index.html)  
 [https://ux.symfony.com/translator](https://ux.symfony.com/translator)
 
+## Symfony UX Vue Components
+
+[https://symfony-vite.pentatrion.com/stimulus/symfony-ux.html](https://symfony-vite.pentatrion.com/stimulus/symfony-ux.html)
+
 ## Security
 
 [https://symfony.com/doc/current/security.html#roles](https://symfony.com/doc/current/security.html#roles)
+
+[https://symfony.com/bundles/ux-vue/current/index.html](https://symfony.com/bundles/ux-vue/current/index.html)
 
 ### Impersonating users
 

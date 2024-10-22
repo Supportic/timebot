@@ -1,9 +1,12 @@
 import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
+import Vue from '@vitejs/plugin-vue';
 import symfonyPlugin from 'vite-plugin-symfony';
 import Components from 'unplugin-vue-components/vite';
+import Icons from 'unplugin-icons/vite';
+import IconsResolver from 'unplugin-icons/resolver';
 import Unfonts from 'unplugin-fonts/vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import AutoImport from 'unplugin-auto-import/vite';
 
 const fontFamilies = [
   {
@@ -39,10 +42,26 @@ const fontFamilies = [
 ];
 
 export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
+  // const isProduction = mode === 'production';
+  // const isDevelopment = command === 'serve';
+
   return {
     plugins: [
-      vue(),
-      Components({}),
+      Vue(),
+      AutoImport({
+        dts: './assets/auto-imports.d.ts', // enable typescript support
+        imports: ['vue', '@vueuse/core'],
+      }),
+      Icons({ compiler: 'vue3', scale: 1 }),
+      Components({
+        dts: './assets/icons.d.ts', // enable typescript support (create on build)
+        version: 3,
+        resolvers: [
+          IconsResolver({
+            prefix: 'icon',
+          }),
+        ],
+      }),
       Unfonts({
         custom: {
           families: fontFamilies,
@@ -90,8 +109,8 @@ export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
       }),
       tsconfigPaths(),
     ],
-    publicDir: false,
-    base: command === 'serve' ? '/' : '/build',
+    publicDir: 'public',
+    base: '/build',
     css: {
       preprocessorOptions: {
         scss: {
@@ -101,10 +120,11 @@ export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
     },
     build: {
       assetsInlineLimit: 512,
+      outDir: 'public/build',
       manifest: true,
       rollupOptions: {
         input: {
-          login: './assets/scripts/pages/login.ts', // has login.scss
+          login: './assets/styles/pages/login.scss',
           main: './assets/vue/main.ts',
 
           app: './assets/app.ts',

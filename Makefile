@@ -2,10 +2,10 @@
 .ONESHELL:
 SHELL = /bin/bash
 TERMINAL = docker compose exec php bash
-NODE = docker compose run --rm --service-ports node
+NODE = docker compose run --rm -it --service-ports node
 SYMFONY = docker compose run --rm --entrypoint symfony php
 COMPOSER = docker compose run --rm php composer
-NPM = docker compose run --service-ports --rm --entrypoint npm node
+NPM = docker compose run --service-ports --rm -it --entrypoint npm node
 
 config:
 	docker compose -f compose.yaml -f .devcontainer/compose.yaml config

@@ -11,10 +11,11 @@
     "paths": {
       "@/*": ["assets/*"],
       "@components/*": ["assets/vue/components/*"],
-      "@types/*": ["assets/scripts/types/*"],
-      "@interfaces/*": ["assets/scripts/interfaces/*"],
+      // "@types/*": ["assets/scripts/types/*"],
+      // "@interfaces/*": ["assets/scripts/interfaces/*"],
       "@styles/*": ["assets/styles/*"],
       "@fonts/*": ["assets/fonts/*"],
+      "@icons/*": ["assets/icons/*"]
       // "@assets/*": ["assets/vue/assets/*"],
       // "@store/*": ["assets/vue/store/*"]
     },
@@ -27,7 +28,12 @@
     "noEmit": true,
     "jsx": "preserve",
     "sourceMap": true,
-    "types": ["vite/client", "unplugin-fonts/client"],
+    "types": [
+      "vite/client", // replaces vite-env.d.ts
+      "unplugin-fonts/client",
+      "unplugin-icons/types/vue",
+      "node"
+    ],
 
     /* Linting */
     "strict": true,
@@ -41,10 +47,9 @@
     "assets/**/*.ts",
     "assets/**/*.tsx",
     "assets/**/*.vue",
-    ".d.ts",
-    "vite-env.d.ts",
-    // "tests/**/*.ts",
-    // "tests/**/*.tsx"
+    "assets/**/*.d.ts",
+    "tests/**/*.ts",
+    "tests/**/*.tsx"
   ],
   "exclude": ["public/build", "node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
