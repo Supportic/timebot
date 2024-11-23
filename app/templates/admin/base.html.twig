@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+  {% if app.user %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+  {% if app.user %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+  {% if app.user %}
+    <div class="flex">
+      <div id="sidebar" class="h-screen">
+        {% block sidebar %}
+          {% include 'admin/partials/_sidebar.html.twig' %}
+        {% endblock %}
+      </div>
+
+      <div class="flex flex-col p-4 w-full">
+        {% block content %}
+
+        {% endblock %}
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

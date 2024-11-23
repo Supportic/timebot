@@ -4,8 +4,8 @@ ux_icons:
   # Default attributes to add to all icons
   default_icon_attributes:
     fill: currentColor
-    width: 1em
-    height: 1em
+    width: 1.2em
+    height: 1.2em
   # Whether to ignore errors when an icon is not found
   ignore_not_found: false
   # Icon aliases (alias => icon name)
