@@ -1,3 +1,6 @@
-/workspace.code-workspace
-/.env.sample
-/.dockerignore
+.env
+**/node_modules/
+**/vendor/
+.git
+**/public/build/
+**/var/

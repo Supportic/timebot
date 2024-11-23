@@ -1,4 +1,4 @@
-ARG NODE_VER=20.17-alpine
+ARG NODE_VER=22.11-alpine
 FROM node:${NODE_VER} AS base
 LABEL autodelete="true"
 
@@ -38,7 +38,17 @@ USER ${UNAME}
 RUN printf "PS1='\u@\h:\w\$ '" >> "${HOME}/.bashrc" \
   && printf "\nalias ll=\"ls -la\"" >> "${HOME}/.bashrc"
 
-RUN npm install -g npm@latest @types/node
+# npm latest 10.9 is very slow when installing packages
+RUN npm install -g npm@10.3.0 @types/node
+
+# remove default binary from node image to use the custom global npm binary
+
+USER root
+
+RUN rm -rf /usr/local/lib/node_modules/npm \
+  && find /usr/local/bin -name "np*" | xargs rm -rf
+
+USER ${UNAME}
 
 WORKDIR /app
 RUN mkdir -p node_modules

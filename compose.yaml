@@ -52,7 +52,7 @@ services:
   # Database
   ########################
   db:
-    image: ${DB_IMAGE:-mariadb}:${DB_IMAGE_VER:-11.2.2-jammy}
+    image: ${DB_IMAGE:-mariadb}:${DB_IMAGE_VER:-11.4.4-noble}
     platform: linux/amd64
     healthcheck:
       test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
@@ -64,10 +64,9 @@ services:
     container_name: ${DB_CONTAINER_NAME:-db}
     restart: unless-stopped
     environment:
-      - MYSQL_DATABASE=${DB_NAME:-timebot}
-      - MYSQL_USER=${DB_USER:-admin}
-      - MYSQL_PASSWORD=${DB_PW:-admin}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
+      - MARIADB_DATABASE=${DB_NAME:-timebot}
+      - MARIADB_USER=${DB_USER:-admin}
+      - MARIADB_PASSWORD=${DB_PW:-admin}
       - MARIADB_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
     expose:
       - ${DB_PORT_CONTAINER:-3306}
@@ -82,16 +81,22 @@ services:
     build:
       context: ./.docker/service/adminer
       args:
-        - ADMINER_VER=${ADMINER_VER:-4.8.1-standalone}
+        - ADMINER_VER=${ADMINER_VER:-latest}
     image: ${PROJECT_NAME}-adminer:0.0.1
     env_file:
       - ./.docker/service/adminer/.env
     platform: linux/amd64
     container_name: ${ADMINER_CONTAINER_NAME:-adminer}
     restart: unless-stopped
-    user: adminer
+    # user: adminer
     ports:
       - ${ADMINER_PORT_HOST:-8080}:8080
+    environment:
+      # default server entry in the login form
+      ADMINER_DEFAULT_SERVER: db
+      ADMINER_DEFAULT_USER: ${DB_USER:-admin}
+      ADMINER_DEFAULT_PASSWORD: ${DB_PW:-admin}
+
 
   ########################
   # Mail Receiver
