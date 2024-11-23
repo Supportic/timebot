@@ -8,6 +8,7 @@
 | symfony/ux-translator                       |
 | symfony/ux-vue with symfony-vite            |
 | unplugin-icons with unplugin-vue-components |
+| gedmo/doctrine-extensions                   |
 
 ## Services
 
@@ -28,6 +29,12 @@ If you want to share/use the translation files with/in JavaScript, use this libr
 ## Symfony UX Vue Components
 
 [https://symfony-vite.pentatrion.com/stimulus/symfony-ux.html](https://symfony-vite.pentatrion.com/stimulus/symfony-ux.html)
+
+## Doctrine Extensions
+
+general: [https://packagist.org/packages/gedmo/doctrine-extensions](https://packagist.org/packages/gedmo/doctrine-extensions) => [https://github.com/doctrine-extensions/DoctrineExtensions/blob/main/doc/frameworks/symfony.md](https://github.com/doctrine-extensions/DoctrineExtensions/blob/main/doc/frameworks/symfony.md)
+
+automatically integrates gedmo/doctrine-extensions into Symfony for you: [https://packagist.org/packages/stof/doctrine-extensions-bundle](https://packagist.org/packages/stof/doctrine-extensions-bundle) => [https://symfony.com/bundles/StofDoctrineExtensionsBundle/current/index.html](https://symfony.com/bundles/StofDoctrineExtensionsBundle/current/index.html)
 
 ## Security
 

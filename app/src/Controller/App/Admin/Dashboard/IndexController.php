@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Controller\App\Dashboard;
+namespace App\Controller\App\Admin\Dashboard;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[IsGranted(new Expression(
-    '"ROLE_ADMIN" in role_names or (is_authenticated() and user.isSuperAdmin())'
-))]
-
+// #[IsGranted(new Expression(
+//     '"ROLE_ADMIN" in role_names or (is_authenticated() and user.isSuperAdmin())'
+// ))]
+#[IsGranted('ROLE_MEMBER')]
 #[Route(path: '/admin')]
 class IndexController extends AbstractController
 {

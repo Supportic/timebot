@@ -7,6 +7,7 @@
     "php": ">=8.2",
     "ext-ctype": "*",
     "ext-iconv": "*",
+    "cerbero/enum": "^2.0",
     "doctrine/dbal": "^3",
     "doctrine/doctrine-bundle": "^2.12",
     "doctrine/doctrine-migrations-bundle": "^3.3",
@@ -14,6 +15,7 @@
     "pentatrion/vite-bundle": "^7.0",
     "phpdocumentor/reflection-docblock": "^5.3",
     "phpstan/phpdoc-parser": "^1.29",
+    "stof/doctrine-extensions-bundle": "^1.12",
     "symfony/asset": "6.4.*",
     "symfony/cache": "6.4.*",
     "symfony/console": "6.4.*",
@@ -98,6 +100,12 @@
     ],
     "post-update-cmd": [
       "@auto-scripts"
+    ],
+    "lint-yaml": [
+      "php vendor/bin/yaml-lint config/ translations/"
+    ],
+    "lint": [
+      "@lint-yaml"
     ]
   },
   "conflict": {

@@ -2,28 +2,38 @@
 
 namespace App\Entity;
 
+use App\Entity\Enum\RolesEnum;
+use App\Entity\Trait\SoftDeletableTrait;
+use App\Entity\Trait\TimestampableTrait;
 use App\Repository\UserRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSerializable
 {
+    use TimestampableTrait;
+    use SoftDeletableTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Groups(['api'])]
     private ?string $username = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
+    #[Groups(['api'])]
     private array $roles = [];
 
     /**
@@ -31,21 +41,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updated_at = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $deleted_at = null;
-
-
-    public function __construct()
-    {
-         $this->created_at = $this->updated_at = new DateTimeImmutable();
-    }
 
     public function getId(): ?int
     {
@@ -88,6 +83,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
+    public function getRole(): string
+    {
+        /** @var RolesEnum */
+        $role = constant(RolesEnum::class . '::' . $this->getRoles()[0]);
+
+        return $role->trans();
+    }
+
     /**
      * @param list<string> $roles
      */
@@ -122,39 +125,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    /**
+     * Make private properties available when serializing e.g. to JSON.
+     *
+     * @return object{
+     *  username: string,
+     *  roles: string[],
+     *  created_at: DatetimeImmutable,
+     *  updated_at: DatetimeImmutable,
+     *  deleted_at: DatetimeImmutable
+     * }
+     */
+    public function jsonSerialize(): mixed
     {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updated_at;
-    }
-
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): static
-    {
-        $this->updated_at = $updated_at;
-
-        return $this;
-    }
-
-    public function getDeletedAt(): ?\DateTimeImmutable
-    {
-        return $this->deleted_at;
-    }
-
-    public function setDeletedAt(?\DateTimeImmutable $deleted_at): static
-    {
-        $this->deleted_at = $deleted_at;
-
-        return $this;
+        return [
+            'username' => $this->username,
+            'roles'     => $this->roles,
+            'created_at'   => $this->createdAt->format(DATE_RFC3339_EXTENDED),
+            'updated_at'   => $this->updatedAt->format(DATE_RFC3339_EXTENDED),
+            'deleted_at'   => $this->updatedAt->format(DATE_RFC3339_EXTENDED),
+        ];
     }
 }
