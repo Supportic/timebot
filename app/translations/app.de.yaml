@@ -1,0 +1,9 @@
+app:
+  name: Timebot
+
+ui:
+  role: Rolle
+  nav:
+    dashboard: Dashboard
+    users: Nutzerverwaltung
+    settings: Einstellungen

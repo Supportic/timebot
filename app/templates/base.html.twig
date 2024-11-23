@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app.locale }}" dir="ltr">
+<html lang="{{ app.request.locale|replace({ '_': '-' }) }}" dir="ltr">
   <head>
     <meta charset="UTF-8" />
     <title>
@@ -23,7 +23,7 @@
   </head>
   <body>
     {% block body %}
-      <div {{ stimulus_controller('hello') }}></div>
+      {# <div {{ stimulus_controller('hello') }}></div> #}
     {% endblock %}
   </body>
 </html>

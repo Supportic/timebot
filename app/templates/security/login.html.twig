@@ -20,7 +20,7 @@
     <div class="p-2 sm:p-6 max-w-xl w-full z-10 backdrop-blur-xl bg-white/30 rounded-4xl shadow">
       <div class="p-6 backdrop-blur-lg bg-white/80 rounded-4xl shadow">
         <main>
-          <h1 class="text-gray-900 text-center text-3xl font-bold">Timebot</h1>
+          <h1 class="text-gray-900 text-center text-3xl font-bold">{{ 'app.name'|trans(domain = 'app') }}</h1>
 
           {% if app.user %}
             <div class="mt-4 bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded flex flex-row justify-between" role="alert">
@@ -68,6 +68,8 @@
               </div>
 
               <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+
+              {# <input type="hidden" name="_target_path" value="{{ path('app_admin_dashboard') }}"> #}
 
               <div class="!mt-8">
                 <button type="submit" class="w-full py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-6 focus:ring-blue-300 transition ease-in">{{ 'login.form_field.submit_button.label'|trans }}</button>

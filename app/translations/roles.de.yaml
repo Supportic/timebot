@@ -1,0 +1,5 @@
+roles:
+  super_admin: Super Admin
+  admin: Admin
+  member: Mitglied
+  user: Benutzer
