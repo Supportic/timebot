@@ -10,11 +10,12 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture implements FixtureGroupInterface
 {
-    public function __construct(private readonly UserPasswordHasherInterface $passwordHasher)
-    {
-    }
+    public function __construct(private readonly UserPasswordHasherInterface $passwordHasher) {}
 
-    public static function getGroups(): array { return ['test']; }
+    public static function getGroups(): array
+    {
+        return ['test'];
+    }
 
     /**
      * @var array<int, array{
@@ -33,6 +34,11 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
             'username' => 'admin',
             'password' => 'admin',
             'roles' => ['ROLE_ADMIN'],
+        ],
+        [
+            'username' => 'member',
+            'password' => 'member',
+            'roles' => ['ROLE_MEMBER'],
         ],
         [
             'username' => 'api',

@@ -20,7 +20,7 @@ USER ${UNAME}
 
 # install nvm (setup .bashrc), Node.js
 ARG NVM_VERSION=0.40.1
-ARG NODE_VERSION=20.17.0
+ARG NODE_VERSION=22.11.0
 ENV NVM_DIR="/home/${UNAME}/.nvm"
 
 # not supported for NVM
@@ -33,7 +33,9 @@ RUN set -ex && mkdir -p "${NVM_DIR}" \
   && nvm install "${NODE_VERSION}" \
   && nvm alias default "${NODE_VERSION}" \
   && nvm use default \
-  && npm install -g npm@latest @types/node
+  && npm install -g npm@10.3.0 @types/node
+
+# npm latest 10.9 is very slow when installing packages
 
 ENV NODE_PATH="${NVM_DIR}/v${NODE_VERSION}/lib/node_modules"
 ENV PATH="${NVM_DIR}/versions/node/v${NODE_VERSION}/bin:$PATH"

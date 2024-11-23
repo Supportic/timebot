@@ -29,6 +29,9 @@ security:
         login_path: app_login
         check_path: app_login
         enable_csrf: true
+        # change the page where the user is redirected to if no previous page was stored in the session
+        default_target_path: app_admin_dashboard
+        always_use_default_target_path: true
       logout:
         path: app_logout
         enable_csrf: true
@@ -48,12 +51,16 @@ security:
   # Users with the ROLE_ADMIN role will also have the ROLE_USER role.
   # Users with ROLE_SUPER_ADMIN, will automatically have ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH and ROLE_USER (inherited from ROLE_ADMIN).
   role_hierarchy:
-    ROLE_ADMIN: ROLE_USER
+    # can see the status of the importer/exporter
+    ROLE_MEMBER: ROLE_USER
+    # can see the logs of the importer/exporter and restart them
+    ROLE_ADMIN: ROLE_MEMBER
+    # can see tokens and hidden menus
     ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used
   access_control:
-    - { path: '^/admin', roles: ROLE_ADMIN }
+    - { path: '^/admin', roles: ROLE_MEMBER }
     - { path: ^/api/auth, roles: [IS_AUTHENTICATED_ANONYMOUSLY] }
     - { path: ^/api, roles: [IS_AUTHENTICATED_FULLY] }
 
