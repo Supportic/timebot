@@ -22,7 +22,7 @@ class SecurityController extends AbstractController
         AuthenticationUtils $authenticationUtils
     ): Response {
         // if user is already logged in, don't display the login page again
-        if ($user) {
+        if ($user instanceof User) {
             return $this->redirectToRoute('app_admin');
         }
 

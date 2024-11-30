@@ -11,7 +11,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 // #[IsGranted(new Expression(
 //     '"ROLE_ADMIN" in role_names or (is_authenticated() and user.isSuperAdmin())'
 // ))]
-#[IsGranted('ROLE_MEMBER')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 #[Route(path: '/admin')]
 class IndexController extends AbstractController
 {

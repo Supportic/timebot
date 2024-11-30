@@ -12,6 +12,7 @@ use JsonSerializable;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
@@ -26,6 +27,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Assert\Length(min: 5, max: 100)]
     #[Groups(['api'])]
     private ?string $username = null;
 
