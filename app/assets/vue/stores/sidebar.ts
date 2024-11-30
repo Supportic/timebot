@@ -4,8 +4,7 @@ interface State {
   isExpanded: boolean;
 }
 
-export const useSidebarStore = defineStore({
-  id: 'sidebar',
+export const useSidebarStore = defineStore('sidebar', {
   state: (): State => ({
     isExpanded: true,
   }),

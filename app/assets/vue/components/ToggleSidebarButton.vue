@@ -11,9 +11,7 @@ import { useSidebarStore } from '@/vue/stores/sidebar'
 
 const sidebarStore = useSidebarStore();
 
-// let isExpanded = ref(props.isExpanded);
 sidebarStore.isExpanded = props.isExpanded;
-
 
 const appName = document.getElementById('app-name');
 const appProfile = document.getElementById('app-profile');
@@ -21,6 +19,7 @@ const navLinks = document.querySelectorAll('.nav-link span');
 
 const expand = () => {
   appName?.classList.replace('w-32', 'w-0');
+  appName?.nextElementSibling?.classList.add('mr-auto');
 
   appProfile?.classList.add('w-0');
   appProfile?.classList.remove('w-52', 'ml-3');
@@ -33,6 +32,7 @@ const expand = () => {
 
 const contract = () => {
   appName?.classList.replace('w-0', 'w-32');
+  appName?.nextElementSibling?.classList.remove('mr-auto');
 
   appProfile?.classList.add('w-52', 'ml-3');
   appProfile?.classList.remove('w-0');
