@@ -33,7 +33,7 @@ RUN set -ex && mkdir -p "${NVM_DIR}" \
   && nvm install "${NODE_VERSION}" \
   && nvm alias default "${NODE_VERSION}" \
   && nvm use default \
-  && npm install -g npm@10.3.0 @types/node
+  && npm install -g npm@10.9.1 @types/node
 
 # npm latest 10.9 is very slow when installing packages
 
