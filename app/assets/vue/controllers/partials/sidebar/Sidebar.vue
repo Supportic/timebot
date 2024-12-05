@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 import ToggleSidebarButton from '@components/ToggleSidebarButton.vue';
 
-const props = defineProps({
+defineProps({
   isExpanded: {
     type: Boolean,
     required: true
@@ -10,7 +10,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <ToggleSidebarButton :isExpanded="props.isExpanded"></ToggleSidebarButton>
+  <ToggleSidebarButton :isExpanded></ToggleSidebarButton>
 </template>
 
 <style lang='scss' scoped></style>

@@ -6,13 +6,6 @@
 
 {% block content %}
   <h1>Dashboard</h1>
-  <div class="mb-3">
-    You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path('main') }}">Logout</a>
-  </div>
-
-  {% if is_granted('ROLE_ADMIN') %}
-    <h2>Hello {{ is_granted('ROLE_SUPER_ADMIN') ? 'ROLE_SUPER_ADMIN' : 'ROLE_ADMIN' }}</h2>
-  {% endif %}
 
   {% if is_granted('IS_IMPERSONATOR') %}
     <a href="{{ impersonation_exit_path(path('app_index')) }}">Exit impersonation</a>

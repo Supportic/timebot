@@ -7,3 +7,5 @@ ui:
     dashboard: Dashboard
     users: Users
     settings: Settings
+    profile: Profile
+    logout: Logout

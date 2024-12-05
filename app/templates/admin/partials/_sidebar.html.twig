@@ -9,19 +9,19 @@
   {# macro does not have access to global variables #}
   {% set isExpanded = app.session.get('sidebar_expanded') ?? true %}
 
-  <li class="group relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors {{ colors }}">
+  <li class="group/navitem relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors {{ colors }}">
     <a class="nav-link flex" href="{{route}}">
       {{ ux_icon(icon, {'font-size': '1.3rem'}) }}
       <span class="{{isExpanded ? 'w-52 ml-3' : 'w-0' }} overflow-hidden transition-all">{{ text }}</span>
     </a>
 
-    <div class="absolute left-full" {{ vue_component('partials/sidebar/Tooltip', {text: text }) }}>
+    <div class="absolute left-full font-medium" {{ vue_component('partials/sidebar/Tooltip', {text: text }) }}>
   </li>
 {% endmacro %}
 
 <nav class="h-full flex flex-col bg-white border-r shadow-sm">
   <div class="flex p-4 pb-2 h-[57px]">
-    <span id="app-name" class="{{isExpanded ? 'w-32' : 'w-0' }} text-xl overflow-hidden transition-all">{{ 'app.name'|trans(domain = 'app') }}</span>
+    <span id="sidebar-app-name" class="{{isExpanded ? 'w-32' : 'w-0' }} text-xl overflow-hidden transition-all">{{ 'app.name'|trans(domain = 'app') }}</span>
     <div class="ml-auto {{isExpanded ? '' : 'mr-auto' }}" {{ vue_component('partials/sidebar/Sidebar', {isExpanded: isExpanded }) }}>
     </div>
   </div>
@@ -32,28 +32,50 @@
        'ui.nav.dashboard'|trans,
        'lucide:layout-dashboard'
     )}}
-    {{ _self.NavItem(
-      '#',
-      'ui.nav.users'|trans,
-      'lucide:circle-user-round'
-    )}}
-    <hr class="mx-3" />
-    {{ _self.NavItem(
-      '#',
-      'ui.nav.settings'|trans,
-      'lucide:settings'
-    )}}
+    {% if is_granted('ROLE_ADMIN')  %}
+      {{ _self.NavItem(
+        '#',
+        'ui.nav.users'|trans,
+        'lucide:circle-user-round'
+      )}}
+      <hr class="mx-3" />
+      {{ _self.NavItem(
+        '#',
+        'ui.nav.settings'|trans,
+        'lucide:settings'
+      )}}
+    {% endif %}
   </ul>
 
 
-  <button class="border-t flex p-3 text-start items-center justify-center hover:bg-indigo-50">
+<div id="sidebar-profile-menu" class="group/profile flex flex-col">
+  <button id="sidebar-profile-button" onclick="window['sidebar-profile-menu'].classList.toggle('open')" class="w-full border-t flex p-3 text-start items-center justify-center hover:bg-indigo-50 group-[.open]/profile:bg-indigo-50">
     {{ renderProfileIcon(size: 40, fontSize: 18) }}
-    <div id="app-profile" class="{{isExpanded ? 'w-52 ml-3' : 'w-0' }} flex justify-between items-center overflow-hidden transition-all">
+    <div id="sidebar-user-profile" class="{{isExpanded ? 'w-52 ml-3' : 'w-0' }} flex justify-between items-center overflow-hidden transition-all">
       <div class="leading-4">
         <h4 class="font-semibold">{{ app.user.username }}</h4>
         <span class="text-xs text-gray-600 whitespace-nowrap">{{ ('ui.role'|trans) ~ ': ' ~ (app.user.role|trans(domain='roles')) }}</span>
       </div>
-      {{ ux_icon('lucide:more-vertical') }}
+      {{ ux_icon('lucide:more-vertical', {class: 'invisible group-hover/profile:visible group-[.open]/profile:visible'}) }}
     </div>
   </button>
+  <div class="order-first group-[.open]/profile:max-h-40 max-h-0 transition-[max-height] ease-out duration-450 overflow-y-clip w-full group-[.open]/profile:visible invisible">
+    <ul class="bg-slate-50 border-t flex flex-col">
+      <li class="order-last group/navitem relative grid place-items-center hover:bg-indigo-50 text-gray-600">
+        <a class="nav-link w-full flex justify-center py-4 px-3 hover:text-indigo-800" href="{{ logout_path('main') }}">
+          {{ ux_icon('lucide:log-out', {'font-size': '1.3rem'}) }}
+          <span class="{{isExpanded ? 'w-52 ml-3' : 'w-0' }} overflow-hidden transition-all">{{'ui.nav.logout'|trans}}</span>
+        </a>
+        <div class="absolute left-full font-medium" {{ vue_component('partials/sidebar/Tooltip', {text: 'ui.nav.logout'|trans }) }}>
+      </li>
+      <li class="order-first group/navitem relative grid place-items-center hover:bg-indigo-50 text-gray-600">
+        <a class="nav-link w-full flex justify-center py-4 px-3 hover:text-indigo-800" href="#">
+          {{ ux_icon('lucide:circle-user', {'font-size': '1.3rem'}) }}
+          <span class="{{isExpanded ? 'w-52 ml-3' : 'w-0' }} overflow-hidden transition-all">{{'ui.nav.profile'|trans}}</span>
+        </a>
+        <div class="absolute left-full font-medium" {{ vue_component('partials/sidebar/Tooltip', {text: 'ui.nav.profile'|trans }) }}>
+      </li>
+    </ul>
+  </div>
+</div>
 </nav>

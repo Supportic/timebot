@@ -13,8 +13,8 @@ const sidebarStore = useSidebarStore();
 
 sidebarStore.isExpanded = props.isExpanded;
 
-const appName = document.getElementById('app-name');
-const appProfile = document.getElementById('app-profile');
+const appName = document.getElementById('sidebar-app-name');
+const appProfile = document.getElementById('sidebar-user-profile');
 const navLinks = document.querySelectorAll('.nav-link span');
 
 const expand = () => {

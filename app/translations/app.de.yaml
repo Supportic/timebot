@@ -7,3 +7,5 @@ ui:
     dashboard: Dashboard
     users: Nutzerverwaltung
     settings: Einstellungen
+    profile: Profil
+    logout: Ausloggen
