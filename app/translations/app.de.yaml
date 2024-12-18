@@ -5,6 +5,7 @@ ui:
   role: Rolle
   nav:
     dashboard: Dashboard
+    importer: Importer
     users: Nutzerverwaltung
     settings: Einstellungen
     profile: Profil

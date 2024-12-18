@@ -21,7 +21,14 @@
         {% endblock %}
       </div>
 
-      <div class="flex flex-col p-4 w-full">
+      <div class="flex flex-col w-full">
+        <div class="flex items-center h-[57px] border-b px-4">
+          {% block heading %}
+            {% if heading is defined and heading is not empty %}
+              <h1 class="text-2xl">{{ heading|default('') }}</h1>
+            {% endif %}
+          {% endblock %}
+        </div>
         {% block content %}
 
         {% endblock %}

@@ -40,7 +40,7 @@
     {% if is_granted('ROLE_ADMIN')  %}
       <hr class="mx-3" />
       {{ _self.NavItem(
-        '#',
+        path('app_admin_user_management'),
         'ui.nav.users'|trans,
         'lucide:circle-user-round'
       )}}
