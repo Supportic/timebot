@@ -59,7 +59,7 @@
       {{ ux_icon('lucide:more-vertical', {class: 'invisible group-hover/profile:visible group-[.open]/profile:visible'}) }}
     </div>
   </button>
-  <div class="order-first group-[.open]/profile:max-h-40 max-h-0 transition-[max-height] ease-out duration-450 overflow-y-clip w-full group-[.open]/profile:visible invisible">
+  <div class="order-first group-[.open]/profile:h-28 h-0 transition-[height,visibility] group-[.open]/profile:duration-450 duration-200 group-[.open]/profile:ease-spring overflow-y-clip w-full group-[.open]/profile:visible invisible">
     <ul class="bg-slate-50 border-t flex flex-col">
       <li class="order-last group/navitem relative grid place-items-center hover:bg-indigo-50 text-gray-600">
         <a class="nav-link w-full flex justify-center py-4 px-3 hover:text-indigo-800" href="{{ logout_path('main') }}">
