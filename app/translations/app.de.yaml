@@ -9,3 +9,4 @@ ui:
     settings: Einstellungen
     profile: Profil
     logout: Ausloggen
+    exit_impersonation: Imitierung beenden
