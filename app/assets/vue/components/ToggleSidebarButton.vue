@@ -30,7 +30,7 @@ const expand = () => {
   })
 }
 
-const contract = () => {
+const minimize = () => {
   appName?.classList.replace('w-0', 'w-32');
   appName?.nextElementSibling?.classList.remove('mr-auto');
 
@@ -45,7 +45,7 @@ const contract = () => {
 
 const toggleSidebar = async () => {
   sidebarStore.isExpanded = !sidebarStore.isExpanded;
-  sidebarStore.isExpanded ? contract() : expand();
+  sidebarStore.isExpanded ? minimize() : expand();
 
   // save sidebar expanded sate in server session
   await fetch('/session/set', {
