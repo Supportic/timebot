@@ -10,12 +10,12 @@
   {% set isExpanded = app.session.get('sidebar_expanded') ?? true %}
 
   <li class="group/navitem relative flex items-center justify-center my-1 font-medium rounded-md cursor-pointer transition-colors {{ colors }}">
-    <a class="nav-link flex py-2 px-3" href="{{route}}">
+    <a class="nav-link flex py-2 px-3" href="{{ route }}">
       {{ ux_icon(icon, {'font-size': '1.3rem'}) }}
       <span class="{{isExpanded ? 'w-52 ml-3' : 'w-0' }} overflow-hidden transition-all">{{ text }}</span>
     </a>
 
-    <div class="absolute left-full font-medium" {{ vue_component('partials/sidebar/Tooltip', {text: text }) }}>
+    <div class="absolute left-full font-medium" {{ vue_component('partials/sidebar/Tooltip', {text: text }) }}></div>
   </li>
 {% endmacro %}
 

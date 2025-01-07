@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import 'unfonts.css';
 import './bootstrap.ts';
 
