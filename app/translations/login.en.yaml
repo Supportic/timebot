@@ -1,4 +1,5 @@
 login:
+  logged_in_notice: You are logged in as
   form_field:
     username:
       label: Username

@@ -10,6 +10,49 @@
   --blending: hard-light;
 }
 
+@property --animate-color-1 {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: hsl(216 100% 54%);
+}
+
+@property --animate-color-2 {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: hsl(251 100% 65%);
+}
+
+/* keyframes that change the color variable */
+@keyframes gradient-change {
+  to {
+    --animate-color-1: hsl(240 100% 70%);
+    --animate-color-2: hsl(201 71% 53%);
+  }
+}
+
+.app-name-gradient {
+  /* apply variable changes over time */
+  animation: gradient-change 2s linear infinite alternate;
+
+  background: linear-gradient(
+    /*
+      in oklch produces more vibrant gradient results
+      learn more https://developer.chrome.com/docs/css-ui/access-colors-spaces#color_interpolation
+    */
+      to right in oklch,
+    /* use the variables in a gradient (or wherever!) */ var(--animate-color-1),
+    var(--animate-color-2)
+  );
+
+  /* old browser support */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* modern browser version */
+  background-clip: text;
+  color: transparent;
+}
+
 html {
   min-height: 100%;
 }

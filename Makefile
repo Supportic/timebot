@@ -29,7 +29,7 @@ update:
 	$(COMPOSER) update
 	$(NPM) update
 
-cl:
+cc:
 	$(SYMFONY) console cache:clear
 
 install: install-container install-deps recreate-db build-assets
