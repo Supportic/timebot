@@ -22,16 +22,23 @@
       </div>
 
       <div class="flex flex-col w-full">
-        <div class="flex items-center h-[57px] border-b px-4">
-          {% block heading %}
-            {% if heading is defined and heading is not empty %}
-              <h1 class="text-2xl">{{ heading|default('') }}</h1>
-            {% endif %}
+        <div class="flex items-center justify-between h-[57px] border-b px-6">
+          <div>
+            {% block heading %}
+              {% if heading is defined and heading is not empty %}
+                <h1 class="text-2xl">{{ heading|default('') }}</h1>
+              {% endif %}
+            {% endblock %}
+          </div>
+          <div>
+            {% include 'admin/partials/_app_version.html.twig' %}
+          </div>
+        </div>
+        <div class="py-4 px-6">
+          {% block content %}
+
           {% endblock %}
         </div>
-        {% block content %}
-
-        {% endblock %}
       </div>
     </div>
   {% endif %}
