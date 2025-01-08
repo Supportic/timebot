@@ -9,8 +9,18 @@
 | symfony/ux-vue with symfony-vite            |
 | unplugin-icons with unplugin-vue-components |
 | gedmo/doctrine-extensions                   |
+| shivas/versioning-bundle                    |
 
 ## Services
+
+## Versioning
+
+[https://github.com/shivas/versioning-bundle/tree/master](https://github.com/shivas/versioning-bundle/tree/master)
+
+Use the twig variable: `app_version`  
+Use the VersionManager class: `$versionManager->getVersion()`  
+Use the command: `bin/console app:version`  
+Write version into file: VERSION
 
 ## Icons
 

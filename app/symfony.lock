@@ -61,6 +61,9 @@
             "tests/bootstrap.php"
         ]
     },
+    "shivas/versioning-bundle": {
+        "version": "4.1.1"
+    },
     "stof/doctrine-extensions-bundle": {
         "version": "1.12",
         "recipe": {
