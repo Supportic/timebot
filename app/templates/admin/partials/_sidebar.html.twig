@@ -19,7 +19,7 @@
   </li>
 {% endmacro %}
 
-<nav class="h-full flex flex-col bg-white border-r shadow-sm">
+<nav class="h-dvh flex flex-col bg-white border-r shadow-sm">
   <div class="flex p-4 pb-2 h-[57px]">
     <span id="sidebar-app-name" class="{{isExpanded ? 'w-32' : 'w-0' }} text-xl overflow-hidden transition-all">{{ 'app.name'|trans(domain = 'app') }}</span>
     <div class="ml-auto {{isExpanded ? '' : 'mr-auto' }}" {{ vue_component('partials/sidebar/Sidebar', {isExpanded: isExpanded }) }}>

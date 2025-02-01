@@ -21,7 +21,7 @@
         {% endblock %}
       </div>
 
-      <div class="flex flex-col w-full">
+      <div class="flex flex-col w-full overflow-x-hidden">
         <div class="flex items-center justify-between h-[57px] border-b px-6">
           <div>
             {% block heading %}
@@ -30,7 +30,7 @@
               {% endif %}
             {% endblock %}
           </div>
-          <div>
+          <div class="hidden sm:block">
             {% include 'admin/partials/_app_version.html.twig' %}
           </div>
         </div>

@@ -55,11 +55,12 @@
 
 html {
   min-height: 100%;
+  overflow: hidden;
 }
 
 body {
   overflow: hidden;
-  height: 100vh;
+  height: 100vdh;
 }
 
 .gradient-bg {

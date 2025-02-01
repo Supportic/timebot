@@ -143,7 +143,7 @@ export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
       port: 3000,
       hmr: {
         host: '192.168.178.37', // localhost or your Docker host IP
-        // protocol: "ws"
+        protocol: 'ws',
       },
       fs: {
         allow: ['.'],
@@ -157,6 +157,7 @@ export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
       port: 3005,
       hmr: {
         host: '192.168.178.37', // localhost or your Docker host IP
+        protocol: 'ws',
       },
     },
   };
