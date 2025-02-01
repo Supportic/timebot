@@ -7,6 +7,7 @@ namespace App\Service\Misc;
 use RuntimeException;
 use Shivas\VersioningBundle\Service\VersionManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Version\Version;
 
 class VersionManager
 {
@@ -22,31 +23,57 @@ class VersionManager
 
     public function hasUpdate(): bool
     {
+        //  does not compare build version
         return $this->versionManager
             ->getVersionFromProvider()
             ->isNotEqualTo($this->versionManager->getVersion());
+
+        // return $this->getVersionFromProvider()->toString !== $this->getVersion()->toString();
     }
 
     /**
-     * Retrieve the current version of the application.
-     * @return string
+     * Always newest.
+     * Retrieve the current not cached version of the application from the VERSION file.
      * @throws RuntimeException
      */
-    public function getVersion(): string
+    public function getVersionFromProvider(): Version
     {
-        $version = $this->versionManager->getVersion()->toString();
-
-        // if ($this->getGitBranchName() !== null) {
-        //     $version .= ' Git branch: ' . $this->getGitBranchName();
-        //     $version .= ', Git commit: ' . $this->getGitCommitHash();
-        // }
-
-        return $version;
+        return $this->versionManager->getVersionFromProvider();
     }
 
-    public function getVersionFromProvider(): string
+    /**
+     * Retrieve the current cached version of the application.
+     * @throws RuntimeException
+     */
+    public function getVersion(): Version
     {
-        return $this->versionManager->getVersionFromProvider()->toString();
+        return $this->versionManager->getVersion()->withBuild($this->getGitCommitHash());
+    }
+
+    public function incrementMajorVersion(): void
+    {
+        $currentVersion = $this->versionManager->getVersion();
+
+        $this->writeVersion($currentVersion->incrementMajor());
+    }
+
+    public function incrementMinorVersion(): void
+    {
+        $currentVersion = $this->versionManager->getVersion();
+
+        $this->writeVersion($currentVersion->incrementMinor());
+    }
+
+    public function incrementPatchVersion(): void
+    {
+        $currentVersion = $this->versionManager->getVersion();
+
+        $this->writeVersion($currentVersion->incrementPatch());
+    }
+
+    private function writeVersion(Version $version)
+    {
+        $this->versionManager->writeVersion($version->withBuild($this->getGitCommitHash()));
     }
 
     /**
@@ -60,9 +87,15 @@ class VersionManager
      */
     private function getGitCommitHash(int $length = 7): ?string
     {
-        $filename = $this->projectDir . '/.git/refs/remotes/origin/' . $this->getGitBranchName();
-        if (is_file($filename)) {
-            $head = file($filename);
+        // remote
+        $filePath = $this->projectDir . DIRECTORY_SEPARATOR . '.git/refs/remotes/origin/' . $this->getGitBranchName();
+        if (!is_file($filePath)) {
+            // local
+            $filePath = $this->projectDir . DIRECTORY_SEPARATOR . '.git/refs/heads/' . $this->getGitBranchName();
+        }
+
+        if (is_file($filePath)) {
+            $head = file($filePath);
 
             if (!isset($head[0])) {
                 return null;
@@ -83,7 +116,7 @@ class VersionManager
      */
     private function getGitBranchName(): ?string
     {
-        if (is_file($this->projectDir . '/.git/HEAD')) {
+        if (is_file($this->projectDir . DIRECTORY_SEPARATOR . '.git/HEAD')) {
             $git = file($this->projectDir . '/.git/HEAD');
             $head = explode('/', $git[0], 3);
 

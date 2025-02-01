@@ -32,13 +32,13 @@ class VersionCommand extends Command
 
         $io->title('Version Information');
 
-        $currentVersion = $this->versionManager->getVersion();
-        $newVersion = $this->versionManager->getVersionFromProvider();
+        $appVersion = $this->versionManager->getVersion();
+        $newVersion = $this->versionManager->getVersionFromProvider()->withBuild($appVersion->getBuild());
         $hasUpdate = $this->versionManager->hasUpdate();
 
         $version = $hasUpdate ?
-            '<error>' . $currentVersion . '</error> => <info>' . $newVersion . '</info>' :
-            $currentVersion;
+            '<error>' . $appVersion->toString() . '</error> => <info>' . $newVersion->toString() . '</info>' :
+            $appVersion->toString();
 
         $table = new Table($output);
         $table
@@ -58,7 +58,8 @@ class VersionCommand extends Command
 
         $io->newLine();
         if ($hasUpdate) {
-            $io->warning('A new version is available. Please run the cache:clear command.');
+            // your app might run in an older version
+            $io->warning(['A new version is available. Please run the cache:clear command.']);
         }
 
         return Command::SUCCESS;

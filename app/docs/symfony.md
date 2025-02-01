@@ -20,7 +20,7 @@
 Use the twig variable: `app_version`  
 Use the VersionManager class: `$versionManager->getVersion()`  
 Use the command: `bin/console app:version`  
-Write version into file: VERSION
+Write version into file: `bin/console app:version:bump --patch 1 [-d]`
 
 ## Icons
 

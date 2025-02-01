@@ -24,6 +24,8 @@ services:
       - ${PHP_PORT_HOST:-9000}:${PHP_PORT_CONTAINER:-9000}
     volumes:
       - ./app:${WORKDIR:-/var/www/app}
+      # read git commit version for version manager
+      - ./.git:${WORKDIR:-/var/www/app}/.git
       - ./.docker/data/logs/php:/var/log
     depends_on:
       db:
