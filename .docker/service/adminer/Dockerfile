@@ -1,4 +1,4 @@
-ARG ADMINER_VER=
+ARG ADMINER_VER=latest
 FROM shyim/adminerevo:$ADMINER_VER
 LABEL autodelete="true"
 
