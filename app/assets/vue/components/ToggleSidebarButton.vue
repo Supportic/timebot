@@ -17,6 +17,22 @@ const appName = document.getElementById('sidebar-app-name');
 const appProfile = document.getElementById('sidebar-user-profile');
 const navLinks = document.querySelectorAll('.nav-link span');
 
+// minimize sidebar when user is resizing window to mobile viewport
+const resizeObserver = new ResizeObserver((entries) => {
+
+  for (const entry of entries) {
+    if (
+      entry.contentRect
+      && sidebarStore.isExpanded
+      && entry.contentRect.width < 768
+    ) {
+      toggleSidebar();
+    }
+  }
+});
+
+resizeObserver.observe(document.body);
+
 const expand = () => {
   appName?.classList.replace('w-32', 'w-0');
   appName?.nextElementSibling?.classList.add('mr-auto');
@@ -43,17 +59,11 @@ const minimize = () => {
   })
 }
 
-const toggleSidebar = async () => {
+const toggleSidebar = () => {
   sidebarStore.isExpanded = !sidebarStore.isExpanded;
   sidebarStore.isExpanded ? minimize() : expand();
 
-  // save sidebar expanded sate in server session
-  await fetch('/session/set', {
-    method: 'POST',
-    body: JSON.stringify({ 'sidebar_expanded': sidebarStore.isExpanded })
-  }).catch(error => {
-    console.error(error);
-  })
+  sidebarStore.updateSession();
 }
 
 </script>

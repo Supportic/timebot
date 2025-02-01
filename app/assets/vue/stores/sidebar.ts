@@ -9,7 +9,17 @@ export const useSidebarStore = defineStore('sidebar', {
     isExpanded: true,
   }),
 
-  actions: {},
+  actions: {
+    // save sidebar expanded sate in server session
+    async updateSession() {
+      await fetch('/session/set', {
+        method: 'POST',
+        body: JSON.stringify({ sidebar_expanded: this.isExpanded }),
+      }).catch((error) => {
+        console.error(error);
+      });
+    },
+  },
 });
 
 if (import.meta.hot) {
