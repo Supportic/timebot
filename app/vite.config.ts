@@ -141,9 +141,10 @@ export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
       // Required to listen on all interfaces
       host: '0.0.0.0',
       port: 3000,
-      // hmr: {
-      //     protocol: "ws"
-      // }
+      hmr: {
+        host: '192.168.178.37', // localhost or your Docker host IP
+        // protocol: "ws"
+      },
       fs: {
         allow: ['.'],
       },
@@ -154,6 +155,9 @@ export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
     preview: {
       host: '0.0.0.0',
       port: 3005,
+      hmr: {
+        host: '192.168.178.37', // localhost or your Docker host IP
+      },
     },
   };
 });
