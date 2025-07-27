@@ -1,3 +1,28 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@forward 'tailwindcss';
+// v3->v4 https://tailwindcss.com/docs/upgrade-guide#using-a-javascript-config-file
+@config '../../tailwind.config.js';
+
+// v3->v4 https://tailwindcss.com/docs/upgrade-guide#preflight-changes
+@layer base {
+  // input placeholder color
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-gray-400);
+  }
+
+  // cursor pointer for buttons
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+
+
+  // border color
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}

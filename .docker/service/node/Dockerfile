@@ -1,4 +1,4 @@
-ARG NODE_VER=22.11-alpine
+ARG NODE_VER
 FROM node:${NODE_VER} AS base
 LABEL autodelete="true"
 

@@ -38,7 +38,7 @@ function toggleInputFieldType() {
 
 </script>
 <template>
-  <button @click="toggleInputFieldType" class="text-xl text-[#bbb] hover:text-slate-500 pointer-events-auto" type="button" :title="title">
+  <button @click="toggleInputFieldType" class="text-xl text-[#bbb] hover:text-slate-500 pointer-events-auto focus:outline-blue-500" type="button" :title="title">
     <icon-mdi-eye v-if="!isPasswordRevealed" />
     <icon-mdi-eye-off v-if="isPasswordRevealed"
       :class="`${isPasswordRevealed ? 'text-slate-500' : ''}`" />

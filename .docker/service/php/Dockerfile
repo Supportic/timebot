@@ -1,4 +1,4 @@
-ARG PHP_VER=8.3-fpm-bookworm
+ARG PHP_VER
 FROM php:${PHP_VER} AS base
 LABEL autodelete="true"
 

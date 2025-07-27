@@ -1,6 +1,6 @@
 {% trans_default_domain 'login' %}
 
-<div class="mt-4 bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded flex flex-row justify-between" role="alert">
+<div class="mt-4 bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded-sm flex flex-row justify-between" role="alert">
   <span class="block sm:inline">{{ 'login.logged_in_notice'|trans }} <span class="font-bold">{{ app.user.userIdentifier }}</span>.</span>
   {# dont use path('app_logout') here since it will throw CSRF errors on language change #}
   <a title="logout" href="{{ logout_path('main') }}">

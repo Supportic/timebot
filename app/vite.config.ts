@@ -7,6 +7,7 @@ import IconsResolver from 'unplugin-icons/resolver';
 import Unfonts from 'unplugin-fonts/vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import AutoImport from 'unplugin-auto-import/vite';
+import tailwindcss from '@tailwindcss/vite';
 
 const fontFamilies = [
   {
@@ -102,13 +103,16 @@ export default defineConfig(
            * or define custom path for your controllers.json
            * stimulus: './assets/other-dir/controllers.json
            */
-          stimulus: true,
+          stimulus: {
+            controllersDir: './assets/controllers',
+          },
 
           // as we set `server.host` to 0.0.0.0
           // we must explicitly set the server host name
           viteDevServerHostname: 'localhost',
         }),
         tsconfigPaths(),
+        tailwindcss(),
       ],
       publicDir: 'public',
       base: '/build',
