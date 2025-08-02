@@ -1,6 +1,8 @@
 .SILENT:
 .ONESHELL:
 SHELL = /bin/bash
+MAKEFLAGS += --no-print-directory
+
 TERMINAL = docker compose exec php bash
 NODE = docker compose run --rm -it --service-ports node
 NODE_RUN = docker compose run --rm -it node
@@ -13,15 +15,6 @@ shell:
 shell-node:
 	$(NODE_RUN)
 
-start:
-	docker compose up -d nginx php db adminer mailpit
-stop:
-	docker compose stop
-down:
-	docker compose down
-erase:
-	docker compose down -v --rmi all
-
 update:
 	$(COMPOSER) update
 	$(NPM) update
@@ -29,12 +22,32 @@ update:
 cc:
 	$(SYMFONY) console cache:clear
 
-install: install-container install-deps recreate-db build-assets
+start:
+	docker compose up -d nginx php db adminer mailpit
+stop:
+	docker compose stop
+down:
+	docker compose down
+restart: down start
+remove:
+	docker compose down -v
+erase:
+	docker compose down -v --rmi all
 
-install-container:
-	docker compose build php node adminer || exit 1
-	docker compose up -d nginx php db adminer mailpit || exit 1
-	@docker rmi $$(docker images -q -f "dangling=true" -f "label=autodelete=true") 2> /dev/null || true
+install: install-precondition install-image install-deps recreate-db build-assets
+rebuild: remove install
+
+install-precondition:
+	@if [ ! -f .env ]; then\
+		echo "Copy and adjust values .env.sample => .env";\
+		exit 1;\
+	fi
+
+install-image:
+	docker compose build --pull php node
+	docker compose pull db adminer mailpit
+	$(MAKE) start
+	@docker rmi $$(docker images -q -f "dangling=true" -f "label=autodelete=true") > /dev/null 2>&1 || true
 
 install-deps:
 	$(COMPOSER) install

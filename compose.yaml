@@ -1,32 +1,41 @@
+volumes:
+  dbdata:
+    name: ${PROJECT_NAME}_dbdata
+  node_modules:
+    name: ${PROJECT_NAME}_node_modules
+
+networks:
+  default:
+    name: ${PROJECT_NAME}_backend
+    driver: bridge
+
 services:
   ########################
   # Development
   ########################
   php:
+    container_name: ${PROJECT_NAME}-php
+    image: ${PROJECT_NAME}-php:0.0.1
     build:
       context: ./.docker/service/php
       args:
-        - PHP_VER=${PHP_VER:-8.2-fpm-bookworm}
+        - PHP_VER=${PHP_VER:-8.3-fpm-bookworm}
         - UID=${UID}
         - GID=${GID}
         - UNAME=${UNAME}
         - GNAME=${GNAME}
         - PASS=${PASS}
       target: develop
-    image: ${PROJECT_NAME}-php:0.0.1
     init: true
-    platform: linux/amd64
-    container_name: ${PHP_CONTAINER_NAME:-php}
     working_dir: ${WORKDIR:-/var/www/app}
     user: ${UID:-1000}
     hostname: localhost
     ports:
-      - ${PHP_PORT_HOST:-9000}:${PHP_PORT_CONTAINER:-9000}
+      - "${PHP_PORT_HOST:-9000}:${PHP_PORT_CONTAINER:-9000}"
     volumes:
       - ./app:${WORKDIR:-/var/www/app}
       # read git commit version for version manager
       - ./.git:${WORKDIR:-/var/www/app}/.git
-      - ./.docker/data/logs/php:/var/log
     depends_on:
       db:
         condition: service_healthy
@@ -37,14 +46,13 @@ services:
   # Webserver
   ########################
   nginx:
+    container_name: ${PROJECT_NAME}-nginx
     image: nginx:${NGINX_VER:-latest}
-    platform: linux/amd64
-    container_name: ${NGINX_CONTAINER_NAME:-nginx}
     restart: unless-stopped
     depends_on:
       - php
     ports:
-      - ${NGINX_PORT_HOST:-80}:80
+      - "${NGINX_PORT_HOST:-80}:80"
     volumes:
       - ./app:${WORKDIR:-/var/www/app}
       - ./.docker/data/logs/nginx:/var/log/nginx
@@ -54,16 +62,14 @@ services:
   # Database
   ########################
   db:
-    image: ${DB_IMAGE:-mariadb}:${DB_IMAGE_VER:-11.4.4-noble}
-    platform: linux/amd64
+    container_name: ${PROJECT_NAME}-db
+    image: ${DB_IMAGE:-mariadb}:${DB_IMAGE_VER:-11.4}
     healthcheck:
       test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
-      start_period: 5s
-      start_interval: 10s
-      interval: 5s
+      start_period: 10s
+      interval: 10s
       timeout: 5s
       retries: 3
-    container_name: ${DB_CONTAINER_NAME:-db}
     restart: unless-stopped
     environment:
       - MARIADB_DATABASE=${DB_NAME:-timebot}
@@ -80,43 +86,45 @@ services:
   # Database UI
   ########################
   adminer:
-    build:
-      context: ./.docker/service/adminer
-      args:
-        - ADMINER_VER=${ADMINER_VER:-latest}
-    image: ${PROJECT_NAME}-adminer:0.0.1
-    env_file:
-      - ./.docker/service/adminer/.env
-    platform: linux/amd64
-    container_name: ${ADMINER_CONTAINER_NAME:-adminer}
+    container_name:  ${PROJECT_NAME}-adminer
+    image: adminer:latest
     restart: unless-stopped
     # user: adminer
     ports:
-      - ${ADMINER_PORT_HOST:-8080}:8080
+      - "${ADMINER_PORT_HOST:-8080}:8080" # web ui
     environment:
+      # https://github.com/vrana/adminer/tree/master/plugins
+      # ADMINER_PLUGINS: "tinymce tables-filter login-servers"
+      # https://github.com/vrana/adminer/tree/master/designs
+      # ADMINER_DESIGN: "nicu"
       # default server entry in the login form
-      ADMINER_DEFAULT_SERVER: db
-      ADMINER_DEFAULT_USER: ${DB_USER:-admin}
-      ADMINER_DEFAULT_PASSWORD: ${DB_PW:-admin}
+      ADMINER_DEFAULT_SERVER: ${PROJECT_NAME}-db
+    volumes:
+      - ./.docker/service/adminer/index.php:/var/www/html/index.php:ro
 
 
   ########################
   # Mail Receiver
   ########################
   mailpit:
+    container_name: ${PROJECT_NAME}-mailpit
     image: axllent/mailpit:latest
-    container_name: ${MAILPIT_CONTAINER_NAME:-mailpit}
     restart: unless-stopped
     logging:
       driver: 'none' # disable saving logs
+    expose:
+      - 1025 # smtp server
     ports:
-      - 1025:1025 # smtp server
-      - 8025:8025 # web ui
+      - "8025:8025" # web ui
+    environment:
+      TZ: Europe/Berlin
 
   ########################
   # Node
   ########################
   node:
+    container_name: ${PROJECT_NAME}-node
+    image: ${PROJECT_NAME}-node:0.0.1
     build:
       context: .
       dockerfile: .docker/service/node/Dockerfile
@@ -129,25 +137,13 @@ services:
         - GNAME=${GNAME}
         - PASS=${PASS}
       target: develop
-    image: ${PROJECT_NAME}-node:0.0.1
     init: true
-    platform: linux/amd64
-    container_name: ${NODE_CONTAINER_NAME:-node}
     user: ${UID:-1000}
     hostname: localhost
     entrypoint: /bin/bash
     working_dir: /app
     ports:
-      - 3000:3000
+      - "3000:3000"
     volumes:
       - ./app:/app
 
-volumes:
-  dbdata:
-    name: ${PROJECT_NAME}_dbdata
-  node_modules:
-    name: ${PROJECT_NAME}_node_modules
-
-networks:
-  default:
-    name: ${PROJECT_NAME}_backend

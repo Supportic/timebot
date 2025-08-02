@@ -11,6 +11,19 @@
 # |                                                            |
 # |     /path/to/dir/*                                         |
 # |                                                            |
-# | this will ignore the content but not the director itself.  |
+# | this will ignore the content but not the directory itself. |
 # +------------------------------------------------------------+
 !.gitkeep
+
+# +----------------------------+
+# |    Keep .gitignore files     |
+# +----------------------------+-------------------------------+
+# | To keep an empty directory, add a .gitignore file to it    |
+# | with the following content:                                |
+# |                                                            |
+# |     *                                                      |
+# |     !.gitignore                                            |
+# |                                                            |
+# | this will ignore the content but not the directory itself. |
+# +------------------------------------------------------------+
+!.gitignore
