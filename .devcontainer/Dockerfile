@@ -19,8 +19,8 @@ RUN echo ${UNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${UNAME} &&\
 USER ${UNAME}
 
 # install nvm (setup .bashrc), Node.js
-ARG NVM_VERSION=0.40.1
-ARG NODE_VERSION=22.11.0
+ARG NVM_VERSION=0.40.2
+ARG NODE_VERSION=24.4.0
 ENV NVM_DIR="/home/${UNAME}/.nvm"
 
 # not supported for NVM
@@ -30,12 +30,10 @@ RUN set -ex && mkdir -p "${NVM_DIR}" \
   && export HOME="/home/${UNAME}" \
   && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/install.sh | bash - \
   && . ~/.nvm/nvm.sh \
-  && nvm install "${NODE_VERSION}" \
+  && nvm install "${NODE_VERSION}" --latest-npm \
   && nvm alias default "${NODE_VERSION}" \
   && nvm use default \
-  && npm install -g npm@10.9.1 @types/node
-
-# npm latest 10.9 is very slow when installing packages
+  && npm install @types/node
 
 ENV NODE_PATH="${NVM_DIR}/v${NODE_VERSION}/lib/node_modules"
 ENV PATH="${NVM_DIR}/versions/node/v${NODE_VERSION}/bin:$PATH"

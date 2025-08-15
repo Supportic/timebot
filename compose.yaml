@@ -29,7 +29,7 @@ services:
     init: true
     working_dir: ${WORKDIR:-/var/www/app}
     user: ${UID:-1000}
-    hostname: localhost
+    hostname: dev
     ports:
       - "${PHP_PORT_HOST:-9000}:${PHP_PORT_CONTAINER:-9000}"
     volumes:
@@ -139,7 +139,7 @@ services:
       target: develop
     init: true
     user: ${UID:-1000}
-    hostname: localhost
+    hostname: node
     entrypoint: /bin/bash
     working_dir: /app
     ports:

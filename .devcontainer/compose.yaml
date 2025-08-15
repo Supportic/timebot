@@ -1,5 +1,6 @@
 services:
   devcontainer:
+    container_name: ${PROJECT_NAME}-devcontainer
     build:
       context: .
       dockerfile: .devcontainer/Dockerfile
@@ -7,10 +8,9 @@ services:
         - BASE_IMAGE=${PROJECT_NAME}-php:0.0.1
         - UNAME=${UNAME}
         - NODE_VERSION=${NODE_VERSION}
-    container_name: ${PROJECT_NAME}-devcontainer
     init: true
     working_dir: /workspace
-    # share the same networking space with the php container so both can use 'localhost' on curl
+    # share the same networking space with the php container so both can use 'localhost' on curl (no custom hostname)
     network_mode: "service:php"
     volumes:
       # Update this to wherever you want VS Code to mount the folder of your project

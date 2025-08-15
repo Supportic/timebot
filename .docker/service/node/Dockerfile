@@ -38,8 +38,7 @@ USER ${UNAME}
 RUN printf "PS1='\u@\h:\w\$ '" >> "${HOME}/.bashrc" \
   && printf "\nalias ll=\"ls -la\"" >> "${HOME}/.bashrc"
 
-# npm latest 10.9.0 is very slow when installing packages
-RUN npm install -g npm@10.9.1 @types/node
+RUN npm install -g npm@latest @types/node
 
 # remove default binary from node image to use the custom global npm binary
 
