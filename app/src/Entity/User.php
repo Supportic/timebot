@@ -13,6 +13,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use ValueError;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
@@ -79,18 +80,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+
+        // don't set role USER to API users
+        if (!in_array(RolesEnum::ROLE_API->value, $roles, true)) {
+            // guarantee every user at least has ROLE_USER
+            $roles[] = RolesEnum::ROLE_USER->value;
+        }
 
         return array_unique($roles);
     }
 
-    public function getRole(): string
+    /**
+     * @throws ValueError
+     */
+    public function getRole(): RolesEnum
     {
-        /** @var RolesEnum */
-        $role = constant(RolesEnum::class . '::' . $this->getRoles()[0]);
+        $roleName = $this->roles[0] ?? '';
 
-        return $role->trans();
+        // defined(RolesEnum::class .'::' . $roleName)
+        if (!RolesEnum::has($roleName)) {
+            throw new \ValueError(sprintf('Undefined role "%s".', $roleName));
+        }
+
+        // /** @var RolesEnum */
+        // $role = constant(RolesEnum::class . '::' . $roleName);
+        $role = RolesEnum::fromName($roleName);
+
+        return $role;
     }
 
     /**

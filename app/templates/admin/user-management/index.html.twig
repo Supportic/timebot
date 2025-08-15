@@ -1,11 +1,41 @@
+{% trans_default_domain 'user_management' %}
 {% extends 'admin/base.html.twig' %}
 
 {% block title %}
   Dashboard
 {% endblock %}
 
-{% set heading = 'ui.nav.users'|trans(domain = 'app') %}
+{% set heading = 'ui.nav.users'|trans(domain='app') %}
+{% set table_head_classes = 'p-3 border border-slate-200' %}
+{% set table_data_classes = 'p-3 border border-slate-200' %}
 
 {% block content %}
-    <p>Content</p>
+  <table class="border-collapse border border-slate-300">
+    <thead>
+      <tr>
+        <th class="{{ table_head_classes }}">ID</th>
+        <th class="{{ table_head_classes }}">{{ 'user_management.table.head.username'|trans }}</th>
+        <th class="{{ table_head_classes }}">{{ 'user_management.table.head.role'|trans }}</th>
+        <th class="{{ table_head_classes }}">{{ 'user_management.table.head.actions'|trans }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users|default([]) %}
+        <tr>
+          <td class="{{ table_data_classes }}">{{ user.id }}</td>
+          <td class="{{ table_data_classes }}">{{ user.username }}</td>
+          <td class="{{ table_data_classes }}">{{ user.role.toTransKey|trans(domain='roles') }}</td>
+          <td class="{{ table_data_classes }}">
+            {% if is_granted(user.getrole.value) %}
+              <div>
+                View | Edit | Delete{% if is_granted('ROLE_ALLOWED_TO_SWITCH') and user.role.value != enum('App\\Entity\\Enum\\RolesEnum').ROLE_SUPER_ADMIN.value -%}
+                  | <a href="{{ path('app_admin_dashboard', { (switch_user_parameter): user.username }) }}" class="hover:underline text-blue-600">Impersonate</a>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}

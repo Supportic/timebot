@@ -8,6 +8,7 @@ parameters:
   app.personio.api.base_uri: "https://api.personio.de/v1"
   app.default_locale : 'en'
   app.supported_locales: ['en','de']
+  app.switch_user.parameter: '_pretend_to_be_user'
 
 services:
   # default configuration for services in *this* file

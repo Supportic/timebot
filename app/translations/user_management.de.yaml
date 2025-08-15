@@ -1,0 +1,6 @@
+user_management:
+  table:
+    head:
+      username: Nutzername
+      role: Rolle
+      actions: Aktionen

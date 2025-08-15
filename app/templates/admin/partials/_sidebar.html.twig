@@ -37,7 +37,7 @@
       'ui.nav.importer'|trans,
       'lucide:import'
   )}}
-    {% if is_granted('ROLE_ADMIN')  %}
+    {% if is_granted(enum('App\\Entity\\Enum\\RolesEnum').ROLE_ADMIN.value)  %}
       <hr class="mx-3" />
       {{ _self.NavItem(
         path('app_admin_user_management'),
@@ -58,7 +58,7 @@
       <div id="sidebar-user-profile" class="{{isExpanded ? 'w-52 ml-3' : 'w-0' }} flex justify-between items-center overflow-hidden transition-all">
         <div class="leading-4">
           <h4 class="font-semibold">{{ app.user.username }}</h4>
-          <span class="text-xs text-gray-600 whitespace-nowrap">{{ ('ui.role'|trans) ~ ': ' ~ (app.user.role|trans(domain='roles')) }}</span>
+          <span class="text-xs text-gray-600 whitespace-nowrap">{{ ('ui.role'|trans) ~ ': ' ~ (app.user.role.toTransKey|trans(domain='roles')) }}</span>
         </div>
         {{ ux_icon('lucide:more-vertical', {class: 'invisible group-hover/profile:visible group-[.open]/profile:visible'}) }}
       </div>
@@ -67,7 +67,7 @@
       <ul class="bg-slate-50 border-t flex flex-col-reverse">
         {% if is_granted('IS_IMPERSONATOR') %}
         <li class="group/navitem relative grid place-items-center hover:bg-indigo-50 text-gray-600">
-          <a class="nav-link w-full flex justify-center py-4 px-3 hover:text-indigo-800" href="{{ impersonation_exit_path(path('app_index')) }}">
+          <a class="nav-link w-full flex justify-center py-4 px-3 hover:text-indigo-800" href="{{ impersonation_exit_path(path('app_admin_user_management')) }}">
             {{ ux_icon('lucide:bot-off', {'font-size': '1.3rem'}) }}
             <span class="{{isExpanded ? 'w-52 ml-3' : 'w-0' }} overflow-hidden transition-all">{{'ui.nav.exit_impersonation'|trans}}</span>
           </a>

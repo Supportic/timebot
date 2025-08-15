@@ -3,3 +3,4 @@ roles:
   admin: Admin
   member: Mitglied
   user: Benutzer
+  api: API

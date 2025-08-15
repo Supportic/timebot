@@ -1,5 +1,7 @@
 twig:
   file_name_pattern: "*.twig"
+  globals:
+    switch_user_parameter: '%app.switch_user.parameter%'
 
 when@test:
   twig:

@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Enum\RolesEnum;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
@@ -28,22 +29,22 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
         [
             'username' => 'superadmin',
             'password' => 'superadmin',
-            'roles' => ['ROLE_SUPER_ADMIN'],
+            'roles' => [RolesEnum::ROLE_SUPER_ADMIN->value],
         ],
         [
             'username' => 'admin',
             'password' => 'admin',
-            'roles' => ['ROLE_ADMIN'],
+            'roles' => [RolesEnum::ROLE_ADMIN->value],
         ],
         [
             'username' => 'member',
             'password' => 'member',
-            'roles' => ['ROLE_MEMBER'],
+            'roles' => [RolesEnum::ROLE_MEMBER->value],
         ],
         [
             'username' => 'api',
             'password' => 'api',
-            'roles' => ['ROLE_API'],
+            'roles' => [RolesEnum::ROLE_API->value],
         ],
     ];
 
