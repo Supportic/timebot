@@ -5,13 +5,12 @@
  */
 
 // Plugins
-import { PrimeVue, Aura } from './primevue';
 
 // Types
 import type { App } from 'vue';
 
+// @ts-ignore
 const registerPlugins = (app: App) => {
-  app.use(PrimeVue, { theme: { preset: Aura } });
 };
 
 export { registerPlugins };

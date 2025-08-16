@@ -3,6 +3,7 @@
 import 'unfonts.css';
 import './bootstrap.ts';
 
+import { PrimeVue, Aura } from './vue/plugins/primevue';
 import { createPinia } from 'pinia';
 import App from '@/vue/App.vue';
 
@@ -23,6 +24,19 @@ document.addEventListener('vue:before-mount', (event) => {
   } = event.detail;
 
   // app.component('Component', Component)
+
+  // https://primevue.org/tailwind/#plugin
+  app.use(PrimeVue, {
+    theme: {
+      preset: Aura,
+      options: {
+        cssLayer: {
+          name: 'primevue',
+          order: 'theme, base, primevue',
+        },
+      },
+    },
+  });
 
   app.use(pinia);
 });

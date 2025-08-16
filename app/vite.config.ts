@@ -4,6 +4,7 @@ import symfonyPlugin from 'vite-plugin-symfony';
 import Components from 'unplugin-vue-components/vite';
 import Icons from 'unplugin-icons/vite';
 import IconsResolver from 'unplugin-icons/resolver';
+import { PrimeVueResolver } from '@primevue/auto-import-resolver';
 import Unfonts from 'unplugin-fonts/vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import AutoImport from 'unplugin-auto-import/vite';
@@ -62,6 +63,8 @@ export default defineConfig(
             IconsResolver({
               prefix: 'icon',
             }),
+            // https://primevue.org/autoimport/
+            PrimeVueResolver(),
           ],
         }),
         Unfonts({

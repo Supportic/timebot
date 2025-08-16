@@ -63,7 +63,7 @@
         {{ ux_icon('lucide:more-vertical', {class: 'invisible group-hover/profile:visible group-[.open]/profile:visible'}) }}
       </div>
     </button>
-    <div class="order-first relative -bottom-full group-[.open]/profile:bottom-0 group-[.open]/profile:visible invisible max-h-0 group-[.open]/profile:max-h-56 transition-[bottom,visibility, max-height] group-[.open]/profile:duration-450 duration-200 group-[.open]/profile:ease-spring">
+    <div class="order-first relative -bottom-full group-[.open]/profile:bottom-0 group-[.open]/profile:visible invisible max-h-0 group-[.open]/profile:max-h-56 transition-[bottom,visibility, max-height] group-[.open]/profile:duration-(--transition-duration-450) duration-200 group-[.open]/profile:ease-(--transition-timing-function-spring)">
       <ul class="bg-slate-50 border-t flex flex-col-reverse">
         {% if is_granted('IS_IMPERSONATOR') %}
         <li class="group/navitem relative grid place-items-center hover:bg-indigo-50 text-gray-600">
