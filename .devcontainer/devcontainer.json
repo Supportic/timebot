@@ -51,7 +51,8 @@
         "mansoorkhan96.php-cs-fixer",
         "sleistner.vscode-fileutils",
         "zyrong.node-modules",
-        "codeandstuff.package-json-upgrade"
+        "codeandstuff.package-json-upgrade",
+        "DEVSENSE.composer-php-vscode"
       ],
       "settings": {
         "php.validate.executablePath": "/usr/local/bin/php",
