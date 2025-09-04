@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Command\Personio\Token;
+declare(strict_types=1);
 
-use App\Service\Personio\Api\ApiAuthTokenService;
+namespace App\Command\Personio\v2\Token;
+
+use App\Service\Personio\Api\v2\ApiAuthTokenService;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -11,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'app:personio:token:refresh',
+    name: 'app:personio:v2:token:refresh',
     description: 'Fetch and cache a new API auth token.',
 )]
 class PersonioTokenRefreshCommand extends Command
@@ -23,9 +25,7 @@ class PersonioTokenRefreshCommand extends Command
         parent::__construct();
     }
 
-    protected function configure(): void
-    {
-    }
+    protected function configure(): void {}
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

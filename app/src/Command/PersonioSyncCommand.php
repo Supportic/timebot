@@ -2,8 +2,8 @@
 
 namespace App\Command;
 
-use App\Service\Personio\Api\ApiAttendanceService;
-use App\Service\Personio\Api\ApiEmployeeService;
+use App\Service\Personio\Api\v1\ApiAttendanceService;
+use App\Service\Personio\Api\v1\ApiEmployeeService;
 use DateTime;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -28,7 +28,7 @@ class PersonioSyncCommand extends Command
         private readonly ApiAttendanceService $apiAttendanceService,
         private readonly Stopwatch $stopwatch,
         private readonly LoggerInterface $performanceLogger,
-        #[Autowire(param: 'app.personio.api.base_uri')]
+        #[Autowire(param: 'app.personio.api.v1.base_uri')]
         private readonly string $personioApiBaseUri,
     ) {
         parent::__construct();

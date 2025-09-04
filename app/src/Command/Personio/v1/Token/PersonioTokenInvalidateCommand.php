@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Command\Personio\Token;
+declare(strict_types=1);
 
-use App\Service\Personio\Api\ApiAuthTokenService;
+namespace App\Command\Personio\v1\Token;
+
+use App\Service\Personio\Api\v1\ApiAuthTokenService;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -11,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'app:personio:token:invalidate',
+    name: 'app:personio:v1:token:invalidate',
     description: 'Delete cached API auth token.',
 )]
 class PersonioTokenInvalidateCommand extends Command
@@ -22,15 +24,13 @@ class PersonioTokenInvalidateCommand extends Command
         parent::__construct();
     }
 
-    protected function configure(): void
-    {
-    }
+    protected function configure(): void {}
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        $tokenCacheItem = $this->personioAuthCache->getItem('personio.api.auth_token');
+        $tokenCacheItem = $this->personioAuthCache->getItem(ApiAuthTokenService::CACHE_KEY);
 
         if (is_null($tokenCacheItem->get())) {
             $io->info('Token not created yet');
@@ -43,7 +43,7 @@ class PersonioTokenInvalidateCommand extends Command
         // $command = new ArrayInput([
         //     'command' => 'cache:pool:delete',
         //     'pool' => 'personio.auth.cache',
-        //     'key' => 'personio.api.auth_token'
+        //     'key' => ApiAuthTokenService::CACHE_KEY
         // ]);
 
         // $returnCode = $this->getApplication()->doRun($command, $output);

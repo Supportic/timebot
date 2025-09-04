@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Command\Personio\Token;
+declare(strict_types=1);
+
+namespace App\Command\Personio\v1\Token;
 
 use App\Helper\TimeHelper;
-use App\Service\Personio\Api\ApiAuthTokenService;
+use App\Service\Personio\Api\v1\ApiAuthTokenService;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -13,7 +15,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Contracts\Cache\ItemInterface;
 
 #[AsCommand(
-    name: 'app:personio:token:show',
+    name: 'app:personio:v1:token:show',
     description: 'Display cached API auth token.',
 )]
 class PersonioTokenShowCommand extends Command
@@ -25,9 +27,7 @@ class PersonioTokenShowCommand extends Command
         parent::__construct();
     }
 
-    protected function configure(): void
-    {
-    }
+    protected function configure(): void {}
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

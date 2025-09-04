@@ -5,7 +5,8 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
   app.api.key: "abc"
-  app.personio.api.base_uri: "https://api.personio.de/v1"
+  app.personio.api.v1.base_uri: "https://api.personio.de/v1"
+  app.personio.api.v2.base_uri: "https://api.personio.de/v2"
   app.default_locale : 'en'
   app.supported_locales: ['en','de']
   app.switch_user.parameter: '_pretend_to_be_user'
@@ -41,18 +42,25 @@ services:
       - "[%%datetime%%] [%%extra.token%%] %%channel%%.%%level_name%%: %%message%% %%context%% %%extra%%\n"
       - "d.m.Y, G:i:s"
 
-  app.personio.api.http_client_factory:
-    class: 'App\Personio\Api\HttpClient\HttpClientFactory'
+  app.personio.api.v1.http_client_factory:
+    class: 'App\Personio\Api\v1\HttpClient\HttpClientFactory'
 
-  app.personio.api.http_client:
+  app.personio.api.v1.http_client:
     class: 'Symfony\Contracts\HttpClient\HttpClientInterface'
-    factory: ['@App\Personio\Api\HttpClient\HttpClientFactory', "create"]
+    factory: ['@App\Personio\Api\v1\HttpClient\HttpClientFactory', "create"]
 
-  App\Service\Personio\Api\ApiEmployeeService:
+  App\Service\Personio\Api\v1\ApiEmployeeService:
     arguments:
-      $httpClient: "@app.personio.api.http_client"
+      $httpClient: "@app.personio.api.v1.http_client"
       # $serializer: '@app.serializer.json'
 
-  App\Service\Personio\Api\ApiAttendanceService:
+  App\Service\Personio\Api\v1\ApiAttendanceService:
     arguments:
-      $httpClient: "@app.personio.api.http_client"
+      $httpClient: "@app.personio.api.v1.http_client"
+
+  app.personio.api.v2.http_client_factory:
+    class: 'App\Personio\Api\v2\HttpClient\HttpClientFactory'
+
+  app.personio.api.v2.http_client:
+    class: 'Symfony\Contracts\HttpClient\HttpClientInterface'
+    factory: ['@App\Personio\Api\v2\HttpClient\HttpClientFactory', "create"]
