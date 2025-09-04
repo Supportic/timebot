@@ -26,7 +26,7 @@ List all cache pools (from config/packages/cache.yaml):
 `php bin/console cache:pool:list`
 
 Delete cached auth token:  
-`php bin/console cache:pool:delete personio.auth.cache personio.api.auth_token`
+`php bin/console cache:pool:delete personio.auth.cache personio.api.v1.auth_token`
 
 ### fetching the API
 

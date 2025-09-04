@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service\Personio\Api\v1;
 
 use App\Model\Personio\Api\v1\AuthToken;
+use App\Service\Personio\Api\ApiAuthTokenServiceInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -12,10 +13,8 @@ use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class ApiAuthTokenService
+class ApiAuthTokenService implements ApiAuthTokenServiceInterface
 {
-    public const CACHE_KEY = 'personio.api.v1.auth_token';
-
     public function __construct(
         private readonly HttpClientInterface $httpClient,
         private readonly CacheInterface $personioAuthCache,
@@ -26,6 +25,11 @@ class ApiAuthTokenService
         #[Autowire(env: 'APP_PERSONIO_CLIENT_SECRET')]
         private readonly string $personioClientSecret,
     ) {}
+
+    public function getCacheKey(): string
+    {
+        return 'personio.api.v1.auth_token';
+    }
 
     /**
      * Fetches a new auth token from the personio API. Old tokens stay valid up to 24h and cannot be invalided.
@@ -75,7 +79,7 @@ class ApiAuthTokenService
     {
         // The callable will only be executed on a cache miss.
         $token = $this->personioAuthCache->get(
-            self::CACHE_KEY,
+            $this->getCacheKey(),
             function (ItemInterface $item): string {
 
                 $authToken = $this->fetchAuthToken();

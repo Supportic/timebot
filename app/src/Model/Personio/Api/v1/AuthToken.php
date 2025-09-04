@@ -1,35 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model\Personio\Api\v1;
 
-class AuthToken
-{
-    public function __construct(
-        private string $token,
-        private int $expiresIn
-    ) {}
+use App\Model\Personio\Api\AbstractAuthToken;
 
-    public function getToken(): string
-    {
-        return $this->token;
-    }
-
-    public function setToken(string $token): self
-    {
-        $this->token = $token;
-
-        return $this;
-    }
-
-    public function getExpiresIn(): int
-    {
-        return $this->expiresIn;
-    }
-
-    public function setExpiresIn(int $expiresIn): self
-    {
-        $this->expiresIn = $expiresIn;
-
-        return $this;
-    }
-}
+class AuthToken extends AbstractAuthToken {}
