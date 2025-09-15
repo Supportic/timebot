@@ -17,6 +17,8 @@ const appName = document.getElementById('sidebar-app-name');
 const appProfile = document.getElementById('sidebar-user-profile');
 const navLinks = document.querySelectorAll('.nav-link span');
 
+const BREAKPOINT_MD = 768;
+
 // minimize sidebar when user is resizing window to mobile viewport
 const resizeObserver = new ResizeObserver((entries) => {
 
@@ -24,7 +26,7 @@ const resizeObserver = new ResizeObserver((entries) => {
     if (
       entry.contentRect
       && sidebarStore.isExpanded
-      && entry.contentRect.width < 768
+      && entry.contentRect.width < BREAKPOINT_MD
     ) {
       toggleSidebar();
     }

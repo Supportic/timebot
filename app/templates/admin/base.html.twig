@@ -1,45 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block stylesheets %}
-  {% if app.user %}
-    {{ parent() }}
-  {% endif %}
+{# {% block stylesheets %}
+  {{ parent() }}
 {% endblock %}
 
 {% block javascripts %}
-  {% if app.user %}
-    {{ parent() }}
-  {% endif %}
-{% endblock %}
+  {{ parent() }}
+{% endblock %} #}
 
 {% block body %}
-  {% if app.user %}
-    <div class="flex">
-      <div id="sidebar" class="h-screen">
-        {% block sidebar %}
-          {% include 'admin/partials/_sidebar.html.twig' %}
-        {% endblock %}
-      </div>
+  <div class="flex">
+    {% block sidebar %}
+      {% include 'admin/partials/_sidebar.html.twig' %}
+    {% endblock %}
 
-      <div class="flex flex-col w-full overflow-x-hidden">
-        <div class="flex items-center justify-between h-[57px] border-b px-6">
-          <div>
-            {% block heading %}
-              {% if heading is defined and heading is not empty %}
-                <h1 class="text-2xl">{{ heading|default('') }}</h1>
-              {% endif %}
-            {% endblock %}
-          </div>
-          <div class="hidden sm:block">
-            {% include 'admin/partials/_app_version.html.twig' %}
-          </div>
-        </div>
-        <div class="py-4 px-6">
-          {% block content %}
-
+    <div class="flex flex-col w-full overflow-x-hidden">
+      <div class="flex items-center justify-between h-[57px] border-b px-6">
+        <div>
+          {% block heading %}
+            {% if heading is defined and heading is not empty %}
+              <h1 class="text-2xl">{{ heading|default('') }}</h1>
+            {% endif %}
           {% endblock %}
         </div>
+        <div class="hidden sm:block">
+          {% include 'admin/partials/_app_version.html.twig' %}
+        </div>
+      </div>
+      <div class="py-4 px-6">
+        {% block content %}
+
+        {% endblock %}
       </div>
     </div>
-  {% endif %}
+  </div>
 {% endblock %}

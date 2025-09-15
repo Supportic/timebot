@@ -11,3 +11,14 @@ ui:
     profile: Profile
     logout: Logout
     exit_impersonation: Exit Impersonation
+
+seo:
+  title_portal: 'Timebot'
+  title_page:
+    default: 'Welcome!'
+    dashboard: 'Dashboard'
+    login: 'Login'
+    users: 'Users'
+    settings: 'Settings'
+    profile: 'Profile'
+    importer: 'Importer'

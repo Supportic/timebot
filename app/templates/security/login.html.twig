@@ -1,9 +1,9 @@
 {% trans_default_domain 'login' %}
 {% extends 'base.html.twig' %}
 
-{% block title %}
-  Log in!
-{% endblock %}
+{%- block title_page -%}
+  {{ 'seo.title_page.login'|trans(domain: 'app') }}
+{%- endblock -%}
 
 {% block stylesheets %}
   {{ parent() }}

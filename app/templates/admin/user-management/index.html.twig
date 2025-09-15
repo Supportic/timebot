@@ -1,9 +1,9 @@
 {% trans_default_domain 'user_management' %}
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}
-  Dashboard
-{% endblock %}
+{%- block title_page -%}
+  {{ 'seo.title_page.users'|trans(domain='app') }}
+{%- endblock -%}
 
 {% set heading = 'ui.nav.users'|trans(domain='app') %}
 {% set table_head_classes = 'p-3 border border-slate-200' %}

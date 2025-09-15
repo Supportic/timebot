@@ -136,7 +136,7 @@ export default defineConfig(
             main: './assets/vue/main.ts',
 
             app: './assets/app.ts',
-            theme: './assets/styles/theme.scss',
+            global: './assets/styles/global.scss',
           },
           output: {
             manualChunks: {
