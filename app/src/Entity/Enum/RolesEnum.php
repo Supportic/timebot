@@ -3,6 +3,7 @@
 namespace App\Entity\Enum;
 
 use Cerbero\Enum\Concerns\Enumerates;
+use Symfony\Component\Translation\TranslatableMessage;
 
 /**
  * access in php: RolesEnum::ROLE_ADMIN->value
@@ -28,6 +29,17 @@ enum RolesEnum: string
             self::ROLE_MEMBER       => 'roles.member',
             self::ROLE_USER         => 'roles.user',
             self::ROLE_API          => 'roles.api',
+        };
+    }
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::ROLE_SUPER_ADMIN  => new TranslatableMessage('roles.super_admin', [], 'roles'),
+            self::ROLE_ADMIN        => new TranslatableMessage('roles.admin', [], 'roles'),
+            self::ROLE_MEMBER       => new TranslatableMessage('roles.member', [], 'roles'),
+            self::ROLE_USER         => new TranslatableMessage('roles.user', [], 'roles'),
+            self::ROLE_API          => new TranslatableMessage('roles.api', [], 'roles'),
         };
     }
 }
