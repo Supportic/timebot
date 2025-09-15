@@ -53,7 +53,7 @@ export default defineConfig(
         Vue(),
         AutoImport({
           dts: './assets/auto-imports.d.ts', // enable typescript support
-          imports: ['vue', '@vueuse/core'],
+          imports: ['vue', '@vueuse/core', 'pinia'],
         }),
         Icons({ compiler: 'vue3', scale: 1 }),
         Components({
@@ -130,6 +130,8 @@ export default defineConfig(
         assetsInlineLimit: 512,
         outDir: 'public/build',
         manifest: true,
+        emptyOutDir: true,
+        // minify: false,
         rollupOptions: {
           input: {
             login: './assets/styles/pages/login.scss',
@@ -139,16 +141,39 @@ export default defineConfig(
             global: './assets/styles/global.scss',
           },
           output: {
+            entryFileNames: `assets/[name].[hash:8].js`,
+            chunkFileNames: `assets/[name].[hash:8].js`,
+            assetFileNames: `assets/[name].[hash:8].[ext]`,
+            compact: true,
             manualChunks: {
-              vue: ['vue'],
+              vue: ['vue', 'pinia'],
             },
+            // manualChunks: (id: string) => {
+            //   if (id.includes('node_modules')) {
+            //     if (
+            //       id.includes('vue') ||
+            //       id.includes('pinia') ||
+            //       id.includes('vite-plugin-symfony')
+            //     )
+            //       return 'vue';
+            //     return 'vendor';
+            //   }
+            // },
           },
         },
+      },
+      optimizeDeps: {
+        exclude: ['vue'],
       },
       server: {
         // Required to listen on all interfaces
         host: '0.0.0.0',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
         port: 3000,
+        cors: true,
+        https: false,
         hmr: {
           host: '192.168.178.37', // localhost or your Docker host IP
           protocol: 'ws',
@@ -162,12 +187,17 @@ export default defineConfig(
       },
       preview: {
         host: '0.0.0.0',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
         port: 3005,
+        cors: true,
+        https: false,
         hmr: {
           host: '192.168.178.37', // localhost or your Docker host IP
           protocol: 'ws',
         },
       },
     };
-  }
+  },
 );
