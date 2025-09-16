@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
+    "composite": true,
     "target": "ES2020",
     "useDefineForClassFields": true,
     "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
-    "baseUrl": ".",
     "allowJs": true, // added to resolve Vue files
     "checkJs": true,
+    "baseUrl": ".",
     "paths": {
       "@/*": ["assets/*"],
       "@components/*": ["assets/vue/components/*"],
