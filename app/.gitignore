@@ -25,6 +25,7 @@
 ###> pentatrion/vite-bundle ###
 /node_modules/
 /public/build/
+/tsconfig.tsbuildinfo
 ###< pentatrion/vite-bundle ###
 
 

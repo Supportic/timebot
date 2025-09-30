@@ -9,6 +9,7 @@ import Unfonts from 'unplugin-fonts/vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import AutoImport from 'unplugin-auto-import/vite';
 import tailwindcss from '@tailwindcss/vite';
+import StimulusHMR from 'vite-plugin-stimulus-hmr';
 
 const fontFamilies = [
   {
@@ -50,6 +51,8 @@ export default defineConfig((config: UserConfig): UserConfig => {
   return {
     plugins: [
       Vue(),
+      StimulusHMR(),
+      // make lib functions globally available to use by saving named libs into auto-imports.d.ts
       AutoImport({
         dts: './assets/auto-imports.d.ts', // enable typescript support
         imports: ['vue', '@vueuse/core', 'pinia'],
@@ -126,11 +129,11 @@ export default defineConfig((config: UserConfig): UserConfig => {
       // minify: false,
       rollupOptions: {
         input: {
-          login: './assets/styles/pages/login.scss',
+          login: './assets/styles/pages/login.css',
           main: './assets/vue/main.ts',
 
           app: './assets/app.ts',
-          global: './assets/styles/global.scss',
+          global: './assets/styles/global.css',
         },
         output: {
           entryFileNames: `assets/[name].[hash:8].js`,
@@ -161,24 +164,21 @@ export default defineConfig((config: UserConfig): UserConfig => {
       // Required to listen on all interfaces
       host: '0.0.0.0',
       port: 3000,
-      // hmr: {
-      // host: '192.168.178.37', // localhost or your Docker host IP
-      // protocol: 'ws',
-      // },
+      hmr: {
+        host: '192.168.178.37', // localhost or your Docker host IP
+        protocol: 'ws',
+      },
       fs: {
         allow: ['.'],
       },
       watch: {
+        // usePolling: true,
         ignored: ['**/.idea/**', '**/tests/**', '**/var/**', '**/vendor/**'],
       },
     },
     preview: {
       host: '0.0.0.0',
       port: 3005,
-      // hmr: {
-      //   host: '192.168.178.37', // localhost or your Docker host IP
-      //   protocol: 'ws',
-      // },
     },
   };
 });
