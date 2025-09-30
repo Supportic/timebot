@@ -23,25 +23,27 @@ Add `styles/_typography.scss` and `@forward 'typography'` in `theme.scss`.
 
 ```scss
 @font-face {
-  font-family: "Montserrat";
+  font-family: 'Montserrat';
   font-style: normal;
-  src: local("Montserrat"), url(@fonts/MontserratVariable.woff2) format("woff2");
+  src: local('Montserrat'), url(@fonts/MontserratVariable.woff2) format('woff2');
 }
 @font-face {
-  font-family: "MontserratItalic";
+  font-family: 'MontserratItalic';
   font-style: italic;
-  src: local("MontserratItalic"), url(@fonts/MontserratVariable-italic.woff2) format("woff2");
+  src: local('MontserratItalic'),
+    url(@fonts/MontserratVariable-italic.woff2) format('woff2');
 }
 
 @font-face {
-  font-family: "Inter";
+  font-family: 'Inter';
   font-style: normal;
-  src: local("Inter"), url(@fonts/InterVariable.woff2) format("woff2");
+  src: local('Inter'), url(@fonts/InterVariable.woff2) format('woff2');
 }
 @font-face {
-  font-family: "InterItalic";
+  font-family: 'InterItalic';
   font-style: italic;
-  src: local("InterItalic"), url(@fonts/InterVariable-italic.woff2) format("woff2");
+  src: local('InterItalic'),
+    url(@fonts/InterVariable-italic.woff2) format('woff2');
 }
 ```
 
@@ -57,8 +59,8 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: "assets/fonts/*",
-          dest: "fonts",
+          src: 'assets/fonts/*',
+          dest: 'fonts',
         },
       ],
     }),
@@ -90,38 +92,38 @@ Add loading css from unfonts in app.ts: `import 'unfonts.css'`
 Adjust vite.config.ts:
 
 ```js
-import Unfonts from "unplugin-fonts/vite";
+import Unfonts from 'unplugin-fonts/vite';
 
 const fontFamilies = [
   {
     /**
      * Name of the font family.
      */
-    name: "Montserrat",
+    name: 'Montserrat',
     /**
      * Local name of the font. Used to add `src: local()` to `@font-rule`.
      */
-    local: "MontserratVariable",
+    local: 'MontserratVariable',
     /**
      * Regex(es) of font files to import. The names of the files will
      * predicate the `font-style` and `font-weight` values of the `@font-rule`'s.
      */
-    src: "./assets/fonts/MontserratVariable.woff2",
+    src: './assets/fonts/MontserratVariable.woff2',
   },
   {
-    name: "MontserratItalic",
-    local: "MontserratVariable-italic",
-    src: "./assets/fonts/MontserratVariable-italic.woff2",
+    name: 'MontserratItalic',
+    local: 'MontserratVariable-italic',
+    src: './assets/fonts/MontserratVariable-italic.woff2',
   },
   {
-    name: "Inter",
-    local: "InterVariable",
-    src: "./assets/fonts/InterVariable.woff2",
+    name: 'Inter',
+    local: 'InterVariable',
+    src: './assets/fonts/InterVariable.woff2',
   },
   {
-    name: "InterItalic",
-    local: "InterVariable-italic",
-    src: "./assets/fonts/InterVariable-italic.woff2",
+    name: 'InterItalic',
+    local: 'InterVariable-italic',
+    src: './assets/fonts/InterVariable-italic.woff2',
   },
 ];
 
@@ -135,7 +137,7 @@ export default defineConfig({
          * Defines the default `font-display` value used for the generated
          * `@font-rule` classes.
          */
-        display: "auto",
+        display: 'auto',
 
         /**
          * Using `<link rel="preload">` will trigger a request for the WebFont
@@ -158,9 +160,17 @@ export default defineConfig({
          * default: 'head-prepend'
          *   values: 'head' | 'body' | 'head-prepend' | 'body-prepend'
          */
-        injectTo: "head-prepend",
+        injectTo: 'head-prepend',
       },
     }),
   ],
 });
 ```
+
+## Tailwindcss
+
+Importing tailwindcss inside scss files breaks HMR in vite.  
+SCSS and Tailwindcss cannot be used together because both are preprocessors. You shouldn't use Tailwind with Sass for the same reason you wouldn't use Sass with Stylus.  
+@for exists in scss  
+@tailwind, @theme ... exists in tailwind  
+https://tailwindcss.com/docs/compatibility#sass-less-and-stylus
