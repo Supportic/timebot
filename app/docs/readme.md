@@ -40,3 +40,10 @@ We don't serialize API responses into Models because serializing an arbitrary am
 ## Email
 
 Testing: `php bin/console mailer:test someone@example.com`
+
+## Devcontainer
+
+sobald man mehrere compose files für den devcontainer angibt `"dockerComposeFile": ["../compose.yaml", "compose.yaml"],`
+versucht es beim hochfahren Referenzen zu mounten, die nach einem WSL shutdown (neustart) nicht mehr existieren (es kommt der Hinweis, dass es verweiste devcontainer gibt (orphaned))
+
+sobald man eine eigene compose Datei verfasst und auf `network_mode: container:timebot-php` verweist, verfällt die Referenz auf den PHP Container nach Neustart von WSL

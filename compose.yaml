@@ -19,7 +19,7 @@ services:
     build:
       context: ./.docker/service/php
       args:
-        - PHP_VER=${PHP_VER:-8.3-fpm-bookworm}
+        - PHP_VER=${PHP_VER:-8.3-fpm-trixie}
         - UID=${UID}
         - GID=${GID}
         - UNAME=${UNAME}
@@ -29,9 +29,7 @@ services:
     init: true
     working_dir: ${WORKDIR:-/var/www/app}
     user: ${UID:-1000}
-    hostname: localhost
-    ports:
-      - "${PHP_PORT_HOST:-9000}:${PHP_PORT_CONTAINER:-9000}"
+    network_mode: service:nginx
     volumes:
       - ./app:${WORKDIR:-/var/www/app}
       # read git commit version for version manager
@@ -39,8 +37,9 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+      nginx:
+        condition: service_started
+
 
   ########################
   # Webserver
@@ -49,14 +48,15 @@ services:
     container_name: ${PROJECT_NAME}-nginx
     image: nginx:${NGINX_VER:-latest}
     restart: unless-stopped
-    depends_on:
-      - php
     ports:
       - "${NGINX_PORT_HOST:-80}:80"
+      - "${PHP_PORT_HOST:-9000}:${PHP_PORT_CONTAINER:-9000}"
     volumes:
       - ./app:${WORKDIR:-/var/www/app}
       - ./.docker/data/logs/nginx:/var/log/nginx
       - ./.docker/service/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   ########################
   # Database
@@ -139,7 +139,6 @@ services:
       target: develop
     init: true
     user: ${UID:-1000}
-    hostname: localhost
     entrypoint: /bin/bash
     working_dir: /app
     ports:

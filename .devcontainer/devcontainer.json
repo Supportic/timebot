@@ -7,18 +7,27 @@
   // The .devcontainer/docker-compose.yml file contains any overrides you need/want to make.
   "dockerComposeFile": ["../compose.yaml", "compose.yaml"],
 
-  // The 'service' property is the name of the service for the container that VS Code should use. Update this value and .devcontainer/docker-composev.yml to the real service name.
+  // The 'service' property is the name of the service for the container that VS Code should use. Update this value and .devcontainer/compose.yaml to the real service name.
   "service": "devcontainer",
   // start specific services in your Docker Compose config.
   "runServices": ["nginx", "php", "adminer", "db", "mailpit"],
 
   // Features to add to the dev container. More info: https://containers.dev/features.
   "features": {
-    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "moby": false // moby removed from debian:trixie
+    }
   },
 
-  // The optional 'workspaceFolder' property is the path VS Code should open by default when connected. This is typically a file mount in .devcontainer/docker-compose.yml
+  // The optional 'workspaceFolder' property is the path VS Code should open by default when connected. This is typically a file mount in .devcontainer/compose.yaml
   "workspaceFolder": "/workspace",
+
+  "portsAttributes": {
+    "9003": {
+      "label": "XDebug Port",
+      "onAutoForward": "notify"
+    }
+  },
 
   "customizations": {
     "vscode": {
@@ -62,6 +71,8 @@
         "intelephense.format.enable": true,
 
         "php.debug.ideKey": "VSCODE",
+        // disable double intellisense suggestions
+        "php.suggest.basic": false,
 
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "[php]": {
@@ -70,6 +81,10 @@
         "[vue]": {
           "editor.defaultFormatter": "Vue.volar"
         },
+
+        "symfony-vscode.shellExecutable": "/bin/bash",
+        "symfony-vscode.consolePath": "/usr/local/bin/symfony",
+        "symfony-vscode.phpExecutablePath": "/usr/local/bin/php",
 
         "files.associations": {
           "**/views/**/*.html": "twig",

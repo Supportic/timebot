@@ -2,6 +2,7 @@ services:
   devcontainer:
     container_name: ${PROJECT_NAME}-devcontainer
     build:
+      # context is the first included compose.yaml in devcontainer.json
       context: .
       dockerfile: .devcontainer/Dockerfile
       args:
