@@ -30,7 +30,7 @@ security:
         check_path: app_login
         enable_csrf: true
         # change the page where the user is redirected to if no previous page was stored in the session
-        default_target_path: app_admin_dashboard
+        default_target_path: admin_dashboard
         always_use_default_target_path: true
       logout:
         path: app_logout

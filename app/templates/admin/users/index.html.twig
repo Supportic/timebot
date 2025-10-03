@@ -29,7 +29,7 @@
             {% if is_granted(user.getrole.value) %}
               <div>
                 View | Edit | Delete{% if is_granted('ROLE_ALLOWED_TO_SWITCH') and user.role.value != enum('App\\Entity\\Enum\\RolesEnum').ROLE_SUPER_ADMIN.value -%}
-                  | <a href="{{ path('app_admin_dashboard', { (switch_user_parameter): user.username }) }}" class="hover:underline text-blue-600">Impersonate</a>
+                  | <a href="{{ path('admin_dashboard', { (switch_user_parameter): user.username }) }}" class="hover:underline text-blue-600">Impersonate</a>
                 {%- endif -%}
               </div>
             {%- endif -%}

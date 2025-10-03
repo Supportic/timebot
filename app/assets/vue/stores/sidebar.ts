@@ -12,7 +12,7 @@ export const useSidebarStore = defineStore('sidebar', {
   actions: {
     // save sidebar expanded sate in server session
     async updateSession() {
-      await fetch('/session/set', {
+      await fetch('/admin/session/set', {
         method: 'POST',
         body: JSON.stringify({ sidebar_expanded: this.isExpanded }),
       }).catch((error) => {

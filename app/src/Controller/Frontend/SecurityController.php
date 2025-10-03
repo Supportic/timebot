@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Controller\App;
+declare(strict_types=1);
+
+namespace App\Controller\Frontend;
 
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

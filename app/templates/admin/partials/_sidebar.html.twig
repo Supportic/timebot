@@ -42,7 +42,7 @@
 
     <ul class="flex-1 px-3">
       {{ _self.NavItem(
-        path('app_admin_dashboard'),
+        path('admin_dashboard'),
         'ui.nav.dashboard'|trans,
         'lucide:layout-dashboard'
       )}}
@@ -54,7 +54,7 @@
       {% if is_granted(enum('App\\Entity\\Enum\\RolesEnum').ROLE_ADMIN.value)  %}
         <hr class="mx-3" />
         {{ _self.NavItem(
-          path('app_admin_user_management'),
+          path('admin_users'),
           'ui.nav.users'|trans,
           'lucide:circle-user-round'
         )}}
@@ -82,7 +82,7 @@
         <ul class="bg-slate-50 border-t flex flex-col-reverse">
           {% if is_granted('IS_IMPERSONATOR') %}
             {{ _self.UserItem(
-              impersonation_exit_path(path('app_admin_user_management')),
+              impersonation_exit_path(path('admin_users')),
               'ui.nav.exit_impersonation'|trans,
               'lucide:bot-off'
             )}}

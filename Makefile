@@ -35,7 +35,7 @@ erase:
 	docker compose down -v --rmi all
 
 install: install-precondition install-image install-deps recreate-db build-assets
-rebuild: remove install-precondition install-image
+rebuild: remove install-precondition install-image recreate-db
 reinstall: remove install
 
 install-precondition:
