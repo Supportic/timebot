@@ -17,7 +17,8 @@ final class VersionExtension extends AbstractExtension implements GlobalsInterfa
     public function getGlobals(): array
     {
         return [
-            'app_version' => $this->versionManager->getVersion()->toString(),
+            'app_version' =>  $this->versionManager->getVersion()->toString(),
+            'app_version_short' =>  $this->versionManager->getVersionShort()->toString(),
         ];
     }
 }

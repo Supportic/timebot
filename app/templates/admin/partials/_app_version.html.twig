@@ -1,4 +1,10 @@
-<div>
-  <span class="text-slate-400 me-1">Version</span>
-  <span class="text-slate-500 rounded-md font-mono px-2 py-1 bg-slate-100 text-sm overflow-clip font-medium shadow-[0_1px_4px_rgba(0,0,0,0.2)]">{{ app_version }}</span>
-</div>
+{#
+  Renders the application version badge.
+
+  Variables:
+    - version_short (bool): If true, shows the short version without commit hash. Default is false.
+#}
+{% set version_short = version_short|default(false) %}
+
+<span class="text-slate-400 me-1">Version</span>
+<span class="bg-indigo-50 text-indigo-800/85 font-mono text-sm font-semibold px-3 py-1.5 tracking-wide rounded-md">{{ version_short ? app_version_short : app_version }}</span>

@@ -1,5 +1,5 @@
 login:
-  logged_in_notice: Du bist bereits angemeldet als
+  logged_in_notice: 'Du bist bereits als <span class="font-bold">%username%</span> angemeldet.'
   form_field:
     username:
       label: Nutzername

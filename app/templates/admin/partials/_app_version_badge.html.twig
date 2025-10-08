@@ -1,0 +1,12 @@
+{#
+  Renders the application version badge.
+
+  Variables:
+    - version_short (bool): If true, shows the short version without commit hash. Default is false.
+#}
+{% set version_short = version_short|default(false) %}
+
+<div class="inline-flex items-center ps-1 pe-4 py-1 bg-blue-600 rounded-full text-white font-mono text-sm shadow-md">
+  <span class="mr-2 flex items-center justify-center h-5 w-5 bg-white/90 rounded-full text-blue-600 font-bold shadow-sm shadow-black/40">v</span>
+  <span class="font-medium">{{ version_short ? app_version_short : app_version }}</span>
+</div>

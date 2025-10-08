@@ -1,5 +1,5 @@
 login:
-  logged_in_notice: You are logged in as
+  logged_in_notice: 'You are already logged in as <span class="font-bold">%username%</span>.'
   form_field:
     username:
       label: Username

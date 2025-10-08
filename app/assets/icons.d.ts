@@ -10,7 +10,5 @@ declare module 'vue' {
   export interface GlobalComponents {
     IconLucideChevronFirst: typeof import('~icons/lucide/chevron-first')['default']
     IconLucideChevronLast: typeof import('~icons/lucide/chevron-last')['default']
-    IconMdiEye: typeof import('~icons/mdi/eye')['default']
-    IconMdiEyeOff: typeof import('~icons/mdi/eye-off')['default']
   }
 }

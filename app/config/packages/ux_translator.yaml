@@ -1,3 +1,4 @@
 ux_translator:
+    domains: ~    # Include all the domains
     # The directory where the JavaScript translations are dumped
     dump_directory: '%kernel.project_dir%/var/translations'

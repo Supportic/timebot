@@ -7,7 +7,7 @@
 
 {% block stylesheets %}
   {{ parent() }}
-  {{ vite_entry_link_tags('login') }}
+  {{ vite_entry_link_tags('login_style') }}
 {% endblock %}
 
 {% block javascripts %}
@@ -20,11 +20,11 @@
     <div class="p-2 sm:p-5 max-w-xl w-full z-10 backdrop-blur-xl bg-white/30 rounded-4xl shadow">
       <div class="p-6 backdrop-blur-lg bg-white/80 rounded-4xl shadow">
         <main>
-          <div class="flex items-center justify-center">
-            <div class="app-name-gradient mr-4">
+          <div class="flex items-center justify-center flex-col">
+            <div class="app-name-gradient mb-2">
               <h1 class="text-gray-900 text-center text-4xl font-bold tracking-wide">{{ 'app.name'|trans(domain='app') }}</h1>
             </div>
-            {# {% include 'admin/partials/_app_version.html.twig' %} #}
+            {% include 'admin/partials/_app_version_badge.html.twig' with {version_short: true} %}
           </div>
           {% if app.user %}
             {% include 'security/_logged_in_notice.html.twig' %}

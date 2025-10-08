@@ -21,14 +21,22 @@ class VersionManager
         return $this->versionManager;
     }
 
+    /**
+     * Compares cached version getVersion() with the newest version getVersionFromProvider().
+     * @throws RuntimeException
+     */
     public function hasUpdate(): bool
     {
-        //  does not compare build version
-        return $this->versionManager
-            ->getVersionFromProvider()
-            ->isNotEqualTo($this->versionManager->getVersion());
+        $currentVersion = $this->versionManager->getVersion();
+        $newVersion = $this->versionManager->getVersionFromProvider();
 
-        // return $this->getVersionFromProvider()->toString !== $this->getVersion()->toString();
+        //  does not compare build version
+        // return $newVersion->isNotEqualTo($currentVersion);
+
+        // Compare only major.minor.patch, ignoring build hash
+        return $newVersion->getMajor() !== $currentVersion->getMajor()
+            || $newVersion->getMinor() !== $currentVersion->getMinor()
+            || $newVersion->getPatch() !== $currentVersion->getPatch();
     }
 
     /**
@@ -42,12 +50,21 @@ class VersionManager
     }
 
     /**
-     * Retrieve the current cached version of the application.
+     * Retrieve the current cached version of the application with commit hash.
      * @throws RuntimeException
      */
     public function getVersion(): Version
     {
         return $this->versionManager->getVersion()->withBuild($this->getGitCommitHash());
+    }
+
+    /**
+     * Retrieve the current cached version of the application.
+     * @throws RuntimeException
+     */
+    public function getVersionShort(): Version
+    {
+        return $this->versionManager->getVersion();
     }
 
     public function incrementMajorVersion(): void

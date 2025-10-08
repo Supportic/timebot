@@ -129,7 +129,9 @@ export default defineConfig((config: UserConfig): UserConfig => {
       // minify: false,
       rollupOptions: {
         input: {
-          login: './assets/styles/pages/login.css',
+          login_style: './assets/styles/pages/login.css',
+          login: './assets/scripts/pages/login.ts',
+
           main: './assets/vue/main.ts',
 
           app: './assets/app.ts',

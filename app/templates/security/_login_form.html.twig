@@ -15,7 +15,11 @@
   <div class="relative flex items-center">
     <input id="password" for="password" name="_password" type="password" autocomplete="current-password" required class="w-full text-gray-900 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600" placeholder="{{ 'login.form_field.password.placeholder'|trans }}" />
 
-    <div class="absolute right-4 flex items-baseline justify-end w-full pointer-events-none" {{ vue_component('login/Login', {passwordInputId: 'password'}) }}></div>
+    <button id="revealPasswordButton" class="text-[#bbb] hover:text-slate-500 pointer-events-auto focus:outline-blue-500 absolute right-3" type="button" title="{{ 'reveal_password_button.title_reveal'|trans }}">
+      {{ ux_icon('mdi:eye', { 'id': 'revealPasswordButtonIconOff', 'font-size': '1.2rem' }) }}
+      {{ ux_icon('mdi:eye-off', { 'id': 'revealPasswordButtonIconOn', 'font-size': '1.2rem', class: 'hidden text-slate-500' }) }}
+      <span id="revealPasswordButtonTitle" class="sr-only">{{ 'reveal_password_button.title_reveal'|trans }}</span>
+    </button>
   </div>
 
   <div class="flex flex-wrap items-center justify-between gap-4">
