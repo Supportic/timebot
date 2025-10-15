@@ -15,6 +15,7 @@
       "@components/*": ["assets/vue/components/*"],
       // "@types/*": ["assets/scripts/types/*"],
       // "@interfaces/*": ["assets/scripts/interfaces/*"],
+      "@scripts/*": ["assets/scripts/*"],
       "@styles/*": ["assets/styles/*"],
       "@fonts/*": ["assets/fonts/*"],
       "@icons/*": ["assets/icons/*"]

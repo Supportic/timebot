@@ -6,6 +6,7 @@ namespace App\Controller\Admin\Internal;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -14,16 +15,16 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route(path: '/admin')]
 class SessionController extends AbstractController
 {
-    const keyWhitelist = ['sidebar_expanded'];
+    const WHITELIST = ['sidebar_expanded'];
 
     #[Route(path: '/session/set', name: 'admin_session_set', methods: [Request::METHOD_POST])]
-    public function set(Request $request): Response
+    public function set(RequestStack $requestStack): Response
     {
-        $payload = json_decode($request->getContent(), flags: JSON_OBJECT_AS_ARRAY | JSON_UNESCAPED_UNICODE);
-        $session = $request->getSession();
+        $payload = $requestStack->getCurrentRequest()->getPayload()->all();
+        $session = $requestStack->getSession();
 
         foreach ($payload as $key => $value) {
-            if (!in_array($key, self::keyWhitelist)) continue;
+            if (!in_array($key, self::WHITELIST)) continue;
 
             $session->set($key, $value);
         }

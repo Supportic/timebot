@@ -3,6 +3,9 @@
 import 'unfonts.css';
 import './bootstrap.ts';
 
+import Sidebar from '@scripts/components/Sidebar';
+new Sidebar();
+
 import { PrimeVue, Aura } from './vue/plugins/primevue';
 import { createPinia } from 'pinia';
 import App from '@/vue/App.vue';
