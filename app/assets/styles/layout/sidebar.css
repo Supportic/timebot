@@ -1,0 +1,27 @@
+#sidebar[data-state="expanded"] {
+  #sidebar-app-name {
+    @apply w-32;
+  }
+
+  /* move icon to the right */
+  #sidebar-app-name + div {
+    @apply mr-0;
+  }
+
+  #sidebar-user-profile,
+  .nav-link span {
+    @apply w-52 ml-3;
+  }
+
+  #sidebar-toggle-icon-left {
+    @apply block;
+  }
+
+  #sidebar-toggle-icon-right {
+    @apply hidden;
+  }
+
+  .sidebar-tooltip {
+    @apply hidden;
+  }
+}
