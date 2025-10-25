@@ -104,13 +104,15 @@ export default defineConfig((config: UserConfig): UserConfig => {
         },
       }),
       symfonyPlugin({
+        stimulus: true,
         /**
          * or define custom path for your controllers.json
          * stimulus: './assets/other-dir/controllers.json
          */
-        stimulus: {
-          controllersDir: './assets/controllers',
-        },
+        // stimulus: {
+        //   controllersDir: './assets/controllers',
+        //   controllersFilePath: './assets/controllers.json',
+        // },
 
         // as we set `server.host` to 0.0.0.0
         // we must explicitly set the server host name

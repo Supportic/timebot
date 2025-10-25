@@ -10,7 +10,7 @@ import {
 
 // register Vue components before startStimulusApp
 registerVueControllerComponents(
-  import.meta.glob<VueModule>('./vue/controllers/**/*.vue')
+  import.meta.glob<VueModule>('./vue/controllers/**/*.vue'),
 );
 
 const app = startStimulusApp();
@@ -25,6 +25,6 @@ registerControllers(
     {
       query: '?stimulus',
       eager: true,
-    }
-  )
+    },
+  ),
 );

@@ -30,7 +30,6 @@
     "@hotwired/stimulus": "^3.2.2",
     "@iconify/json": "^2.2.400",
     "@primevue/auto-import-resolver": "^4.4.1",
-    "@symfony/stimulus-bridge": "^4.0.1",
     "@symfony/ux-translator": "file:vendor/symfony/ux-translator/assets",
     "@symfony/ux-vue": "file:vendor/symfony/ux-vue/assets",
     "@tailwindcss/vite": "^4.1.16",
