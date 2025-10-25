@@ -7,36 +7,38 @@
 
 {% set isExpanded = app.session.get('sidebar_expanded') %}
 
-{% macro Tooltip(text, class = '') %}
+{% macro Tooltip(text, class) %}
   {# macro does not have access to global variables #}
   {% set isExpanded = app.session.get('sidebar_expanded') %}
+  {% if class is not empty %}{% set class = class ~ ' ' %}{% endif %}
 
-  <div class="{{- class~' ' -}} block sidebar-tooltip absolute left-full font-medium pointer-events-none">
+  <div class="{{ class -}} block sidebar-tooltip absolute left-full font-medium pointer-events-none">
     <div class="rounded-md absolute top-[50%] -translate-y-[50%] whitespace-nowrap px-2 py-1 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover/navitem:visible group-hover/navitem:opacity-100 group-hover/navitem:translate-x-0 group-focus-within/navitem:visible group-focus-within/navitem:opacity-100 group-focus-within/navitem:translate-x-0">
       {{ text|e }}
     </div>
   </div>
 {% endmacro %}
 
-{% macro NavItem(route, text, icon = '') %}
+{% macro NavItem(route, text, icon) %}
+  {# dont use app.current_route here because the value should be directly set on href #}
   {% set isActive = app.request.pathInfo == route %}
   {% set colors = isActive ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800' : 'hover:bg-indigo-50 text-gray-600' %}
 
   <li class="group/navitem relative flex items-center justify-center my-1 font-medium rounded-md transition-colors {{ colors }}">
     <a class="nav-link flex py-2 px-3" href="{{ route }}">
-      {{ ux_icon(icon, {'font-size': '1.3rem'}) }}
-      <span class="w-0 overflow-hidden transition-all">{{ text|e }}</span>
+      {% if icon is not empty %}{{ ux_icon(icon, {'font-size': '1.3rem'}) }}{% endif %}
+      <span class="w-0 overflow-hidden transition-all">{{ text|e|trim }}</span>
     </a>
 
     {{_self.Tooltip(text, 'ml-6')}}
   </li>
 {% endmacro %}
 
-{% macro UserItem(route, text, icon = '') %}
+{% macro UserItem(route, text, icon) %}
   <li class="group/navitem relative grid place-items-center hover:bg-indigo-50 text-gray-600">
     <a class="nav-link w-full flex justify-center py-4 px-3 hover:text-indigo-800" href="{{ route }}">
-      {{ ux_icon(icon, {'font-size': '1.3rem'}) }}
-      <span class="w-0 overflow-hidden transition-all">{{ text|e }}</span>
+      {% if icon is not empty %}{{ ux_icon(icon, {'font-size': '1.3rem'}) }}{% endif %}
+      <span class="w-0 overflow-hidden transition-all">{{ text|e|trim }}</span>
     </a>
 
     {{_self.Tooltip(text, 'ml-3')}}
@@ -50,8 +52,8 @@
 
       <div class="mx-auto">
         <button id="sidebar-toggle" class="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100">
-            {{ ux_icon('lucide:chevron-left', {'id': 'sidebar-toggle-icon-left','font-size': '1.4rem', 'class': 'hidden' }) }}
-            {{ ux_icon('lucide:chevron-right', {'id': 'sidebar-toggle-icon-right','font-size': '1.4rem', 'class': 'block' }) }}
+            {{ ux_icon('lucide:chevron-left', {id: 'sidebar-toggle-icon-left','font-size': '1.4rem', 'class': 'hidden' }) }}
+            {{ ux_icon('lucide:chevron-right', {id: 'sidebar-toggle-icon-right','font-size': '1.4rem', class: 'block' }) }}
         </button>
       </div>
     </div>
@@ -63,19 +65,19 @@
         'lucide:layout-dashboard'
       )}}
       {{ _self.NavItem(
-        '#',
+        'javascript:void(0);',
         'ui.nav.importer'|trans,
         'lucide:import'
     )}}
       {% if is_granted(enum('App\\Entity\\Enum\\RolesEnum').ROLE_ADMIN.value)  %}
         <hr class="mx-3" />
         {{ _self.NavItem(
-          path('admin_users'),
+          path('admin_user'),
           'ui.nav.users'|trans,
           'lucide:circle-user-round'
         )}}
         {{ _self.NavItem(
-          '#',
+          'javascript:void(0);',
           'ui.nav.settings'|trans,
           'lucide:settings'
         )}}
@@ -83,18 +85,17 @@
     </ul>
 
     <div id="sidebar-profile-menu" class="group/profile flex flex-col overflow-y-clip">
-      <button id="sidebar-profile-button" onclick="window['sidebar-profile-menu'].classList.toggle('open')" class="z-[1] w-full border-t flex p-3 text-start items-center justify-center bg-white hover:bg-indigo-50 group-[.open]/profile:bg-indigo-50">
+      <button id="sidebar-profile-button" class="z-[1] w-full border-t flex p-3 text-start items-center justify-center bg-white hover:bg-indigo-50">
         {{ renderProfileIcon(size: 40, fontSize: 18) }}
         <div id="sidebar-user-profile" class="w-0 flex justify-between items-center overflow-hidden transition-all">
           <div class="leading-4">
             <h4 class="font-semibold">{{ app.user.username }}</h4>
             <span class="text-xs text-gray-600 whitespace-nowrap">{{ ('ui.role'|trans) ~ ': ' ~ (app.user.role.toTransKey|trans(domain='roles')) }}</span>
           </div>
-          {# TODO visible on focus group/profile #}
-          {{ ux_icon('lucide:more-vertical', {class: 'invisible group-hover/profile:visible group-[.open]/profile:visible'}) }}
+          {{ ux_icon('lucide:more-vertical', {id: 'sidebar-profile-menu-icon', class: 'invisible'}) }}
         </div>
       </button>
-      <div class="order-first relative -bottom-full group-[.open]/profile:bottom-0 group-[.open]/profile:visible invisible max-h-0 group-[.open]/profile:max-h-56 transition-[bottom,visibility, max-height] group-[.open]/profile:duration-(--transition-duration-450) duration-200 group-[.open]/profile:ease-(--transition-timing-function-spring)">
+      <div id="sidebar-profile-menu-wrapper" class="order-first relative -bottom-full invisible max-h-0  transition-[bottom,visibility, max-height] duration-200">
         <ul class="bg-slate-50 border-t flex flex-col-reverse">
           {% if is_granted('IS_IMPERSONATOR') %}
             {{ _self.UserItem(
@@ -110,7 +111,7 @@
             'lucide:log-out'
           )}}
           {{ _self.UserItem(
-            '#',
+            'javascript:void(0);',
             'ui.nav.profile'|trans,
             'lucide:circle-user'
           )}}

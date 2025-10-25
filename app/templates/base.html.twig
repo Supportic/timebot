@@ -1,17 +1,20 @@
+{% trans_default_domain 'app' %}
+
 <!DOCTYPE html>
 <html lang="{{ app.request.locale|replace({ '_': '-' }) }}" dir="ltr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-      {%- block title %}
-        {%- block title_page -%}
-          {{ 'seo.title_page.default'|trans }}
+
+    {% set seoTitle -%}
+        {%- block seoTitle -%}
+            {%- block title_portal -%}{{ 'seo.title_portal'|trans }}{%- endblock -%}
+            {%- if block('title_page') is not empty %} {% block title_separator %}-{% endblock %} {% endif -%}
+            {%- block title_page -%}{{ 'seo.title_page.default'|trans }}{%- endblock -%}
         {%- endblock -%}
-        {%- block title_separator %} - {% endblock -%}
-        {%- block title_portal %}Timebot{% endblock -%}
-      {% endblock -%}
-    </title>
+    {%- endset %}
+
+    <title>{{ seoTitle }}</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>" />
     {% block stylesheets %}
       {# for imported styles in TS file #}
@@ -28,7 +31,11 @@
   </head>
   <body>
     {% block body %}
+    <main>
+      {% block main %}
       {# <div {{ stimulus_controller('hello') }}></div> #}
+      {% endblock %}
+    </main>
     {% endblock %}
   </body>
 </html>

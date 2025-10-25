@@ -1,27 +1,55 @@
-#sidebar[data-state="expanded"] {
-  #sidebar-app-name {
-    @apply w-32;
+#sidebar {
+  /* SIDEBAR OPEN */
+  &[data-state='expanded'] {
+    #sidebar-app-name {
+      @apply w-32;
+    }
+
+    /* move icon to the right */
+    #sidebar-app-name + div {
+      @apply mr-0;
+    }
+
+    #sidebar-user-profile,
+    .nav-link span {
+      @apply w-52 ml-3;
+    }
+
+    #sidebar-toggle-icon-left {
+      @apply block;
+    }
+
+    #sidebar-toggle-icon-right {
+      @apply hidden;
+    }
+
+    .sidebar-tooltip {
+      @apply hidden;
+    }
   }
 
-  /* move icon to the right */
-  #sidebar-app-name + div {
-    @apply mr-0;
-  }
+  /* SIDEBAR PROFILE MENU */
+  #sidebar-profile-menu {
+    &.open {
+      #sidebar-profile-button {
+        @apply bg-indigo-50;
+      }
 
-  #sidebar-user-profile,
-  .nav-link span {
-    @apply w-52 ml-3;
-  }
+      /* settings icon */
+      #sidebar-profile-menu-icon {
+        @apply visible;
+      }
 
-  #sidebar-toggle-icon-left {
-    @apply block;
-  }
+      #sidebar-profile-menu-wrapper {
+        @apply bottom-0 visible max-h-56 duration-(--transition-duration-450) ease-(--transition-timing-function-spring);
+      }
+    }
 
-  #sidebar-toggle-icon-right {
-    @apply hidden;
-  }
-
-  .sidebar-tooltip {
-    @apply hidden;
+    &:hover {
+      /* settings icon */
+      #sidebar-profile-menu-icon {
+        @apply visible;
+      }
+    }
   }
 }

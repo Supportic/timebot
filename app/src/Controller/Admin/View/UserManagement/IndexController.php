@@ -21,6 +21,6 @@ class IndexController extends AbstractController
     {
         $users = $userRepository->findAll();
 
-        return $this->render('admin/users/index.html.twig', ['users' => $users]);
+        return $this->render('admin/pages/users/index.html.twig', ['users' => $users]);
     }
 }
