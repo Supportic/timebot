@@ -3,6 +3,7 @@ users:
     head:
       username: Username
       role: Role
+      state: State
       actions: Actions
     body:
       actions:

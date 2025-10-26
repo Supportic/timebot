@@ -69,7 +69,7 @@
         'ui.nav.importer'|trans,
         'lucide:import'
     )}}
-      {% if is_granted(enum('App\\Entity\\Enum\\RolesEnum').ROLE_ADMIN.value)  %}
+      {% if is_granted(enum('App\\Enum\\Role').ROLE_ADMIN.value)  %}
         <hr class="mx-3" />
         {{ _self.NavItem(
           path('admin_users'),
@@ -95,7 +95,7 @@
         <div id="sidebar-user-profile" class="w-0 flex justify-between items-center overflow-hidden transition-all">
           <div class="leading-4">
             <h4 class="font-semibold">{{ app.user.username }}</h4>
-            <span class="text-xs text-gray-600 whitespace-nowrap">{{ ('ui.role'|trans) ~ ': ' ~ (app.user.role.toTransKey|trans(domain='roles')) }}</span>
+            <span class="text-xs text-gray-600 whitespace-nowrap">{{ ('ui.role'|trans) ~ ': ' ~ (app.user.role|trans) }}</span>
           </div>
           {{ ux_icon('lucide:more-vertical', {id: 'sidebar-profile-menu-icon', class: 'invisible'}) }}
         </div>

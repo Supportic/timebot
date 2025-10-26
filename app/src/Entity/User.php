@@ -2,7 +2,8 @@
 
 namespace App\Entity;
 
-use App\Entity\Enum\RolesEnum;
+use App\Enum\Role;
+use App\Enum\UserState;
 use App\Entity\Trait\SoftDeletableTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\UserRepository;
@@ -45,6 +46,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
     #[ORM\Column]
     private ?string $password = null;
 
+    #[ORM\Column(enumType: UserState::class)]
+    private ?UserState $state = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -82,9 +86,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
         $roles = $this->roles;
 
         // don't set role USER to API users
-        if (!in_array(RolesEnum::ROLE_API->value, $roles, true)) {
+        if (!in_array(Role::ROLE_API->value, $roles, true)) {
             // guarantee every user at least has ROLE_USER
-            $roles[] = RolesEnum::ROLE_USER->value;
+            $roles[] = Role::ROLE_USER->value;
         }
 
         return array_unique($roles);
@@ -93,18 +97,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
     /**
      * @throws ValueError
      */
-    public function getRole(): RolesEnum
+    public function getRole(): Role
     {
         $roleName = $this->roles[0] ?? '';
 
-        // defined(RolesEnum::class .'::' . $roleName)
-        if (!RolesEnum::has($roleName)) {
+        // defined(Role::class .'::' . $roleName)
+        if (!Role::has($roleName)) {
             throw new \ValueError(sprintf('Undefined role "%s".', $roleName));
         }
 
-        // /** @var RolesEnum */
-        // $role = constant(RolesEnum::class . '::' . $roleName);
-        $role = RolesEnum::fromName($roleName);
+        // /** @var Role */
+        // $role = constant(Role::class . '::' . $roleName);
+        $role = Role::fromName($roleName);
 
         return $role;
     }
@@ -143,6 +147,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
         // $this->plainPassword = null;
     }
 
+    public function getState(): ?UserState
+    {
+        return $this->state;
+    }
+
+    public function setState(UserState $state): static
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
     /**
      * Make private properties available when serializing e.g. to JSON.
      *
@@ -157,11 +173,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
     public function jsonSerialize(): mixed
     {
         return [
-            'username' => $this->username,
-            'roles'     => $this->roles,
-            'created_at'   => $this->createdAt->format(DATE_RFC3339_EXTENDED),
-            'updated_at'   => $this->updatedAt->format(DATE_RFC3339_EXTENDED),
-            'deleted_at'   => $this->updatedAt->format(DATE_RFC3339_EXTENDED),
+            'username'      => $this->username,
+            'roles'         => $this->roles,
+            'state'         => $this->state->label(),
+            'created_at'    => $this->createdAt->format(DATE_RFC3339_EXTENDED),
+            'updated_at'    => $this->updatedAt->format(DATE_RFC3339_EXTENDED),
+            'deleted_at'    => $this->updatedAt->format(DATE_RFC3339_EXTENDED),
         ];
     }
 }

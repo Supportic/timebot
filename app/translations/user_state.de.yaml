@@ -1,0 +1,4 @@
+user_state:
+  enabled: aktiv
+  disabled: deaktiviert
+  pending: ausstehend

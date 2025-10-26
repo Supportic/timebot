@@ -2,7 +2,8 @@
 
 namespace App\Controller\Admin\View\UserManagement;
 
-use App\Entity\Enum\RolesEnum;
+use App\Controller\AdminApi\v1\Users\UserController;
+use App\Enum\Role;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +13,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 // #[IsGranted(new Expression(
 //     '"ROLE_ADMIN" in role_names or (is_authenticated() and user.isSuperAdmin())'
 // ))]
-#[IsGranted(RolesEnum::ROLE_ADMIN->value)]
+#[IsGranted(Role::ROLE_ADMIN->value)]
 #[Route(path: '/admin/users')]
 class IndexController extends AbstractController
 {

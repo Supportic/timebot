@@ -2,7 +2,8 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Enum\RolesEnum;
+use App\Enum\Role;
+use App\Enum\UserState;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
@@ -29,22 +30,26 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
         [
             'username' => 'superadmin',
             'password' => 'superadmin',
-            'roles' => [RolesEnum::ROLE_SUPER_ADMIN->value],
+            'state' => UserState::ENABLED,
+            'roles' => [Role::ROLE_SUPER_ADMIN],
         ],
         [
             'username' => 'admin',
             'password' => 'admin',
-            'roles' => [RolesEnum::ROLE_ADMIN->value],
+            'state' => UserState::ENABLED,
+            'roles' => [Role::ROLE_ADMIN],
         ],
         [
             'username' => 'member',
             'password' => 'member',
-            'roles' => [RolesEnum::ROLE_MEMBER->value],
+            'state' => UserState::ENABLED,
+            'roles' => [Role::ROLE_MEMBER],
         ],
         [
             'username' => 'api',
             'password' => 'api',
-            'roles' => [RolesEnum::ROLE_API->value],
+            'state' => UserState::DISABLED,
+            'roles' => [Role::ROLE_API],
         ],
     ];
 
@@ -54,7 +59,8 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
         foreach ($this->users as $user) {
             $newUser = (new User())
                 ->setUsername($user['username'])
-                ->setRoles($user['roles']);
+                ->setRoles($user['roles'])
+                ->setState($user['state']);
             $plaintextPassword = $user['password'];
 
             $hashedPassword = $this->passwordHasher->hashPassword($newUser, $plaintextPassword);
