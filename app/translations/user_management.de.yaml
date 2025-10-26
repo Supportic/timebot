@@ -1,6 +1,12 @@
-user_management:
+users:
   table:
     head:
       username: Nutzername
       role: Rolle
       actions: Aktionen
+    body:
+      actions:
+        view: Nutzerprofil anzeigen
+        edit: Nutzer bearbeiten
+        delete: Nutzer löschen
+        impersonate: Als diesen Nutzer anmelden

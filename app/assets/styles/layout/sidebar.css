@@ -41,7 +41,7 @@
       }
 
       #sidebar-profile-menu-wrapper {
-        @apply bottom-0 visible max-h-56 duration-(--transition-duration-450) ease-(--transition-timing-function-spring);
+        @apply bottom-0 visible max-h-56 duration-450 ease-(--transition-timing-function-spring);
       }
     }
 

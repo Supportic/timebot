@@ -1,6 +1,12 @@
-user_management:
+users:
   table:
     head:
       username: Username
       role: Role
       actions: Actions
+    body:
+      actions:
+        view: View User Profile
+        edit: Edit User
+        delete: Delete User
+        impersonate: Impersonate User
