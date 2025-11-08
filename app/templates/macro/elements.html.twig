@@ -1,0 +1,60 @@
+{# do not use dynamic twig variables directly in templates like here, use macros to interpret them instead - see https://tailwindcss.com/docs/detecting-classes-in-source-files#dynamic-class-names #}
+{# https://tailwindcss.com/docs/colors #}
+
+{% macro chip(label = null, tailwindBgClass = null) %}
+  {% if tailwindBgClass == 'red' %}{% set tailwindBgClass = 'text-red-600 bg-red-50' %}
+  {% elseif tailwindBgClass == 'green' %}{% set tailwindBgClass = 'text-green-600 bg-green-50' %}
+  {% elseif tailwindBgClass == 'yellow' %}{% set tailwindBgClass = 'text-yellow-600 bg-yellow-50' %}
+  {% elseif tailwindBgClass == 'blue' %}{% set tailwindBgClass = 'text-blue-600 bg-blue-50' %}
+  {% elseif tailwindBgClass is empty %}
+    {% set tailwindBgClass = 'bg-zinc-50' %}
+  {% endif %}
+
+  {% if label is not empty -%}
+    <span class="{{ tailwindBgClass|trim }} text-sm font-medium px-3 py-1.5 tracking-wide rounded-full">{{ label }}</span>
+  {%- endif %}
+{% endmacro %}
+
+{% macro badge(label = null, tailwindBgClass = null) %}
+  {% if tailwindBgClass == 'red' %}{% set tailwindBgClass = 'text-red-800 bg-red-100 inset-ring-red-800/20' %}
+  {% elseif tailwindBgClass == 'green' %}{% set tailwindBgClass = 'text-green-800 bg-green-100 inset-ring-green-800/20' %}
+  {% elseif tailwindBgClass == 'yellow' %}{% set tailwindBgClass = 'text-yellow-800 bg-yellow-100 inset-ring-yellow-800/20' %}
+  {% elseif tailwindBgClass == 'blue' %}{% set tailwindBgClass = 'text-blue-800 bg-blue-100 inset-ring-blue-800/20' %}
+  {% elseif tailwindBgClass is empty %}
+    {% set tailwindBgClass = 'bg-zinc-100 inset-ring-zinc-800/20' %}
+  {% endif %}
+
+  {% if label is not empty -%}
+    <span class="{{ tailwindBgClass|trim }} inline-flex items-center rounded-md px-2 py-1 text-xs font-medium inset-ring">{{ label }}</span>
+  {%- endif %}
+{% endmacro %}
+
+{% macro status(label = null, tailwindBgClass = null) %}
+  {% if tailwindBgClass == 'red' %}{% set tailwindBgClass = 'bg-red-500' %}
+  {% elseif tailwindBgClass == 'green' %}{% set tailwindBgClass = 'bg-green-500' %}
+  {% elseif tailwindBgClass == 'yellow' %}{% set tailwindBgClass = 'bg-yellow-500' %}
+  {% elseif tailwindBgClass == 'blue' %}{% set tailwindBgClass = 'bg-blue-500' %}
+  {% elseif tailwindBgClass is empty %}
+    {% set tailwindBgClass = 'bg-zinc-400' %}
+  {% endif %}
+
+  {% if label is not empty -%}
+    <span class="{{ tailwindBgClass|trim }} px-2 py-0.5 font-semibold text-sm rounded-sm text-white">{{ label }}</span>
+  {%- endif %}
+{% endmacro %}
+
+{% macro status_information(label = null) %}
+  {{ _self.status(label|default('information'|trans(domain='status')), 'blue') }}
+{% endmacro %}
+
+{% macro status_error(label = null) %}
+  {{ _self.status(label|default('error'|trans(domain='status')), 'red') }}
+{% endmacro %}
+
+{% macro status_success(label = null) %}
+  {{ _self.status(label|default('success'|trans(domain='status')), 'green') }}
+{% endmacro %}
+
+{% macro status_warning(label = null) %}
+  {{ _self.status(label|default('warning'|trans(domain='status')), 'yellow') }}
+{% endmacro %}
