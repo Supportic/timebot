@@ -137,6 +137,11 @@ class VersionManager
     {
         if (is_file($this->projectDir . DIRECTORY_SEPARATOR . '.git/HEAD')) {
             $git = file($this->projectDir . '/.git/HEAD');
+
+            if ($git === false || !isset($git[0])) {
+                return null;
+            }
+
             $head = explode('/', $git[0], 3);
 
             if (!isset($head[2])) {

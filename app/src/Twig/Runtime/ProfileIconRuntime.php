@@ -22,12 +22,13 @@ class ProfileIconRuntime implements RuntimeExtensionInterface
     ): Markup {
 
         $acronymName = $this->createAcronymName($name);
+        $unfilteredClasses = preg_split('/\s/', $class);
 
         /** @var string[] */
         $classes = array_values(
             array_filter(
-                preg_split('/\s/', $class),
-                fn($value): bool => !is_null($value) && $value !== ''
+                $unfilteredClasses == false ? [] : $unfilteredClasses,
+                fn($value): bool => $value !== ''
             )
         );
 
@@ -51,7 +52,14 @@ class ProfileIconRuntime implements RuntimeExtensionInterface
             $name = $user->getUserIdentifier();
         }
 
-        [$firstName, $lastName]  = array_pad(mb_split('/\s/', $name, 1), 2, '');
+        $splitName = mb_split('/\s/', $name, 1);
+
+        [$firstName, $lastName]  = array_pad(
+            $splitName === false ? [] : $splitName,
+            2,
+            ''
+        );
+
         if ($firstName && '' === $lastName) {
             return mb_strimwidth($name, 0, 2);
         }

@@ -20,7 +20,7 @@
     <div data-table-target="output"></div>
   </div> #}
 
-  <table {{ stimulus_controller('table') }} data-max="5" data-fetch="{{ users_route }}" class="border-collapse border border-slate-300">
+  <table {{ stimulus_controller('table') }} data-max="5" data-fetch="{{ path('admin_api_v1_users') }}" class="border-collapse border border-slate-300">
     <thead>
       <tr>
         <th class="{{ table_head_classes }}">ID</th>
@@ -34,7 +34,7 @@
         <tr>
           <td class="{{ table_data_classes }}">{{ user.id }}</td>
           <td class="{{ table_data_classes }}">{{ user.username }}</td>
-          <td class="{{ table_data_classes }}">{{ user.role.toTransKey|trans(domain='roles') }}</td>
+          <td class="{{ table_data_classes }}">{{ user.role|trans(domain='roles') }}</td>
           <td class="{{ table_data_classes }}">
             {% if is_granted(user.getrole.value) %}
               <div class="flex flex-row gap-x-3">
@@ -50,7 +50,7 @@
                   {{ ux_icon('lucide:trash-2') }}
                   <span class="sr-only">{{'users.table.body.actions.delete'|trans}}</span>
                 </a>
-                {% if is_granted('ROLE_ALLOWED_TO_SWITCH') and user.role.value != enum('App\\Entity\\Enum\\RolesEnum').ROLE_SUPER_ADMIN.value -%}
+                {% if is_granted('ROLE_ALLOWED_TO_SWITCH') and user.role != enum('App\\Enum\\Role').ROLE_SUPER_ADMIN -%}
                   <a class="inline bg-gray-50 rounded-md outline outline-black/2 shadow-md p-1.5 text-gray-500 transition-colors hover:text-gray-700" href="{{ path('admin_dashboard', { (switch_user_parameter): user.username }) }}" title="{{'users.table.body.actions.impersonate'|trans}}">
                     {{ ux_icon('lucide:bot') }}
                     <span class="sr-only">{{'users.table.body.actions.impersonate'|trans}}</span>

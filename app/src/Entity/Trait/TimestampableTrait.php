@@ -11,12 +11,12 @@ trait TimestampableTrait
     #[ORM\Column('created_at')]
     #[Groups(['api'])]
     #[Gedmo\Timestampable(on: 'create')]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\Column('updated_at')]
     #[Groups(['api'])]
     #[Gedmo\Timestampable(on: 'update')]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private \DateTimeImmutable $updatedAt;
 
     public function __construct()
     {
@@ -24,7 +24,7 @@ trait TimestampableTrait
         $this->updatedAt = $this->createdAt;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -36,7 +36,7 @@ trait TimestampableTrait
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->updatedAt;
     }

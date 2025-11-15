@@ -28,7 +28,7 @@ class UserController extends AbstractController
         return new JsonResponse([
             'status' => 'ok',
             'code' => Response::HTTP_OK,
-            'users' => $users ?? [],
+            'users' => $users,
         ]);
     }
 }

@@ -47,7 +47,7 @@ class VersionCommand extends Command
                 [
                     $version,
                     PHP_VERSION,
-                    $this->getApplication()->getVersion()
+                    $this->getApplication()?->getVersion()
                 ],
             ])
             ->setColumnWidth(1, 5)

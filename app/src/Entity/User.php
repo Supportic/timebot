@@ -34,9 +34,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
     private ?string $username = null;
 
     /**
-     * @var list<string> The user roles
+     * @var Role[] The user roles
      */
-    #[ORM\Column]
+    #[ORM\Column(enumType: Role::class)]
     #[Groups(['api'])]
     private array $roles = [];
 
@@ -79,19 +79,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
     /**
      * @see UserInterface
      *
-     * @return list<string>
+     * @return string[]
      */
     public function getRoles(): array
     {
         $roles = $this->roles;
 
         // don't set role USER to API users
-        if (!in_array(Role::ROLE_API->value, $roles, true)) {
+        if (!in_array(Role::ROLE_API, $roles, true)) {
             // guarantee every user at least has ROLE_USER
-            $roles[] = Role::ROLE_USER->value;
+            $roles[] = Role::ROLE_USER;
         }
 
-        return array_unique($roles);
+        return array_unique(
+            array_map(fn(Role $role) => $role->value, $roles),
+        );
     }
 
     /**
@@ -99,22 +101,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
      */
     public function getRole(): Role
     {
-        $roleName = $this->roles[0] ?? '';
+        $role = $this->roles[0] ?? Role::ROLE_USER;
 
         // defined(Role::class .'::' . $roleName)
-        if (!Role::has($roleName)) {
-            throw new \ValueError(sprintf('Undefined role "%s".', $roleName));
+        if (!Role::has($role)) {
+            throw new \ValueError(sprintf('Undefined role "%s".', $role));
         }
-
-        // /** @var Role */
-        // $role = constant(Role::class . '::' . $roleName);
-        $role = Role::fromName($roleName);
 
         return $role;
     }
 
     /**
-     * @param list<string> $roles
+     * @param Role[] $roles
      */
     public function setRoles(array $roles): static
     {

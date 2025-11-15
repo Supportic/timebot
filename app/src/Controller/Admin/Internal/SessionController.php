@@ -19,7 +19,13 @@ class SessionController extends AbstractController
     #[Route(path: '/admin/session/set', name: 'admin_session_set', methods: [Request::METHOD_POST])]
     public function set(RequestStack $requestStack): Response
     {
-        $payload = $requestStack->getCurrentRequest()->getPayload()->all();
+        $request = $requestStack->getCurrentRequest();
+
+        if (!$request instanceof Request) {
+            return new Response('No valid request.', Response::HTTP_BAD_REQUEST);
+        }
+
+        $payload = $request->getPayload()->all();
         $session = $requestStack->getSession();
 
         foreach ($payload as $key => $value) {

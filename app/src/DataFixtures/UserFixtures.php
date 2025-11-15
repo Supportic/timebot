@@ -23,7 +23,8 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
      * @var array<int, array{
      *  username: string,
      *  password: string,
-     *  roles: string[]
+     *  state: UserState,
+     *  roles: Role[]
      * }>
      */
     private array $users = [
