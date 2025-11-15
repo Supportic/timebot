@@ -7,16 +7,16 @@
     "php": ">=8.3",
     "ext-ctype": "*",
     "ext-iconv": "*",
-    "cerbero/enum": "^2.3",
-    "doctrine/dbal": "^3",
-    "doctrine/doctrine-bundle": "^2.16",
-    "doctrine/doctrine-migrations-bundle": "^3.4",
-    "doctrine/orm": "^3.5",
-    "pentatrion/vite-bundle": "^8.2",
-    "phpdocumentor/reflection-docblock": "^5.6",
+    "cerbero/enum": "^2.3.3",
+    "doctrine/dbal": "^3.10.3",
+    "doctrine/doctrine-bundle": "^2.18.1",
+    "doctrine/doctrine-migrations-bundle": "^3.6",
+    "doctrine/orm": "^3.5.7",
+    "pentatrion/vite-bundle": "^8.2.2",
+    "phpdocumentor/reflection-docblock": "^5.6.3",
     "phpstan/phpdoc-parser": "^1.33",
-    "shivas/versioning-bundle": "^4.1",
-    "stof/doctrine-extensions-bundle": "^1.12",
+    "shivas/versioning-bundle": "^4.1.1",
+    "stof/doctrine-extensions-bundle": "^1.14",
     "symfony/asset": "6.4.*",
     "symfony/cache": "6.4.*",
     "symfony/console": "6.4.*",
@@ -24,7 +24,7 @@
     "symfony/doctrine-messenger": "6.4.*",
     "symfony/dotenv": "6.4.*",
     "symfony/expression-language": "6.4.*",
-    "symfony/flex": "^2",
+    "symfony/flex": "^2.9",
     "symfony/form": "6.4.*",
     "symfony/framework-bundle": "6.4.*",
     "symfony/http-client": "6.4.*",
@@ -39,34 +39,40 @@
     "symfony/runtime": "6.4.*",
     "symfony/security-bundle": "6.4.*",
     "symfony/serializer": "6.4.*",
-    "symfony/stimulus-bundle": "^2.29",
+    "symfony/stimulus-bundle": "^2.31",
     "symfony/stopwatch": "6.4.*",
     "symfony/string": "6.4.*",
     "symfony/translation": "6.4.*",
     "symfony/twig-bundle": "6.4.*",
-    "symfony/ux-icons": "^2.30",
-    "symfony/ux-translator": "^2.30",
-    "symfony/ux-vue": "^2.30",
+    "symfony/ux-icons": "^2.31",
+    "symfony/ux-translator": "^2.31",
+    "symfony/ux-vue": "^2.31",
     "symfony/validator": "6.4.*",
     "symfony/web-link": "6.4.*",
     "symfony/yaml": "6.4.*",
-    "twig/extra-bundle": "^3.21",
-    "twig/twig": "^3.21"
+    "twig/extra-bundle": "^3.22",
+    "twig/twig": "^3.22"
   },
   "require-dev": {
-    "doctrine/doctrine-fixtures-bundle": "^3.7",
-    "phpunit/phpunit": "^9.6",
+    "doctrine/doctrine-fixtures-bundle": "^3.7.2",
+    "phpstan/extension-installer": "^1.4.3",
+    "phpstan/phpstan": "^2.1.32",
+    "phpstan/phpstan-doctrine": "^2.0.11",
+    "phpstan/phpstan-symfony": "^2.0.8",
+    "phpunit/phpunit": "^9.6.29",
+    "rector/rector": "^2.2.8",
     "symfony/browser-kit": "6.4.*",
     "symfony/css-selector": "6.4.*",
     "symfony/debug-bundle": "6.4.*",
     "symfony/maker-bundle": "^1.64",
-    "symfony/phpunit-bridge": "^7.0",
+    "symfony/phpunit-bridge": "^7.3.4",
     "symfony/stopwatch": "6.4.*",
     "symfony/web-profiler-bundle": "6.4.*"
   },
   "config": {
     "allow-plugins": {
       "php-http/discovery": true,
+      "phpstan/extension-installer": true,
       "symfony/flex": true,
       "symfony/runtime": true
     },
@@ -102,11 +108,24 @@
     "post-update-cmd": [
       "@auto-scripts"
     ],
-    "lint-yaml": [
+    "lint:yaml": [
       "php vendor/bin/yaml-lint config/ translations/"
     ],
     "lint": [
-      "@lint-yaml"
+      "@lint:yaml"
+    ],
+    "test:rector": [
+      "vendor/bin/rector --dry-run"
+    ],
+    "test:phpstan": [
+      "vendor/bin/phpstan analyse -c phpstan.dist.neon"
+    ],
+    "test": [
+      "@test:rector",
+      "@test:phpstan"
+    ],
+    "fix:rector": [
+      "vendor/bin/rector"
     ]
   },
   "conflict": {

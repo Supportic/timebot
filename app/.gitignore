@@ -25,7 +25,6 @@
 ###> pentatrion/vite-bundle ###
 /node_modules/
 /public/build/
-/tsconfig.tsbuildinfo
 ###< pentatrion/vite-bundle ###
 
 
@@ -40,3 +39,7 @@
 # | this will ignore the content but not the director itself.  |
 # +------------------------------------------------------------+
 !.gitkeep
+
+###> phpstan/phpstan ###
+phpstan.neon
+###< phpstan/phpstan ###

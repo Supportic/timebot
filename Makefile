@@ -4,11 +4,13 @@ SHELL = /bin/bash
 MAKEFLAGS += --no-print-directory
 
 TERMINAL = docker compose exec php bash
+TERMINAL_RUN = docker compose run --rm php bash
 NODE = docker compose run --rm -it --service-ports node
 NODE_RUN = docker compose run --rm -it node
 SYMFONY = docker compose run --rm --entrypoint symfony php
 COMPOSER = docker compose run --rm php composer
 NPM = docker compose run --service-ports --rm -it --entrypoint npm node
+NPM_RUN = docker compose run --rm --entrypoint npm node
 
 shell:
 	$(TERMINAL)
@@ -16,8 +18,8 @@ shell-node:
 	$(NODE_RUN)
 
 update:
-	$(COMPOSER) update
-	$(NPM) update
+	$(TERMINAL_RUN) -c "composer bump && composer update"
+	$(NPM_RUN) update --save
 
 cc:
 	$(SYMFONY) console cache:clear
@@ -56,7 +58,7 @@ install-deps:
 	# $(NPM) ci --no-audit --loglevel=silly
 
 build-assets:
-	$(NPM) run build
+	$(NPM_RUN) run build
 watch-assets:
 	$(NPM) run dev
 
