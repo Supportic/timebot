@@ -27,7 +27,7 @@ class ProfileIconRuntime implements RuntimeExtensionInterface
         $classes = array_values(
             array_filter(
                 preg_split('/\s/', $class),
-                fn($value) => !is_null($value) && $value !== ''
+                fn($value): bool => !is_null($value) && $value !== ''
             )
         );
 
@@ -52,11 +52,12 @@ class ProfileIconRuntime implements RuntimeExtensionInterface
         }
 
         [$firstName, $lastName]  = array_pad(mb_split('/\s/', $name, 1), 2, '');
-
         if ($firstName && '' === $lastName) {
             return mb_strimwidth($name, 0, 2);
-        } else if ($firstName && $lastName) {
-            return mb_strimwidth($firstName, 0,  1) . mb_strimwidth($lastName, 0, 1);
+        }
+
+        if ($firstName && $lastName) {
+            return mb_strimwidth((string) $firstName, 0,  1) . mb_strimwidth((string) $lastName, 0, 1);
         }
 
         return 'TB';

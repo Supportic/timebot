@@ -9,12 +9,13 @@ use Symfony\Component\DependencyInjection\Attribute\Exclude;
 #[Exclude]
 final class ScriptNonceSubscriber implements EventSubscriberInterface
 {
-    public function onRenderAssetTag(RenderAssetTagEvent $event)
+    public function onRenderAssetTag(RenderAssetTagEvent $event): void
     {
         $tag = $event->getTag();
         if ($tag->isInternal()) {
             return;
         }
+
         if ($tag->isScriptTag() && $event->isBuild()) {
             $tag->setAttribute('nonce', 'lookup nonce');
         }

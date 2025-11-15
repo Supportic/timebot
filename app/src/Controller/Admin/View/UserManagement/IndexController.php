@@ -14,10 +14,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 //     '"ROLE_ADMIN" in role_names or (is_authenticated() and user.isSuperAdmin())'
 // ))]
 #[IsGranted(Role::ROLE_ADMIN->value)]
-#[Route(path: '/admin/users')]
 class IndexController extends AbstractController
 {
-    #[Route(path: '/', name: 'admin_users')]
+    #[Route(path: '/admin/users/', name: 'admin_users')]
     public function index(UserRepository $userRepository): Response
     {
         $users = $userRepository->findAll();

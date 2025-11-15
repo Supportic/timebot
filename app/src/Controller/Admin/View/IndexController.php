@@ -13,10 +13,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 //     '"ROLE_ADMIN" in role_names or (is_authenticated() and user.isSuperAdmin())'
 // ))]
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
-#[Route(path: '/admin')]
 class IndexController extends AbstractController
 {
-    #[Route(path: '/', name: 'app_admin')]
+    #[Route(path: '/admin/', name: 'app_admin')]
     public function index(): Response
     {
         return $this->redirectToRoute('admin_dashboard');

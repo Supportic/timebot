@@ -11,6 +11,7 @@ class ApiEmployeeService
 {
 
     public const EMPLOYEE_API_PATH = '/company/employees';
+
     public const EMPLOYEE_PAGE_LIMIT = 100;
 
     public function __construct(

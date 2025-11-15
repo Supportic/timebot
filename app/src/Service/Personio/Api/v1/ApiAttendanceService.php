@@ -13,6 +13,7 @@ class ApiAttendanceService
 {
 
     public const EMPLOYEE_API_PATH = '/company/attendances';
+
     public const ATTENDANCE_PAGE_LIMIT = 200;
 
     public function __construct(

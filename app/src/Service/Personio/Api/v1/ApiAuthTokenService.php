@@ -38,7 +38,7 @@ class ApiAuthTokenService implements ApiAuthTokenServiceInterface
      */
     public function fetchAuthToken(): AuthToken
     {
-        $authRoute = "{$this->personioApiBaseUri}/auth";
+        $authRoute = $this->personioApiBaseUri . '/auth';
 
         $payload = json_encode([
             'client_id' => $this->personioClientId,

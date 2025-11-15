@@ -13,10 +13,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 //     '"ROLE_ADMIN" in role_names or (is_authenticated() and user.isSuperAdmin())'
 // ))]
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
-#[Route(path: '/admin/dashboard')]
 class IndexController extends AbstractController
 {
-    #[Route(path: '/', name: 'admin_dashboard')]
+    #[Route(path: '/admin/dashboard/', name: 'admin_dashboard')]
     public function dashboard(): Response
     {
         return $this->render('admin/pages/dashboard/index.html.twig');

@@ -11,7 +11,7 @@ use Twig\Extension\GlobalsInterface;
 final class VersionExtension extends AbstractExtension implements GlobalsInterface
 {
     public function __construct(
-        protected readonly VersionManager $versionManager
+        private readonly VersionManager $versionManager
     ) {}
 
     public function getGlobals(): array

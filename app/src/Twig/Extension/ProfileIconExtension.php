@@ -8,6 +8,7 @@ use Twig\TwigFunction;
 
 class ProfileIconExtension extends AbstractExtension
 {
+    #[\Override]
     public function getFunctions(): array
     {
         return [

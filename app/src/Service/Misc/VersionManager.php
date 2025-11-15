@@ -29,14 +29,16 @@ class VersionManager
     {
         $currentVersion = $this->versionManager->getVersion();
         $newVersion = $this->versionManager->getVersionFromProvider();
-
         //  does not compare build version
         // return $newVersion->isNotEqualTo($currentVersion);
-
         // Compare only major.minor.patch, ignoring build hash
-        return $newVersion->getMajor() !== $currentVersion->getMajor()
-            || $newVersion->getMinor() !== $currentVersion->getMinor()
-            || $newVersion->getPatch() !== $currentVersion->getPatch();
+        if ($newVersion->getMajor() !== $currentVersion->getMajor()) {
+            return true;
+        }
+        if ($newVersion->getMinor() !== $currentVersion->getMinor()) {
+            return true;
+        }
+        return $newVersion->getPatch() !== $currentVersion->getPatch();
     }
 
     /**
@@ -88,7 +90,7 @@ class VersionManager
         $this->writeVersion($currentVersion->incrementPatch());
     }
 
-    private function writeVersion(Version $version)
+    private function writeVersion(Version $version): void
     {
         $this->versionManager->writeVersion($version->withBuild($this->getGitCommitHash()));
     }

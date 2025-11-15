@@ -20,7 +20,8 @@ trait TimestampableTrait
 
     public function __construct()
     {
-        $this->createdAt = $this->updatedAt = new \DateTimeImmutable();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = $this->createdAt;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable

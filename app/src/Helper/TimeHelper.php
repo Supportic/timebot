@@ -27,11 +27,13 @@ class TimeHelper
         "%h hour" . ($dateInterval->h > 1 ? 's' : '')
       );
     }
+
     if ($dateInterval->i) {
       $segments[] = $dateInterval->format(
         "%i minute" . ($dateInterval->i > 1 ? 's' : '')
       );
     }
+
     if ($dateInterval->s) {
       $segments[] = $dateInterval->format(
         "%s second" . ($dateInterval->s > 1 ? 's' : '')

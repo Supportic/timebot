@@ -9,6 +9,8 @@ use App\Model\Personio\Api\AuthTokenInterface;
 interface ApiAuthTokenServiceInterface
 {
     public function getCacheKey(): string;
+
     public function fetchAuthToken(): AuthTokenInterface;
+
     public function getAuthToken(): string;
 }
