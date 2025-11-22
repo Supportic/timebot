@@ -35,9 +35,11 @@ class VersionManager
         if ($newVersion->getMajor() !== $currentVersion->getMajor()) {
             return true;
         }
+
         if ($newVersion->getMinor() !== $currentVersion->getMinor()) {
             return true;
         }
+
         return $newVersion->getPatch() !== $currentVersion->getPatch();
     }
 

@@ -1,0 +1,151 @@
+{% trans_default_domain 'user_management' %}
+
+{% set heading = 'ui.nav.users'|trans(domain='app') %}
+{% set table_head_classes = 'p-3 border border-slate-200' %}
+{% set table_data_classes = 'p-3 border border-slate-200' %}
+
+{# <table {{ stimulus_controller('table') }} data-max="5" data-fetch="{{ path('admin_api_v1_users') }}" class="border-collapse border border-slate-300"> #}
+<div {{ attributes }}>
+  <table class="border-collapse border border-slate-300">
+    <thead>
+      <tr>
+        <th class="{{ table_head_classes }}">ID</th>
+        <th class="{{ table_head_classes }}">{{ 'users.table.head.username'|trans }}</th>
+        <th class="{{ table_head_classes }}">{{ 'users.table.head.role'|trans }}</th>
+        <th class="{{ table_head_classes }}">{{ 'users.table.head.actions'|trans }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in this.getUsers() %}
+        <tr>
+          <td class="{{ table_data_classes }}">{{ user.id }}</td>
+          <td class="{{ table_data_classes }}">{{ user.username }}</td>
+          <td class="{{ table_data_classes }}">{{ user.role|trans(domain='roles') }}</td>
+          <td class="{{ table_data_classes }}">
+            {% if is_granted(user.getrole.value) %}
+              <div class="flex flex-row gap-x-3">
+                <a class="inline bg-gray-50 rounded-md outline outline-black/2 shadow-md p-1.5 text-gray-500 transition-colors hover:text-gray-700" href="javascript:void(0);" title="{{ 'users.table.body.actions.view'|trans }}">
+                  {{ ux_icon('lucide:user') }}
+                  <span class="sr-only">{{ 'users.table.body.actions.view'|trans }}</span>
+                </a>
+                <a class="inline bg-gray-50 rounded-md outline outline-black/2 shadow-md p-1.5 text-gray-500 transition-colors hover:text-blue-700" href="javascript:void(0);" title="{{ 'users.table.body.actions.edit'|trans }}">
+                  {{ ux_icon('lucide:edit') }}
+                  <span class="sr-only">{{ 'users.table.body.actions.edit'|trans }}</span>
+                </a>
+                <a class="inline bg-gray-50 rounded-md outline outline-black/2 shadow-md p-1.5 text-gray-500 transition-colors hover:text-red-700" href="javascript:void(0);" title="{{ 'users.table.body.actions.delete'|trans }}">
+                  {{ ux_icon('lucide:trash-2') }}
+                  <span class="sr-only">{{ 'users.table.body.actions.delete'|trans }}</span>
+                </a>
+                {% if is_granted('ROLE_ALLOWED_TO_SWITCH') and user.role != enum('App\\Enum\\Role').ROLE_SUPER_ADMIN -%}
+                  <a class="inline bg-gray-50 rounded-md outline outline-black/2 shadow-md p-1.5 text-gray-500 transition-colors hover:text-indigo-700" href="{{ path('admin_dashboard', { (switch_user_parameter): user.username }) }}" title="{{ 'users.table.body.actions.impersonate'|trans }}">
+                    {{ ux_icon('lucide:bot') }}
+                    <span class="sr-only">{{ 'users.table.body.actions.impersonate'|trans }}</span>
+                  </a>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+    {% if this.shouldShowPagination() %}
+    <div class="mt-4">
+      <nav class="pagination flex gap-x-2">
+        {# First Page Button #}
+        <button type="button"
+          {% if this.currentPage > 1 %}
+            data-action="live#action"
+            data-live-action-param="goToPage"
+            data-live-page-param="1"
+          {% else %}
+            disabled
+          {% endif %}
+          aria-label="{{ 'ui.pagination.first'|trans(domain='app') }}"
+          class="px-2 py-1 rounded transition-colors {% if this.currentPage > 1 %}bg-slate-100 hover:bg-slate-200 text-slate-700{% else %}bg-slate-50 text-slate-400 cursor-not-allowed{% endif %}">
+          {{ ux_icon('lucide:chevron-first', {'font-size': '1.3rem'}) }}
+        </button>
+
+        {# Previous Button #}
+        <button type="button"
+          {% if this.currentPage > 1 %}
+            data-action="live#action"
+            data-live-action-param="goToPage"
+            data-live-page-param="{{ this.currentPage - 1 }}"
+          {% else %}
+            disabled
+          {% endif %}
+          aria-label="{{ 'ui.pagination.prev'|trans(domain='app') }}"
+          class="px-2 py-1 rounded transition-colors {% if this.currentPage > 1 %}bg-slate-100 hover:bg-slate-200 text-slate-700{% else %}bg-slate-50 text-slate-400 cursor-not-allowed{% endif %}">
+          {{ ux_icon('lucide:arrow-left', {'font-size': '1.1rem'}) }}
+        </button>
+
+        {# Page Numbers Container - Fixed Width #}
+        <div class="flex gap-x-2 min-w-max">
+          {# Page Numbers #}
+          {% set paginationRange = this.getPaginationRange() %}
+          {% set totalPages = this.getTotalPages() %}
+
+          {# Show ellipsis before if we're not at the start #}
+          {% if paginationRange[0] > 1 %}
+            <span class="px-2 py-1 text-slate-500">...</span>
+          {% else %}
+            <span class="px-2 py-1 text-transparent">...</span>
+          {% endif %}
+
+          {% for num in paginationRange %}
+            <button type="button"
+              {% if num != this.currentPage %}
+                data-action="live#action"
+                data-live-action-param="goToPage"
+                data-live-page-param="{{ num }}"
+                aria-label="{{ 'ui.pagination.toPage'|trans(arguments={'%pageNumber%': num},domain='app') }}"
+              {% else %}
+                aria-label="{{ 'ui.pagination.page'|trans(arguments={'%pageNumber%': num},domain='app') }}"
+                disabled
+              {% endif %}
+              class="px-2 py-1 bg-slate-50 hover:bg-slate-200 rounded transition-colors {% if num == this.currentPage %}bg-slate-200 font-bold text-slate-900{% else %}bg-slate-100 hover:bg-slate-200 text-slate-700{% endif %}">
+              {{- num -}}
+            </button>
+          {% endfor %}
+
+          {# Show ellipsis after if we're not at the end #}
+          {% if paginationRange|last < totalPages %}
+            <span class="px-2 py-1 text-slate-500">...</span>
+          {% else %}
+            <span class="px-2 py-1 text-transparent">...</span>
+          {% endif %}
+        </div>
+
+        {# Next Button #}
+        <button type="button"
+          {% if this.currentPage < this.getTotalPages() %}
+            data-action="live#action"
+            data-live-action-param="goToPage"
+            data-live-page-param="{{ this.currentPage + 1 }}"
+          {% else %}
+            disabled
+          {% endif %}
+          aria-label="{{ 'ui.pagination.next'|trans(domain='app') }}"
+          class="px-2 py-1 rounded transition-colors {% if this.currentPage < this.getTotalPages() %}bg-slate-100 hover:bg-slate-200 text-slate-700{% else %}bg-slate-50 text-slate-400 cursor-not-allowed{% endif %}">
+          {{ ux_icon('lucide:arrow-right', {'font-size': '1.1rem'}) }}
+        </button>
+
+        {# Last Page Button #}
+        <button type="button"
+          {% if this.currentPage < this.getTotalPages() %}
+            data-action="live#action"
+            data-live-action-param="goToPage"
+            data-live-page-param="{{ this.getTotalPages() }}"
+          {% else %}
+            disabled
+          {% endif %}
+          aria-label="{{ 'ui.pagination.last'|trans(domain='app') }}"
+          class="px-2 py-1 rounded transition-colors {% if this.currentPage < this.getTotalPages() %}bg-slate-100 hover:bg-slate-200 text-slate-700{% else %}bg-slate-50 text-slate-400 cursor-not-allowed{% endif %}">
+          {{ ux_icon('lucide:chevron-last', {'font-size': '1.3rem'}) }}
+        </button>
+      </nav>
+    </div>
+  {% endif %}
+</div>

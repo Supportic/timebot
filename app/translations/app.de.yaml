@@ -11,6 +11,13 @@ ui:
     profile: Profil
     logout: Ausloggen
     exit_impersonation: Imitierung beenden
+  pagination:
+    page: 'Seite %pageNumber%'
+    toPage: 'gehe zur Seite %pageNumber%'
+    prev: 'zur vorherigen Seite'
+    next: 'zur nächste Seite'
+    first: 'zur ersten Seite'
+    last: 'zur letzten Seite'
 
 seo:
   title_portal: 'Timebot'

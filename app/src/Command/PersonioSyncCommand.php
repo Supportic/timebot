@@ -68,7 +68,9 @@ class PersonioSyncCommand extends Command
 
         /** @var StopwatchEvent $event */
         foreach ($events as $event) {
-            if ('__section__' === $event->getName()) continue;
+            if ('__section__' === $event->getName()) {
+                continue;
+            }
 
             $this->performanceLogger->info('{category}/{name} - {duration} ms', [
                 'category' => $event->getCategory(),

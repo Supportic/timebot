@@ -48,7 +48,7 @@ class ProfileIconRuntime implements RuntimeExtensionInterface
         // trying to retrieve the user from the current session
         $user = $this->security->isGranted('IS_AUTHENTICATED_FULLY') ? $this->security->getUser() : null;
 
-        if (empty($name) && $user instanceof User) {
+        if ($name === '' && $user instanceof User) {
             $name = $user->getUserIdentifier();
         }
 
