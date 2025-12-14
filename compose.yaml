@@ -88,19 +88,20 @@ services:
   adminer:
     container_name:  ${PROJECT_NAME}-adminer
     image: adminer:latest
-    restart: unless-stopped
-    # user: adminer
-    ports:
-      - "${ADMINER_PORT_HOST:-8080}:8080" # web ui
     environment:
       # https://github.com/vrana/adminer/tree/master/plugins
-      # ADMINER_PLUGINS: "tinymce tables-filter login-servers"
+      ADMINER_PLUGINS: "tables-filter edit-calendar edit-textarea"
       # https://github.com/vrana/adminer/tree/master/designs
       # ADMINER_DESIGN: "nicu"
       # default server entry in the login form
-      ADMINER_DEFAULT_SERVER: ${PROJECT_NAME}-db
+      ADMINER_SERVERS_JSON: '[{"server":"db:3306","username":"${DB_USER}","password":"${DB_PW}","db":"${DB_NAME}","label":"Local Dev (ENV)"}]'
+    restart: unless-stopped
+    user: adminer
+    ports:
+      - "${ADMINER_PORT_HOST:-8080}:8080" # web ui
     volumes:
-      - ./.docker/service/adminer/index.php:/var/www/html/index.php:ro
+      - ./.docker/service/adminer/plugins/autologin.php:/var/www/html/plugins/autologin.php
+      - ./.docker/service/adminer/plugins-enabled/autologin.php:/var/www/html/plugins-enabled/autologin.php
 
 
   ########################
