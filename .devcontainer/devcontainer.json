@@ -12,6 +12,10 @@
   // start specific services in your Docker Compose config.
   "runServices": ["nginx", "php", "adminer", "db", "mailpit"],
 
+  // Uncomment to connect as a non-root user if you've added one. Default is last USER statement in Dockerfile. See https://aka.ms/vscode-remote/containers/non-root.
+  // "remoteUser": "symfony"
+  // "containerUser": "root"
+
   // Features to add to the dev container. More info: https://containers.dev/features.
   "features": {
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
@@ -22,15 +26,19 @@
   // The optional 'workspaceFolder' property is the path VS Code should open by default when connected. This is typically a file mount in .devcontainer/compose.yaml
   "workspaceFolder": "/workspace",
 
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [],
+
   "portsAttributes": {
     "9003": {
       "label": "XDebug Port",
       "onAutoForward": "notify"
     }
   },
-
   "customizations": {
     "vscode": {
+      // important for windows WSL2 https://github.com/microsoft/vscode-remote-release/issues/9293
+      "dev.containers.mountWaylandSocket": false,
       "extensions": [
         "nadim-vscode.symfony-code-snippets",
         "bmewburn.vscode-intelephense-client",
@@ -98,9 +106,6 @@
     }
   }
 
-  // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  // "forwardPorts": [],
-
   // Uncomment the next line if you want to keep your containers running after VS Code shuts down.
   // "shutdownAction": "none",
 
@@ -109,10 +114,6 @@
 
   // run commands after the CONTAINER IS CREATED
   // "postCreateCommand": ""
-
-  // Uncomment to connect as a non-root user if you've added one. Default is last USER statement in Dockerfile. See https://aka.ms/vscode-remote/containers/non-root.
-  // "remoteUser": "symfony"
-  // "containerUser": "root"
 
   // dont create extra image to match UID/GUID of host, we do it ourselfs: https://github.com/microsoft/vscode-remote-release/issues/3264#issuecomment-651084059
   // "updateRemoteUserUID": false

@@ -16,7 +16,7 @@ services:
     volumes:
       # Update this to wherever you want VS Code to mount the folder of your project
       - .:/workspace:cached
-      - ~/.gitconfig:/home/${UNAME}/.gitconfig:ro
+      # dont use host symlinks here, they cause issues with file watching since the symlink path may not exist inside the devcontainer
+      # - ~/.gitconfig:/home/${UNAME}/.gitconfig:ro
       # dont mount .ssh dir here, the ssh-agent has everything we need
-      - ~/.ssh/known_hosts:/home/${UNAME}/.ssh/known_hosts
-
+      # - ~/.ssh/known_hosts:/home/${UNAME}/.ssh/known_hosts
