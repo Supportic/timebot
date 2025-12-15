@@ -95,7 +95,7 @@
         "symfony-vscode.phpExecutablePath": "/usr/local/bin/php",
 
         "files.associations": {
-          "**/views/**/*.html": "twig",
+          "**/templates/**/*.html": "twig",
           "*.tpl": "twig"
         },
 

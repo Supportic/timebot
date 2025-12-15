@@ -12,7 +12,9 @@
   {% set isExpanded = app.session.get('sidebar_expanded') %}
   {% if class is not empty %}{% set class = class ~ ' ' %}{% endif %}
 
-  <div class="{{ class -}} block sidebar-tooltip absolute left-full font-medium pointer-events-none">
+  {% set stayVisibleOnHover = true %}
+
+  <div class="{{ class -}} block sidebar-tooltip absolute left-full font-medium {{ stayVisibleOnHover ? 'h-full before:content-[\'\'] before:absolute before:block before:top-0 before:h-full' : 'pointer-events-none' }}">
     <div class="rounded-md absolute top-[50%] -translate-y-[50%] whitespace-nowrap px-2 py-1 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover/navitem:visible group-hover/navitem:opacity-100 group-hover/navitem:translate-x-0 group-focus-within/navitem:visible group-focus-within/navitem:opacity-100 group-focus-within/navitem:translate-x-0">
       {{- text|e|trim -}}
     </div>
@@ -30,7 +32,7 @@
       <span class="w-0 overflow-hidden whitespace-nowrap transition-all">{{ text|e|trim }}</span>
     </a>
 
-    {{_self.Tooltip(text, 'ml-6')}}
+    {{_self.Tooltip(text, 'ml-6 before:w-6 before:-left-6')}}
   </li>
 {% endmacro %}
 
@@ -41,7 +43,7 @@
       <span class="w-0 overflow-hidden whitespace-nowrap transition-all">{{ text|e|trim }}</span>
     </a>
 
-    {{_self.Tooltip(text, 'ml-3')}}
+    {{_self.Tooltip(text, 'ml-3 before:w-3 before:-left-3')}}
   </li>
 {% endmacro %}
 
