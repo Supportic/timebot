@@ -6,7 +6,7 @@
 {% set table_data_classes = 'p-3 border border-slate-200' %}
 
 {# <table {{ stimulus_controller('table') }} data-max="5" data-fetch="{{ path('admin_api_v1_users') }}" class="border-collapse border border-slate-300"> #}
-<div {{ attributes }} class="relative">
+<div {{ attributes.defaults(stimulus_controller('pagination', { currentPage: this.currentPage, pageQueryAlias: this.pageQueryAlias })) }} class="relative">
     <div data-loading="action(goToPage)|show" class="hidden absolute inset-0 z-10 items-center justify-center bg-white/50 backdrop-blur-[1px] transition-all duration-200">
         <div class="flex flex-col items-center gap-2 rounded-lg bg-white p-4 shadow-lg ring-1 ring-slate-900/5">
             {{ ux_icon('lucide:loader-2', {class: 'h-8 w-8 animate-spin text-indigo-600'}) }}
