@@ -6,7 +6,6 @@
 {% endblock %}
 
 {% set heading = 'ui.nav.users'|trans(domain='app') %}
-{% set currentPage = currentPage|default(1) %}
 
 {% block content %}
   {# <div {{ vue_component('DataTable', { users: users }) }}>Loading...</div> #}
@@ -15,5 +14,5 @@
     <div {{ stimulus_target('hello', 'output') }}></div>
   </div> #}
 
-  <twig:Table:UserTable :currentPage="currentPage"/>
+  <twig:Table:UserTable :currentPage="4"/>
 {% endblock %}

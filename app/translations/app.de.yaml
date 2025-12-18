@@ -13,11 +13,14 @@ ui:
     exit_impersonation: Imitierung beenden
   pagination:
     page: 'Seite %pageNumber%'
-    toPage: 'gehe zur Seite %pageNumber%'
+    to_page: 'gehe zur Seite %pageNumber%'
     prev: 'zur vorherigen Seite'
     next: 'zur nächste Seite'
     first: 'zur ersten Seite'
     last: 'zur letzten Seite'
+    show_from_page_to: 'Seite <span class="font-medium">%pageNumber%</span> von <span class="font-medium">%totalPages%</span>'
+    label: 'Seitennavigation: %page%'
+    more_pages: 'es existieren weitere Seiten'
 
 seo:
   title_portal: 'Timebot'

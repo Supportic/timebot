@@ -1,151 +1,178 @@
 {% trans_default_domain 'user_management' %}
 
 {% set heading = 'ui.nav.users'|trans(domain='app') %}
-{% set table_head_classes = 'p-3 border border-slate-200' %}
+{% set table_head_classes = 'p-3 border border-slate-200 bg-slate-50 text-left font-semibold text-slate-900' %}
+{% set table_row_classes = 'hover:bg-slate-50 transition-colors h-[53px]' %}
 {% set table_data_classes = 'p-3 border border-slate-200' %}
 
 {# <table {{ stimulus_controller('table') }} data-max="5" data-fetch="{{ path('admin_api_v1_users') }}" class="border-collapse border border-slate-300"> #}
-<div {{ attributes }}>
-  <table class="border-collapse border border-slate-300">
-    <thead>
-      <tr>
-        <th class="{{ table_head_classes }}">ID</th>
-        <th class="{{ table_head_classes }}">{{ 'users.table.head.username'|trans }}</th>
-        <th class="{{ table_head_classes }}">{{ 'users.table.head.role'|trans }}</th>
-        <th class="{{ table_head_classes }}">{{ 'users.table.head.actions'|trans }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for user in this.getUsers() %}
-        <tr>
-          <td class="{{ table_data_classes }}">{{ user.id }}</td>
-          <td class="{{ table_data_classes }}">{{ user.username }}</td>
-          <td class="{{ table_data_classes }}">{{ user.role|trans(domain='roles') }}</td>
-          <td class="{{ table_data_classes }}">
-            {% if is_granted(user.getrole.value) %}
-              <div class="flex flex-row gap-x-3">
-                <a class="inline bg-gray-50 rounded-md outline outline-black/2 shadow-md p-1.5 text-gray-500 transition-colors hover:text-gray-700" href="javascript:void(0);" title="{{ 'users.table.body.actions.view'|trans }}">
-                  {{ ux_icon('lucide:user') }}
-                  <span class="sr-only">{{ 'users.table.body.actions.view'|trans }}</span>
-                </a>
-                <a class="inline bg-gray-50 rounded-md outline outline-black/2 shadow-md p-1.5 text-gray-500 transition-colors hover:text-blue-700" href="javascript:void(0);" title="{{ 'users.table.body.actions.edit'|trans }}">
-                  {{ ux_icon('lucide:edit') }}
-                  <span class="sr-only">{{ 'users.table.body.actions.edit'|trans }}</span>
-                </a>
-                <a class="inline bg-gray-50 rounded-md outline outline-black/2 shadow-md p-1.5 text-gray-500 transition-colors hover:text-red-700" href="javascript:void(0);" title="{{ 'users.table.body.actions.delete'|trans }}">
-                  {{ ux_icon('lucide:trash-2') }}
-                  <span class="sr-only">{{ 'users.table.body.actions.delete'|trans }}</span>
-                </a>
-                {% if is_granted('ROLE_ALLOWED_TO_SWITCH') and user.role != enum('App\\Enum\\Role').ROLE_SUPER_ADMIN -%}
-                  <a class="inline bg-gray-50 rounded-md outline outline-black/2 shadow-md p-1.5 text-gray-500 transition-colors hover:text-indigo-700" href="{{ path('admin_dashboard', { (switch_user_parameter): user.username }) }}" title="{{ 'users.table.body.actions.impersonate'|trans }}">
-                    {{ ux_icon('lucide:bot') }}
-                    <span class="sr-only">{{ 'users.table.body.actions.impersonate'|trans }}</span>
-                  </a>
-                {%- endif -%}
-              </div>
-            {%- endif -%}
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+<div {{ attributes }} class="relative">
+    <div data-loading="action(goToPage)|show" class="hidden absolute inset-0 z-10 items-center justify-center bg-white/50 backdrop-blur-[1px] transition-all duration-200">
+        <div class="flex flex-col items-center gap-2 rounded-lg bg-white p-4 shadow-lg ring-1 ring-slate-900/5">
+            {{ ux_icon('lucide:loader-2', {class: 'h-8 w-8 animate-spin text-indigo-600'}) }}
+            <span class="text-sm font-medium text-slate-600">Loading...</span>
+        </div>
+    </div>
+
+    {# no pointer events prevents clicking  #}
+    <div data-loading="addClass(opacity-50 pointer-events-none duration-200)" class="transition-opacity">
+      <p class="text-sm text-slate-700 mb-4">
+          {{- 'users.table.users_found'|trans(arguments={'%amount%': this.totalUserCount()})|raw -}}
+      </p>
+      <table class="w-full border-collapse border border-slate-300">
+        <thead>
+          <tr>
+            <th class="{{ table_head_classes }}">ID</th>
+            <th class="{{ table_head_classes }}">{{ 'users.table.head.username'|trans }}</th>
+            <th class="{{ table_head_classes }}">{{ 'users.table.head.role'|trans }}</th>
+            <th class="{{ table_head_classes }}">{{ 'users.table.head.actions'|trans }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if this.totalUserCount > 0 %}
+            {% for user in this.getUsers() %}
+              <tr class="{{table_row_classes}}">
+                <td class="{{ table_data_classes }}">{{ user.id }}</td>
+                <td class="{{ table_data_classes }} font-medium text-slate-900">{{ user.username }}</td>
+                <td class="{{ table_data_classes }}">
+                  <span class="inline-flex items-center rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600 ring-1 ring-inset ring-slate-500/10">
+                        {{- user.role|trans(domain='roles') -}}
+                    </span>
+                </td>
+                <td class="{{ table_data_classes }}">
+                  {% if is_granted(user.getrole.value) %}
+                    <div class="flex flex-row gap-x-2">
+                      <a class="inline-flex items-center justify-center rounded-md bg-white p-1.5 text-slate-500 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 hover:text-slate-700" href="javascript:void(0);" title="{{ 'users.table.body.actions.view'|trans }}">
+                        {{ ux_icon('lucide:user', {class: 'h-4 w-4'}) }}
+                        <span class="sr-only">{{ 'users.table.body.actions.view'|trans }}</span>
+                      </a>
+                      <a class="inline-flex items-center justify-center rounded-md bg-white p-1.5 text-slate-500 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 hover:text-blue-600" href="javascript:void(0);" title="{{ 'users.table.body.actions.edit'|trans }}">
+                        {{ ux_icon('lucide:edit', {class: 'h-4 w-4'}) }}
+                        <span class="sr-only">{{ 'users.table.body.actions.edit'|trans }}</span>
+                      </a>
+                      <a class="inline-flex items-center justify-center rounded-md bg-white p-1.5 text-slate-500 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 hover:text-red-600" href="javascript:void(0);" title="{{ 'users.table.body.actions.delete'|trans }}">
+                        {{ ux_icon('lucide:trash-2', {class: 'h-4 w-4'}) }}
+                        <span class="sr-only">{{ 'users.table.body.actions.delete'|trans }}</span>
+                      </a>
+                      {% if is_granted('ROLE_ALLOWED_TO_SWITCH') and user.role != enum('App\\Enum\\Role').ROLE_SUPER_ADMIN -%}
+                        <a class="inline-flex items-center justify-center rounded-md bg-white p-1.5 text-slate-500 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 hover:text-indigo-600" href="{{ path('admin_dashboard', { (switch_user_parameter): user.username }) }}" title="{{ 'users.table.body.actions.impersonate'|trans }}">
+                          {{ ux_icon('lucide:bot', {class: 'h-4 w-4'}) }}
+                          <span class="sr-only">{{ 'users.table.body.actions.impersonate'|trans }}</span>
+                        </a>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+                </td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr class="{{table_row_classes}}">
+                <td colspan="4" class="p-3 text-center text-slate-500">
+                    {{ 'users.table.no_users'|trans }}
+                </td>
+            </tr>
+          {%- endif -%}
+        </tbody>
+      </table>
+    </div>
+
 
     {% if this.shouldShowPagination() %}
-    <div class="mt-4">
-      <nav class="pagination flex gap-x-2">
-        {# First Page Button #}
-        <button type="button"
-          {% if this.currentPage > 1 %}
-            data-action="live#action"
-            data-live-action-param="goToPage"
-            data-live-page-param="1"
-          {% else %}
-            disabled
-          {% endif %}
-          aria-label="{{ 'ui.pagination.first'|trans(domain='app') }}"
-          class="px-2 py-1 rounded transition-colors {% if this.currentPage > 1 %}bg-slate-100 hover:bg-slate-200 text-slate-700{% else %}bg-slate-50 text-slate-400 cursor-not-allowed{% endif %}">
-          {{ ux_icon('lucide:chevron-first', {'font-size': '1.3rem'}) }}
-        </button>
+    <div data-loading="addAttribute(disabled) addClass(disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400)" class="flex items-center justify-between py-4">
+      <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+        <p class="text-sm text-slate-700">
+            {{- 'ui.pagination.show_from_page_to'|trans(arguments={'%pageNumber%': this.currentPage, '%totalPages%': this.getTotalPages() },domain='app')|raw -}}
+        </p>
+        <nav class="isolate h-10 inline-flex -space-x-px rounded-md shadow-sm" aria-label="{{ 'ui.pagination.label'|trans(arguments={'%page%': heading},domain='app') }}">
 
-        {# Previous Button #}
-        <button type="button"
-          {% if this.currentPage > 1 %}
-            data-action="live#action"
-            data-live-action-param="goToPage"
-            data-live-page-param="{{ this.currentPage - 1 }}"
-          {% else %}
-            disabled
+          {% if this.canJumpToEnds %}
+            {# First Page Button #}
+            <button type="button"
+              {% if this.currentPage > 1 %}
+                data-action="live#action"
+                data-live-action-param="goToPage"
+                data-live-page-param="1"
+              {% else %}
+                disabled
+              {% endif %}
+              aria-label="{{ 'ui.pagination.first'|trans(domain='app') }}"
+              class="relative w-10 inline-flex items-center justify-center rounded-l-md text-slate-500 ring-1 ring-inset ring-slate-300 enabled:hover:bg-slate-50 focus:z-1 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed">
+              {{ ux_icon('lucide:chevrons-left', {class: 'h-4 w-4'}) }}
+            </button>
           {% endif %}
-          aria-label="{{ 'ui.pagination.prev'|trans(domain='app') }}"
-          class="px-2 py-1 rounded transition-colors {% if this.currentPage > 1 %}bg-slate-100 hover:bg-slate-200 text-slate-700{% else %}bg-slate-50 text-slate-400 cursor-not-allowed{% endif %}">
-          {{ ux_icon('lucide:arrow-left', {'font-size': '1.1rem'}) }}
-        </button>
 
-        {# Page Numbers Container - Fixed Width #}
-        <div class="flex gap-x-2 min-w-max">
-          {# Page Numbers #}
-          {% set paginationRange = this.getPaginationRange() %}
-          {% set totalPages = this.getTotalPages() %}
+          {# Previous Button #}
+          <button type="button"
+            {% if this.currentPage > 1 %}
+              data-action="live#action"
+              data-live-action-param="goToPage"
+              data-live-page-param="{{ this.currentPage - 1 }}"
+            {% else %}
+              disabled
+            {% endif %}
+            aria-label="{{ 'ui.pagination.prev'|trans(domain='app') }}"
+            class="relative w-10 {% if not this.canJumpToEnds %} rounded-l-md {% endif -%} inline-flex items-center justify-center text-slate-500 ring-1 ring-inset ring-slate-300 enabled:hover:bg-slate-50 focus:z-1 focus:outline-offset-0 disabled:opacity-50  disabled:cursor-not-allowed">
+            {{ ux_icon('lucide:chevron-left', {class: 'h-4 w-4'}) }}
+          </button>
 
           {# Show ellipsis before if we're not at the start #}
-          {% if paginationRange[0] > 1 %}
-            <span class="px-2 py-1 text-slate-500">...</span>
-          {% else %}
-            <span class="px-2 py-1 text-transparent">...</span>
+          {% if this.getPaginationRange()|first > 1 and this.showEllipsis %}
+              <span aria-label="{{'ui.pagination.more_pages'|trans(domain: 'app')}}" class="relative w-10 inline-flex items-center justify-center text-sm font-semibold text-slate-700 ring-1 ring-inset ring-slate-300 focus:outline-offset-0">...</span>
           {% endif %}
 
-          {% for num in paginationRange %}
+          {% for num in this.getPaginationRange() %}
             <button type="button"
               {% if num != this.currentPage %}
                 data-action="live#action"
                 data-live-action-param="goToPage"
                 data-live-page-param="{{ num }}"
-                aria-label="{{ 'ui.pagination.toPage'|trans(arguments={'%pageNumber%': num},domain='app') }}"
+                aria-label="{{ 'ui.pagination.to_page'|trans(arguments={'%pageNumber%': num},domain='app') }}"
               {% else %}
                 aria-label="{{ 'ui.pagination.page'|trans(arguments={'%pageNumber%': num},domain='app') }}"
+                aria-current="page"
                 disabled
               {% endif %}
-              class="px-2 py-1 bg-slate-50 hover:bg-slate-200 rounded transition-colors {% if num == this.currentPage %}bg-slate-200 font-bold text-slate-900{% else %}bg-slate-100 hover:bg-slate-200 text-slate-700{% endif %}">
+              class="relative w-10 inline-flex items-center justify-center text-sm font-semibold ring-1 ring-inset ring-slate-300 focus:z-2 focus:outline-offset-0 {% if num == this.currentPage %} z-1 underline underline-offset-2 bg-linear-to-tr from-indigo-200 to-indigo-100 text-indigo-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 {% else -%} text-gray-600 enabled:hover:bg-slate-50 {% endif -%}">
               {{- num -}}
             </button>
           {% endfor %}
 
           {# Show ellipsis after if we're not at the end #}
-          {% if paginationRange|last < totalPages %}
-            <span class="px-2 py-1 text-slate-500">...</span>
-          {% else %}
-            <span class="px-2 py-1 text-transparent">...</span>
+          {% if this.getPaginationRange()|last < this.getTotalPages() and this.showEllipsis %}
+              <span aria-label="{{'ui.pagination.more_pages'|trans(domain: 'app')}}" class="relative  w-10 inline-flex items-center justify-center text-sm font-semibold text-slate-700 ring-1 ring-inset ring-slate-300 focus:outline-offset-0">...</span>
           {% endif %}
-        </div>
 
-        {# Next Button #}
-        <button type="button"
-          {% if this.currentPage < this.getTotalPages() %}
-            data-action="live#action"
-            data-live-action-param="goToPage"
-            data-live-page-param="{{ this.currentPage + 1 }}"
-          {% else %}
-            disabled
-          {% endif %}
-          aria-label="{{ 'ui.pagination.next'|trans(domain='app') }}"
-          class="px-2 py-1 rounded transition-colors {% if this.currentPage < this.getTotalPages() %}bg-slate-100 hover:bg-slate-200 text-slate-700{% else %}bg-slate-50 text-slate-400 cursor-not-allowed{% endif %}">
-          {{ ux_icon('lucide:arrow-right', {'font-size': '1.1rem'}) }}
-        </button>
+          {# Next Button #}
+          <button type="button"
+            {% if this.currentPage < this.getTotalPages() %}
+              data-action="live#action"
+              data-live-action-param="goToPage"
+              data-live-page-param="{{ this.currentPage + 1 }}"
+            {% else %}
+              disabled
+            {% endif %}
+            aria-label="{{ 'ui.pagination.next'|trans(domain='app') }}"
+            class="relative w-10 {% if not this.canJumpToEnds %} rounded-r-md {% endif -%} inline-flex items-center justify-center text-slate-500 ring-1 ring-inset ring-slate-300 enabled:hover:bg-slate-50 focus:z-1 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed">
+            {{ ux_icon('lucide:chevron-right', {class: 'h-4 w-4'}) }}
+          </button>
 
-        {# Last Page Button #}
-        <button type="button"
-          {% if this.currentPage < this.getTotalPages() %}
-            data-action="live#action"
-            data-live-action-param="goToPage"
-            data-live-page-param="{{ this.getTotalPages() }}"
-          {% else %}
-            disabled
+          {% if this.canJumpToEnds %}
+            {# Last Page Button #}
+            <button type="button"
+              {% if this.currentPage < this.getTotalPages() %}
+                data-action="live#action"
+                data-live-action-param="goToPage"
+                data-live-page-param="{{ this.getTotalPages() }}"
+              {% else %}
+                disabled
+              {% endif %}
+              aria-label="{{ 'ui.pagination.last'|trans(domain='app') }}"
+              class="relative w-10 inline-flex items-center justify-center rounded-r-md text-slate-500 ring-1 ring-inset ring-slate-300 enabled:hover:bg-slate-50 focus:z-1 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed">
+              {{ ux_icon('lucide:chevrons-right', {class: 'h-4 w-4'}) }}
+            </button>
           {% endif %}
-          aria-label="{{ 'ui.pagination.last'|trans(domain='app') }}"
-          class="px-2 py-1 rounded transition-colors {% if this.currentPage < this.getTotalPages() %}bg-slate-100 hover:bg-slate-200 text-slate-700{% else %}bg-slate-50 text-slate-400 cursor-not-allowed{% endif %}">
-          {{ ux_icon('lucide:chevron-last', {'font-size': '1.3rem'}) }}
-        </button>
-      </nav>
+        </nav>
+      </div>
     </div>
-  {% endif %}
+    {% endif %}
 </div>

@@ -18,13 +18,9 @@ class IndexController extends AbstractController
     #[Route(path: '/admin/users/', name: 'admin_users')]
     public function index(Request $request): Response
     {
-        $currentPage = max(1, (int) $request->query->get('p', 1));
-
         return $this->render(
             'admin/pages/users/index.html.twig',
-            [
-                'currentPage' => $currentPage,
-            ]
+            []
         );
     }
 }

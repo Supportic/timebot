@@ -13,11 +13,15 @@ ui:
     exit_impersonation: Exit Impersonation
   pagination:
     page: 'go to page %pageNumber%'
-    toPage: 'go to page %pageNumber%'
+    to_page: 'go to page %pageNumber%'
     prev: 'go to previous page'
     next: 'go to next page'
     first: 'go to first page'
     last: 'got to last page'
+    show_from_page_to: 'Showing page <span class="font-medium">%pageNumber%</span> of <span class="font-medium">%totalPages%</span>'
+    label: 'Page navigation: %page%'
+    more_pages: 'more pages are available'
+
 seo:
   title_portal: 'Timebot'
   title_page:
