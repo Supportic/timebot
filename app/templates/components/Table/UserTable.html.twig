@@ -6,7 +6,7 @@
 {% set table_data_classes = 'p-3 border border-slate-200' %}
 
 {# <table {{ stimulus_controller('table') }} data-max="5" data-fetch="{{ path('admin_api_v1_users') }}" class="border-collapse border border-slate-300"> #}
-<div {{ attributes.defaults(stimulus_controller('pagination', { currentPage: this.currentPage, pageQueryAlias: this.pageQueryAlias })) }} class="relative">
+<div {{ attributes.defaults(stimulus_controller('pagination', { currentPage: this.safePage, pageQueryAlias: this.pageQueryAlias })) }} class="relative">
     <div data-loading="action(goToPage)|show" class="hidden absolute inset-0 z-10 items-center justify-center bg-white/50 backdrop-blur-[1px] transition-all duration-200">
         <div class="flex flex-col items-center gap-2 rounded-lg bg-white p-4 shadow-lg ring-1 ring-slate-900/5">
             {{ ux_icon('lucide:loader-2', {class: 'h-8 w-8 animate-spin text-indigo-600'}) }}
@@ -17,7 +17,7 @@
     {# no pointer events prevents clicking  #}
     <div data-loading="addClass(opacity-50 pointer-events-none duration-200)" class="transition-opacity">
       <p class="text-sm text-slate-700 mb-4">
-          {{- 'users.table.users_found'|trans(arguments={'%amount%': this.totalUserCount()})|raw -}}
+          {{- 'users.table.users_found'|trans(arguments={'%amount%': this.getEffectiveUserCount()})|raw -}}
       </p>
       <table class="w-full border-collapse border border-slate-300">
         <thead>
@@ -29,8 +29,8 @@
           </tr>
         </thead>
         <tbody>
-          {% if this.totalUserCount > 0 %}
-            {% for user in this.getUsers() %}
+          {% if this.getTotalUserCount() > 0 %}
+            {% for user in this.getPaginatedUsers() %}
               <tr class="{{table_row_classes}}">
                 <td class="{{ table_data_classes }}">{{ user.id }}</td>
                 <td class="{{ table_data_classes }} font-medium text-slate-900">{{ user.username }}</td>
@@ -77,18 +77,18 @@
     </div>
 
 
-    {% if this.shouldShowPagination() %}
+    {% if this.shouldShowPagination %}
     <div data-loading="addAttribute(disabled) addClass(disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400)" class="flex items-center justify-between py-4">
       <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
         <p class="text-sm text-slate-700">
-            {{- 'ui.pagination.show_from_page_to'|trans(arguments={'%pageNumber%': this.currentPage, '%totalPages%': this.getTotalPages() },domain='app')|raw -}}
+            {{- 'ui.pagination.show_from_page_to'|trans(arguments={'%pageNumber%': this.safePage, '%totalPages%': this.getTotalPages() },domain='app')|raw -}}
         </p>
         <nav class="isolate h-10 inline-flex -space-x-px rounded-md shadow-sm" aria-label="{{ 'ui.pagination.label'|trans(arguments={'%page%': heading},domain='app') }}">
 
           {% if this.canJumpToEnds %}
             {# First Page Button #}
             <button type="button"
-              {% if this.currentPage > 1 %}
+              {% if this.safePage > 1 %}
                 data-action="live#action"
                 data-live-action-param="goToPage"
                 data-live-page-param="1"
@@ -103,10 +103,10 @@
 
           {# Previous Button #}
           <button type="button"
-            {% if this.currentPage > 1 %}
+            {% if this.safePage > 1 %}
               data-action="live#action"
               data-live-action-param="goToPage"
-              data-live-page-param="{{ this.currentPage - 1 }}"
+              data-live-page-param="{{ this.safePage - 1 }}"
             {% else %}
               disabled
             {% endif %}
@@ -122,7 +122,7 @@
 
           {% for num in this.getPaginationRange() %}
             <button type="button"
-              {% if num != this.currentPage %}
+              {% if num != this.safePage %}
                 data-action="live#action"
                 data-live-action-param="goToPage"
                 data-live-page-param="{{ num }}"
@@ -132,7 +132,7 @@
                 aria-current="page"
                 disabled
               {% endif %}
-              class="relative w-10 inline-flex items-center justify-center text-sm font-semibold ring-1 ring-inset ring-slate-300 focus:z-2 focus:outline-offset-0 {% if num == this.currentPage %} z-1 underline underline-offset-2 bg-linear-to-tr from-indigo-200 to-indigo-100 text-indigo-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 {% else -%} text-gray-600 enabled:hover:bg-slate-50 {% endif -%}">
+              class="relative w-10 inline-flex items-center justify-center text-sm font-semibold ring-1 ring-inset ring-slate-300 focus:z-2 focus:outline-offset-0 {% if num == this.safePage %} z-1 underline underline-offset-2 bg-linear-to-tr from-indigo-200 to-indigo-100 text-indigo-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 {% else -%} text-gray-600 enabled:hover:bg-slate-50 {% endif -%}">
               {{- num -}}
             </button>
           {% endfor %}
@@ -144,10 +144,10 @@
 
           {# Next Button #}
           <button type="button"
-            {% if this.currentPage < this.getTotalPages() %}
+            {% if this.safePage < this.getTotalPages() %}
               data-action="live#action"
               data-live-action-param="goToPage"
-              data-live-page-param="{{ this.currentPage + 1 }}"
+              data-live-page-param="{{ this.safePage + 1 }}"
             {% else %}
               disabled
             {% endif %}
@@ -159,7 +159,7 @@
           {% if this.canJumpToEnds %}
             {# Last Page Button #}
             <button type="button"
-              {% if this.currentPage < this.getTotalPages() %}
+              {% if this.safePage < this.getTotalPages() %}
                 data-action="live#action"
                 data-live-action-param="goToPage"
                 data-live-page-param="{{ this.getTotalPages() }}"

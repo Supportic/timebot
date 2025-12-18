@@ -34,7 +34,6 @@ export default class extends Controller {
   async initialize() {
     this.component = await getComponent(this.element as HTMLElement);
 
-    // Set initial query param if needed
     this.updateQueryParam();
   }
 

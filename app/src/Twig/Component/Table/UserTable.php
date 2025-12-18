@@ -82,18 +82,18 @@ class UserTable
         // Pagination
         //////////////////////////
 
-        // Normalize current page on mount
-        $currentPage = max(1, $currentPage);
-        $this->currentPage = $currentPage;
-
         // hide pagination when max links are 0 or less
         $this->showPagination = $maxPaginationLinks <= 0 ? false : $showPagination;
+        // 4 links are recommended to avoid visual jumps where the ellipsis gets added
+        $this->maxPaginationLinks = ($this->showEllipsis && $maxPaginationLinks < 4) ? 4 : $maxPaginationLinks;
 
-        $this->maxPaginationLinks = $maxPaginationLinks;
-        if ($this->showEllipsis && $maxPaginationLinks < 4) {
-            // 4 links are recommended to avoid visual jumps where the ellipsis gets added
-            $this->maxPaginationLinks = 4;
-        }
+        $totalPages = $this->getTotalPages();
+        /**
+         * Ensure the page is at least 1, and no more than totalPages
+         * If totalPages is 0, we still default to page 1 to show the 'empty' state correctly)
+         */
+        $maxAllowedPage = max(1, $totalPages);
+        $this->currentPage = min(max(1, $currentPage), $maxAllowedPage);
     }
 
     public function modifyCurrentPageProp(LiveProp $liveProp): LiveProp
@@ -105,38 +105,63 @@ class UserTable
         return $liveProp;
     }
 
+    /**
+     * Get the total user count from the database
+     */
     public function getTotalUserCount(): int
     {
         return $this->userRepository->count([]);
     }
 
     /**
+     * Get the effective user count, respecting maxEntries limit
+     */
+    public function getEffectiveUserCount(): int
+    {
+        $totalCount = $this->getTotalUserCount();
+
+        if ($this->maxEntries !== null) {
+            $totalCount = min($totalCount, $this->maxEntries);
+        }
+
+        return $totalCount;
+    }
+
+    /**
+     * Get the users for the current paginated page.
      * @return User[]
      */
-    public function getUsers(): array
+    public function getPaginatedUsers(): array
     {
-        $offset = ($this->currentPage - 1) * $this->perPage;
+        // 1. Calculate the safe, valid page number right now
+        $totalPages = max(1, $this->getTotalPages());
+        $safePage = min(max(1, $this->currentPage), $totalPages);
 
-        // Safety check: if offset is beyond maxEntries, return empty
+        // 2. Use safePage for the offset, not this->currentPage
+        $offset = ($safePage - 1) * $this->perPage;
+
+        // Safety check: if offset is still beyond maxEntries (edge case), return empty
         if ($this->maxEntries !== null && $offset >= $this->maxEntries) {
             return [];
         }
 
-        // Calculate the actual limit.
-        // Usually it's $perPage, unless we are near the $maxEntries cap.
         $limit = $this->perPage;
         if ($this->maxEntries !== null) {
             $remainingAllowed = $this->maxEntries - $offset;
             $limit = min($this->perPage, $remainingAllowed);
         }
 
-        // Fetch only the slice needed for this page
         return $this->userRepository->findBy(
             [],
-            ['id' => 'ASC'], // Recommend adding a sort order for consistent pagination
+            ['id' => 'ASC'],
             $limit,
             $offset
         );
+    }
+
+    public function getSafePage(): int
+    {
+        return min(max(1, $this->currentPage), max(1, $this->getTotalPages()));
     }
 
     public function hasPagination(): bool
@@ -185,6 +210,9 @@ class UserTable
     public function goToPage(#[LiveArg] int $page): void
     {
         // sleep(2); // artificially delay
-        $this->currentPage = $page;
+        $maxAllowedPage = max(1, $this->getTotalPages());
+
+        // Clamp the input
+        $this->currentPage = min(max(1, $page), $maxAllowedPage);
     }
 }
