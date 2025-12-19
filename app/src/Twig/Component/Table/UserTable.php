@@ -87,13 +87,9 @@ class UserTable
         // 4 links are recommended to avoid visual jumps where the ellipsis gets added
         $this->maxPaginationLinks = ($this->showEllipsis && $maxPaginationLinks < 4) ? 4 : $maxPaginationLinks;
 
-        $totalPages = $this->getTotalPages();
-        /**
-         * Ensure the page is at least 1, and no more than totalPages
-         * If totalPages is 0, we still default to page 1 to show the 'empty' state correctly)
-         */
-        $maxAllowedPage = max(1, $totalPages);
-        $this->currentPage = min(max(1, $currentPage), $maxAllowedPage);
+
+        // Initial clamp
+        $this->currentPage = $this->getSafePage($currentPage);
     }
 
     public function modifyCurrentPageProp(LiveProp $liveProp): LiveProp
@@ -118,13 +114,8 @@ class UserTable
      */
     public function getEffectiveUserCount(): int
     {
-        $totalCount = $this->getTotalUserCount();
-
-        if ($this->maxEntries !== null) {
-            $totalCount = min($totalCount, $this->maxEntries);
-        }
-
-        return $totalCount;
+        $total = $this->userRepository->count([]);
+        return ($this->maxEntries !== null) ? min($total, $this->maxEntries) : $total;
     }
 
     /**
@@ -133,35 +124,26 @@ class UserTable
      */
     public function getPaginatedUsers(): array
     {
-        // 1. Calculate the safe, valid page number right now
-        $totalPages = max(1, $this->getTotalPages());
-        $safePage = min(max(1, $this->currentPage), $totalPages);
-
-        // 2. Use safePage for the offset, not this->currentPage
+        $safePage = $this->getSafePage();
         $offset = ($safePage - 1) * $this->perPage;
 
-        // Safety check: if offset is still beyond maxEntries (edge case), return empty
-        if ($this->maxEntries !== null && $offset >= $this->maxEntries) {
-            return [];
-        }
-
+        // Calculate limit: normally perPage, but capped if we'd exceed maxEntries
         $limit = $this->perPage;
         if ($this->maxEntries !== null) {
-            $remainingAllowed = $this->maxEntries - $offset;
-            $limit = min($this->perPage, $remainingAllowed);
+            $limit = min($this->perPage, max(0, $this->maxEntries - $offset));
         }
 
-        return $this->userRepository->findBy(
-            [],
-            ['id' => 'ASC'],
-            $limit,
-            $offset
-        );
+        return ($limit <= 0) ? [] : $this->userRepository->findBy([], ['id' => 'ASC'], $limit, $offset);
     }
 
-    public function getSafePage(): int
+    /**
+     * Ensure the page is at least 1, and no more than totalPages
+     * If totalPages is 0, we still default to page 1 to show the 'empty' state correctly)
+     */
+    public function getSafePage(?int $page = null): int
     {
-        return min(max(1, $this->currentPage), max(1, $this->getTotalPages()));
+        $page ??= $this->currentPage;
+        return min(max(1, $page), max(1, $this->getTotalPages()));
     }
 
     public function hasPagination(): bool
@@ -177,42 +159,25 @@ class UserTable
     public function getPaginationRange(): array
     {
         $totalPages = $this->getTotalPages();
-
-        if ($this->maxPaginationLinks === null || $totalPages <= $this->maxPaginationLinks) {
+        if (!$this->maxPaginationLinks || $totalPages <= $this->maxPaginationLinks) {
             return range(1, max(1, $totalPages));
         }
 
-        $half = (int) floor($this->maxPaginationLinks / 2);
-        $start = max(1, $this->currentPage - $half);
+        $start = max(1, $this->getSafePage() - (int)floor($this->maxPaginationLinks / 2));
         $end = min($totalPages, $start + $this->maxPaginationLinks - 1);
 
-        if ($end - $start + 1 < $this->maxPaginationLinks) {
-            $start = max(1, $end - $this->maxPaginationLinks + 1);
-        }
-
-        return range($start, $end);
+        return range(max(1, $end - $this->maxPaginationLinks + 1), $end);
     }
 
     public function getTotalPages(): int
     {
-        // 1. Get total users in DB efficiently
-        $totalCount = $this->getTotalUserCount();
-
-        // 2. Cap by maxEntries if set
-        if ($this->maxEntries !== null) {
-            $totalCount = min($totalCount, $this->maxEntries);
-        }
-
-        return (int) ceil($totalCount / $this->perPage);
+        return (int) ceil($this->getEffectiveUserCount() / $this->perPage);
     }
 
     #[LiveAction]
     public function goToPage(#[LiveArg] int $page): void
     {
         // sleep(2); // artificially delay
-        $maxAllowedPage = max(1, $this->getTotalPages());
-
-        // Clamp the input
-        $this->currentPage = min(max(1, $page), $maxAllowedPage);
+        $this->currentPage = $this->getSafePage($page);
     }
 }

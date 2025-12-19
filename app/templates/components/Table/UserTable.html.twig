@@ -29,49 +29,47 @@
           </tr>
         </thead>
         <tbody>
-          {% if this.getTotalUserCount() > 0 %}
-            {% for user in this.getPaginatedUsers() %}
-              <tr class="{{table_row_classes}}">
-                <td class="{{ table_data_classes }}">{{ user.id }}</td>
-                <td class="{{ table_data_classes }} font-medium text-slate-900">{{ user.username }}</td>
-                <td class="{{ table_data_classes }}">
-                  <span class="inline-flex items-center rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600 ring-1 ring-inset ring-slate-500/10">
-                        {{- user.role|trans(domain='roles') -}}
-                    </span>
-                </td>
-                <td class="{{ table_data_classes }}">
-                  {% if is_granted(user.getrole.value) %}
-                    <div class="flex flex-row gap-x-2">
-                      <a class="inline-flex items-center justify-center rounded-md bg-white p-1.5 text-slate-500 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 hover:text-slate-700" href="javascript:void(0);" title="{{ 'users.table.body.actions.view'|trans }}">
-                        {{ ux_icon('lucide:user', {class: 'h-4 w-4'}) }}
-                        <span class="sr-only">{{ 'users.table.body.actions.view'|trans }}</span>
+        {% for user in this.getPaginatedUsers() %}
+            <tr class="{{table_row_classes}}">
+              <td class="{{ table_data_classes }}">{{ user.id }}</td>
+              <td class="{{ table_data_classes }} font-medium text-slate-900">{{ user.username }}</td>
+              <td class="{{ table_data_classes }}">
+                <span class="inline-flex items-center rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600 ring-1 ring-inset ring-slate-500/10">
+                      {{- user.role|trans(domain='roles') -}}
+                  </span>
+              </td>
+              <td class="{{ table_data_classes }}">
+                {% if is_granted(user.role.value|default('')) %}
+                  <div class="flex flex-row gap-x-2">
+                    <a class="inline-flex items-center justify-center rounded-md bg-white p-1.5 text-slate-500 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 hover:text-slate-700" href="javascript:void(0);" title="{{ 'users.table.body.actions.view'|trans }}">
+                      {{ ux_icon('lucide:user', {class: 'h-4 w-4'}) }}
+                      <span class="sr-only">{{ 'users.table.body.actions.view'|trans }}</span>
+                    </a>
+                    <a class="inline-flex items-center justify-center rounded-md bg-white p-1.5 text-slate-500 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 hover:text-blue-600" href="javascript:void(0);" title="{{ 'users.table.body.actions.edit'|trans }}">
+                      {{ ux_icon('lucide:edit', {class: 'h-4 w-4'}) }}
+                      <span class="sr-only">{{ 'users.table.body.actions.edit'|trans }}</span>
+                    </a>
+                    <a class="inline-flex items-center justify-center rounded-md bg-white p-1.5 text-slate-500 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 hover:text-red-600" href="javascript:void(0);" title="{{ 'users.table.body.actions.delete'|trans }}">
+                      {{ ux_icon('lucide:trash-2', {class: 'h-4 w-4'}) }}
+                      <span class="sr-only">{{ 'users.table.body.actions.delete'|trans }}</span>
+                    </a>
+                    {% if is_granted('ROLE_ALLOWED_TO_SWITCH') and user.role != enum('App\\Enum\\Role').ROLE_SUPER_ADMIN -%}
+                      <a class="inline-flex items-center justify-center rounded-md bg-white p-1.5 text-slate-500 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 hover:text-indigo-600" href="{{ path('admin_dashboard', { (switch_user_parameter): user.username }) }}" title="{{ 'users.table.body.actions.impersonate'|trans }}">
+                        {{ ux_icon('lucide:bot', {class: 'h-4 w-4'}) }}
+                        <span class="sr-only">{{ 'users.table.body.actions.impersonate'|trans }}</span>
                       </a>
-                      <a class="inline-flex items-center justify-center rounded-md bg-white p-1.5 text-slate-500 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 hover:text-blue-600" href="javascript:void(0);" title="{{ 'users.table.body.actions.edit'|trans }}">
-                        {{ ux_icon('lucide:edit', {class: 'h-4 w-4'}) }}
-                        <span class="sr-only">{{ 'users.table.body.actions.edit'|trans }}</span>
-                      </a>
-                      <a class="inline-flex items-center justify-center rounded-md bg-white p-1.5 text-slate-500 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 hover:text-red-600" href="javascript:void(0);" title="{{ 'users.table.body.actions.delete'|trans }}">
-                        {{ ux_icon('lucide:trash-2', {class: 'h-4 w-4'}) }}
-                        <span class="sr-only">{{ 'users.table.body.actions.delete'|trans }}</span>
-                      </a>
-                      {% if is_granted('ROLE_ALLOWED_TO_SWITCH') and user.role != enum('App\\Enum\\Role').ROLE_SUPER_ADMIN -%}
-                        <a class="inline-flex items-center justify-center rounded-md bg-white p-1.5 text-slate-500 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 hover:text-indigo-600" href="{{ path('admin_dashboard', { (switch_user_parameter): user.username }) }}" title="{{ 'users.table.body.actions.impersonate'|trans }}">
-                          {{ ux_icon('lucide:bot', {class: 'h-4 w-4'}) }}
-                          <span class="sr-only">{{ 'users.table.body.actions.impersonate'|trans }}</span>
-                        </a>
-                      {%- endif -%}
-                    </div>
-                  {%- endif -%}
-                </td>
-              </tr>
-            {% endfor %}
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+              </td>
+            </tr>
           {% else %}
             <tr class="{{table_row_classes}}">
                 <td colspan="4" class="p-3 text-center text-slate-500">
                     {{ 'users.table.no_users'|trans }}
                 </td>
             </tr>
-          {%- endif -%}
+          {% endfor %}
         </tbody>
       </table>
     </div>
