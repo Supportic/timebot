@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
-import { getComponent, Component } from '@symfony/ux-live-component';
+// import { getComponent, Component } from '@symfony/ux-live-component';
 
 // https://symfony.com/bundles/StimulusBundle/current/index.html#stimulus-twig-helpers
 // https://ux.symfony.com/stimulus
@@ -17,22 +17,22 @@ import { getComponent, Component } from '@symfony/ux-live-component';
  * If this is problematic in the future remove this TS controller and always provide URLs with query param.
  */
 export default class extends Controller {
-  private component!: Component;
+  // private component!: Component;
 
   static values = {
     currentPage: Number,
-    pageQueryAlias: String,
+    customPageQueryAlias: String,
   };
 
   declare readonly hasCurrentPageValue: boolean;
   declare currentPageValue: number;
 
-  declare readonly hasPageQueryAliasValue: boolean;
-  declare readonly pageQueryAliasValue: string | null;
+  declare readonly hasCustomPageQueryAliasValue: boolean;
+  declare readonly customPageQueryAliasValue: string | null;
 
   // stimulus initialize lifecycle method
   async initialize() {
-    this.component = await getComponent(this.element as HTMLElement);
+    // this.component = await getComponent(this.element as HTMLElement);
 
     this.updateQueryParam();
   }
@@ -44,16 +44,28 @@ export default class extends Controller {
 
   private updateQueryParam() {
     const pageQueryAlias =
-      this.hasPageQueryAliasValue && this.pageQueryAliasValue !== null
-        ? this.pageQueryAliasValue
+      this.hasCustomPageQueryAliasValue &&
+      this.customPageQueryAliasValue !== null
+        ? this.customPageQueryAliasValue
         : 'p';
 
     const url = new URL(window.location.href);
+    const currentPage = url.searchParams.get(pageQueryAlias);
+    const expectedValue =
+      this.hasCurrentPageValue && this.currentPageValue > 1
+        ? this.currentPageValue.toString()
+        : null;
 
-    this.hasCurrentPageValue && this.currentPageValue > 1
-      ? url.searchParams.set(pageQueryAlias, this.currentPageValue.toString())
-      // delete param on page 1
-      : url.searchParams.delete(pageQueryAlias);
+    // php updated the query param value already - no update needed
+    if (currentPage === expectedValue) {
+      return;
+    }
+
+    expectedValue !== null
+      ? // update URL on page load without query param but forced page in template
+        url.searchParams.set(pageQueryAlias, expectedValue)
+      : // delete query param on page 1
+        url.searchParams.delete(pageQueryAlias);
 
     window.history.replaceState({}, '', url);
   }

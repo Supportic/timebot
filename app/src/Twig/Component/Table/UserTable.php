@@ -24,6 +24,8 @@ class UserTable
     use DefaultActionTrait;
     use ValidatableComponentTrait;
 
+    private const DEFAULT_PAGE_QUERY_ALIAS = 'p';
+
     #[LiveProp]
     public ?int $maxEntries = null;
 
@@ -37,13 +39,22 @@ class UserTable
 
     // setting the "url" param updates the queryParameter in the url
     // https://symfony.com/bundles/ux-live-component/current/index.html#controlling-the-query-parameter-name
-    #[LiveProp(writable: true, url: new UrlMapping(as: 'p'),  modifier: 'modifyCurrentPageProp')]
+    #[LiveProp(
+        writable: true,
+        url: new UrlMapping(as: self::DEFAULT_PAGE_QUERY_ALIAS),
+        modifier: 'modifyCurrentPageProp'
+    )]
     #[Assert\Positive]
     public int $currentPage = 1;
 
+    private string $pageQueryAlias = self::DEFAULT_PAGE_QUERY_ALIAS;
+
+    /**
+     * Override the $pageQueryAlias: <twig:UserTable customPageQueryAlias="page" />
+     * @var null|string
+     */
     #[LiveProp]
-    // <twig:UserTable pageQueryAlias="page" />
-    public ?string $pageQueryAlias = null;
+    public ?string $customPageQueryAlias = null;
 
     #[LiveProp]
     // null means show all
@@ -94,8 +105,9 @@ class UserTable
 
     public function modifyCurrentPageProp(LiveProp $liveProp): LiveProp
     {
-        if ($this->pageQueryAlias) {
-            $liveProp = $liveProp->withUrl(new UrlMapping(as: $this->pageQueryAlias));
+        if ($this->customPageQueryAlias) {
+            $liveProp = $liveProp->withUrl(new UrlMapping(as: $this->customPageQueryAlias));
+            $this->pageQueryAlias = $this->customPageQueryAlias;
         }
 
         return $liveProp;
