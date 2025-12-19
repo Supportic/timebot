@@ -2,11 +2,12 @@
 
 {# {% block stylesheets %}
   {{ parent() }}
-{% endblock %}
+{% endblock %} #}
 
 {% block javascripts %}
   {{ parent() }}
-{% endblock %} #}
+  {{ vite_entry_script_tags('sidebar') }}
+{% endblock %}
 
 {% block body %}
   <div class="flex">

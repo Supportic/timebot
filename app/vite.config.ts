@@ -134,9 +134,12 @@ export default defineConfig((config: UserConfig): UserConfig => {
           login_style: './assets/styles/pages/login.css',
           login: './assets/scripts/pages/login.ts',
 
-          main: './assets/vue/main.ts',
+          // vue: './assets/entrypoints/vue.ts',
 
-          app: './assets/app.ts',
+          // backend JS
+          app: './assets/entrypoints/app.ts',
+          sidebar: './assets/entrypoints/sidebar.ts',
+          // backend CSS
           global: './assets/styles/global.css',
         },
         output: {

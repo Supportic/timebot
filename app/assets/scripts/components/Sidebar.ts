@@ -1,4 +1,4 @@
-import SessionUpdater from '@/scripts/utils/SessionUpdater';
+import SessionUpdater from '@scripts/utils/SessionUpdater';
 
 export default class Sidebar {
   private readonly BREAKPOINT_MD: number = 768;

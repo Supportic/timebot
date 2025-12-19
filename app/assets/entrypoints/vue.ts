@@ -3,7 +3,7 @@ import { registerPlugins } from '@/vue/plugins';
 // Composables
 import { createApp } from 'vue';
 
-import App from './App.vue';
+import App from '@/vue/App.vue';
 
 const app = createApp(App);
 
