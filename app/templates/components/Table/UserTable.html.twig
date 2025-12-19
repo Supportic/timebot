@@ -6,7 +6,7 @@
 {% set table_data_classes = 'p-3 border border-slate-200' %}
 
 {# <table {{ stimulus_controller('table') }} data-max="5" data-fetch="{{ path('admin_api_v1_users') }}" class="border-collapse border border-slate-300"> #}
-<div {{ attributes.defaults(stimulus_controller('pagination', { currentPage: this.safePage, customPageQueryAlias: this.customPageQueryAlias })) }} class="relative">
+<div {{ attributes.defaults(stimulus_controller('pagination', { currentPage: this.getSafePage(), customPageQueryAlias: this.customPageQueryAlias })) }} class="relative">
     <div data-loading="action(goToPage)|show" class="hidden absolute inset-0 z-10 items-center justify-center bg-white/50 backdrop-blur-[1px] transition-all duration-200">
         <div class="flex flex-col items-center gap-2 rounded-lg bg-white p-4 shadow-lg ring-1 ring-slate-900/5">
             {{ ux_icon('lucide:loader-2', {class: 'h-8 w-8 animate-spin text-indigo-600'}) }}
@@ -17,7 +17,7 @@
     {# no pointer events prevents clicking  #}
     <div data-loading="addClass(opacity-50 pointer-events-none duration-200)" class="transition-opacity">
       <p class="text-sm text-slate-700 mb-4">
-          {{- 'users.table.users_found'|trans(arguments={'%amount%': this.getEffectiveUserCount()})|raw -}}
+          {{- 'users.table.users_found'|trans(arguments={'%amount%': this.totalCount})|raw -}}
       </p>
       <table class="w-full border-collapse border border-slate-300">
         <thead>
@@ -29,7 +29,7 @@
           </tr>
         </thead>
         <tbody>
-        {% for user in this.getPaginatedUsers() %}
+        {% for user in this.getPaginatedEntries() %}
             <tr class="{{table_row_classes}}">
               <td class="{{ table_data_classes }}">{{ user.id }}</td>
               <td class="{{ table_data_classes }} font-medium text-slate-900">{{ user.username }}</td>
