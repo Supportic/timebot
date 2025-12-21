@@ -19,7 +19,7 @@ ui:
     first: 'zur ersten Seite'
     last: 'zur letzten Seite'
     show_from_page_to: 'Seite <span class="font-medium">%pageNumber%</span> von <span class="font-medium">%totalPages%</span>'
-    label: 'Seitennavigation: %page%'
+    label: 'Seitennavigation'
     more_pages: 'es existieren weitere Seiten'
 
 seo:

@@ -1,0 +1,117 @@
+<div {{ attributes.defaults(stimulus_controller('pagination', {
+    currentPage: this.getSafePage(),
+    customPageQueryAlias: this.customPageQueryAlias
+  })) }} class="relative">
+  <div class="flex items-center justify-between py-4">
+    <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+      <p class="text-sm text-slate-700">
+          {{- 'ui.pagination.show_from_page_to'|trans(arguments={'%pageNumber%': this.getSafePage(), '%totalPages%': this.getTotalPaginationPages() },domain='app')|raw -}}
+      </p>
+      <nav class="isolate h-10 inline-flex rounded-md shadow-sm"  aria-label="{{ 'ui.pagination.label'|trans(domain='app') }}">
+        <ul class="flex -space-x-px">
+
+          {% if this.canJumpToEnds %}
+          {# First Page Button #}
+          <li class="flex">
+            <button type="button"
+              {% if this.getSafePage() > 1 %}
+                data-action="live#action"
+                data-live-action-param="goToPage"
+                data-live-page-param="1"
+              {% else %}
+                disabled aria-disabled="true"
+              {% endif %}
+              aria-label="{{ 'ui.pagination.first'|trans(domain='app') }}"
+              class="w-10 inline-flex items-center justify-center rounded-l-md text-slate-500 ring-1 ring-inset ring-slate-300 enabled:hover:bg-slate-50 focus:z-1 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed">
+              {{ ux_icon('lucide:chevrons-left', {class: 'h-4 w-4'}) }}
+            </button>
+          </li>
+          {% endif %}
+
+          {# Previous Button #}
+          <li class="flex">
+            <button type="button"
+              {% if this.getSafePage() > 1 %}
+                data-action="live#action"
+                data-live-action-param="goToPage"
+                data-live-page-param="{{ this.getSafePage() - 1 }}"
+              {% else %}
+                disabled aria-disabled="true"
+              {% endif %}
+              aria-label="{{ 'ui.pagination.prev'|trans(domain='app') }}"
+              class="w-10 inline-flex items-center justify-center text-slate-500 ring-1 ring-inset ring-slate-300 enabled:hover:bg-slate-50 focus:z-1 focus:outline-offset-0 disabled:opacity-50  disabled:cursor-not-allowed {% if not this.canJumpToEnds %} rounded-l-md {% endif -%}">
+              {{ ux_icon('lucide:chevron-left', {class: 'h-4 w-4'}) }}
+            </button>
+          </li>
+
+          {# Show ellipsis before if we're not at the start #}
+          {% if this.getPaginationRange()|first > 1 and this.showEllipsis %}
+          <li class="flex">
+            <span aria-label="{{'ui.pagination.more_pages'|trans(domain: 'app')}}" class="w-10 inline-flex items-center justify-center text-sm font-semibold text-slate-700 ring-1 ring-inset ring-slate-300 focus:outline-offset-0">...</span>
+          </li>
+          {% endif %}
+
+          {% for num in this.getPaginationRange() %}
+          <li class="flex">
+            <button type="button"
+              {% if num != this.getSafePage() %}
+                data-action="live#action"
+                data-live-action-param="goToPage"
+                data-live-page-param="{{ num }}"
+                aria-label="{{ 'ui.pagination.to_page'|trans(arguments={'%pageNumber%': num},domain='app') }}"
+              {% else %}
+                aria-label="{{ 'ui.pagination.page'|trans(arguments={'%pageNumber%': num},domain='app') }}"
+                aria-current="page"
+                disabled aria-disabled="true"
+              {% endif %}
+              class="w-10 inline-flex items-center justify-center text-sm font-semibold ring-1 ring-inset ring-slate-300 focus:z-2 focus:outline-offset-0 {% if num == this.getSafePage() %} z-1 underline underline-offset-2 bg-linear-to-tr from-indigo-200 to-indigo-100 text-indigo-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 {% else -%} text-gray-600 enabled:hover:bg-slate-50 {% endif -%}">
+              {{- num -}}
+            </button>
+          </li>
+          {% endfor %}
+
+          {# Show ellipsis after if we're not at the end #}
+          {% if this.getPaginationRange()|last < this.getTotalPaginationPages() and this.showEllipsis %}
+          <li class="flex">
+              <span aria-label="{{'ui.pagination.more_pages'|trans(domain: 'app')}}" class="w-10 inline-flex items-center justify-center text-sm font-semibold text-slate-700 ring-1 ring-inset ring-slate-300 focus:outline-offset-0">...</span>
+          </li>
+          {% endif %}
+
+          {# Next Button #}
+          <li class="flex">
+            <button type="button"
+              {% if this.getSafePage() < this.getTotalPaginationPages() %}
+                data-action="live#action"
+                data-live-action-param="goToPage"
+                data-live-page-param="{{ this.getSafePage() + 1 }}"
+              {% else %}
+                disabled aria-disabled="true"
+              {% endif %}
+              aria-label="{{ 'ui.pagination.next'|trans(domain='app') }}"
+              class="w-10 inline-flex items-center justify-center text-slate-500 ring-1 ring-inset ring-slate-300 enabled:hover:bg-slate-50 focus:z-1 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed {% if not this.canJumpToEnds %} rounded-r-md {% endif -%}">
+              {{ ux_icon('lucide:chevron-right', {class: 'h-4 w-4'}) }}
+            </button>
+          </li>
+
+          {% if this.canJumpToEnds %}
+          {# Last Page Button #}
+          <li class="flex">
+            <button type="button"
+              {% if this.getSafePage() < this.getTotalPaginationPages() %}
+                data-action="live#action"
+                data-live-action-param="goToPage"
+                data-live-page-param="{{ this.getTotalPaginationPages() }}"
+              {% else %}
+                disabled aria-disabled="true"
+              {% endif %}
+              aria-label="{{ 'ui.pagination.last'|trans(domain='app') }}"
+              class="w-10 inline-flex items-center justify-center rounded-r-md text-slate-500 ring-1 ring-inset ring-slate-300 enabled:hover:bg-slate-50 focus:z-1 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed">
+              {{ ux_icon('lucide:chevrons-right', {class: 'h-4 w-4'}) }}
+            </button>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>

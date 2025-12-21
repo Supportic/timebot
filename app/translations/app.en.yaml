@@ -19,7 +19,7 @@ ui:
     first: 'go to first page'
     last: 'got to last page'
     show_from_page_to: 'Showing page <span class="font-medium">%pageNumber%</span> of <span class="font-medium">%totalPages%</span>'
-    label: 'Page navigation: %page%'
+    label: 'Page navigation'
     more_pages: 'more pages are available'
 
 seo:

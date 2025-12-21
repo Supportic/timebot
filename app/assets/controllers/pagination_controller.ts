@@ -13,7 +13,7 @@ import { Controller } from '@hotwired/stimulus';
 
 /**
  * I implemented this controller to force a page number when the pagination is loaded without a query param and remove the query on the first page.
- * <twig:Table:UserTable :currentPage="4" />
+ * <twig:Pagination :currentPage="4" />
  * If this is problematic in the future remove this TS controller and always provide URLs with query param.
  */
 export default class extends Controller {

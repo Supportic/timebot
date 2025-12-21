@@ -9,6 +9,9 @@ use App\Repository\UserRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 
+/**
+ * @extends BaseTable<User>
+ */
 #[AsLiveComponent(exposePublicProps: false)]
 class UserTable extends BaseTable
 {

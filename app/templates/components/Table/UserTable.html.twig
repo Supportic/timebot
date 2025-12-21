@@ -1,13 +1,12 @@
 {% trans_default_domain 'user_management' %}
 
-{% set heading = 'ui.nav.users'|trans(domain='app') %}
 {% set table_head_classes = 'p-3 border border-slate-200 bg-slate-50 text-left font-semibold text-slate-900' %}
 {% set table_row_classes = 'hover:bg-slate-50 transition-colors h-[53px]' %}
 {% set table_data_classes = 'p-3 border border-slate-200' %}
 
 {# <table {{ stimulus_controller('table') }} data-max="5" data-fetch="{{ path('admin_api_v1_users') }}" class="border-collapse border border-slate-300"> #}
-<div {{ attributes.defaults(stimulus_controller('pagination', { currentPage: this.getSafePage(), customPageQueryAlias: this.customPageQueryAlias })) }} class="relative">
-    <div data-loading="action(goToPage)|show" class="hidden absolute inset-0 z-10 items-center justify-center bg-white/50 backdrop-blur-[1px] transition-all duration-200">
+<div {{ attributes }} class="relative">
+    <div data-loading="show" class="hidden absolute inset-0 z-10 items-center justify-center bg-white/50 backdrop-blur-[1px] transition-all duration-200">
         <div class="flex flex-col items-center gap-2 rounded-lg bg-white p-4 shadow-lg ring-1 ring-slate-900/5">
             {{ ux_icon('lucide:loader-2', {class: 'h-8 w-8 animate-spin text-indigo-600'}) }}
             <span class="text-sm font-medium text-slate-600">Loading...</span>
@@ -17,7 +16,7 @@
     {# no pointer events prevents clicking  #}
     <div data-loading="addClass(opacity-50 pointer-events-none duration-200)" class="transition-opacity">
       <p class="text-sm text-slate-700 mb-4">
-          {{- 'users.table.users_found'|trans(arguments={'%amount%': this.totalCount})|raw -}}
+          {{- 'users.table.users_found'|trans(arguments={'%amount%': this.getTotalCount()})|raw -}}
       </p>
       <table class="w-full border-collapse border border-slate-300">
         <thead>
@@ -74,103 +73,25 @@
       </table>
     </div>
 
+    {# Pagination Component prefix #}
+    {% set maxPaginationLinks = maxPaginationLinks ?? 4 %}
+    {% set showPagination = showPagination ?? (maxPaginationLinks <= 0 ? false : true) %}
+    {% set customPageQueryAlias = customPageQueryAlias ?? null %}
+    {% set showEllipsis = showEllipsis ?? true %}
+    {% set canJumpToEnds = canJumpToEnds ?? true %}
 
-    {% if this.shouldShowPagination %}
-    <div data-loading="addAttribute(disabled) addClass(disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400)" class="flex items-center justify-between py-4">
-      <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-        <p class="text-sm text-slate-700">
-            {{- 'ui.pagination.show_from_page_to'|trans(arguments={'%pageNumber%': this.safePage, '%totalPages%': this.getTotalPages() },domain='app')|raw -}}
-        </p>
-        <nav class="isolate h-10 inline-flex -space-x-px rounded-md shadow-sm" aria-label="{{ 'ui.pagination.label'|trans(arguments={'%page%': heading},domain='app') }}">
+    {% set totalPaginationPages = (this.getTotalCount() / this.perPage)|round(0, 'ceil') %}
 
-          {% if this.canJumpToEnds %}
-            {# First Page Button #}
-            <button type="button"
-              {% if this.safePage > 1 %}
-                data-action="live#action"
-                data-live-action-param="goToPage"
-                data-live-page-param="1"
-              {% else %}
-                disabled
-              {% endif %}
-              aria-label="{{ 'ui.pagination.first'|trans(domain='app') }}"
-              class="relative w-10 inline-flex items-center justify-center rounded-l-md text-slate-500 ring-1 ring-inset ring-slate-300 enabled:hover:bg-slate-50 focus:z-1 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed">
-              {{ ux_icon('lucide:chevrons-left', {class: 'h-4 w-4'}) }}
-            </button>
-          {% endif %}
-
-          {# Previous Button #}
-          <button type="button"
-            {% if this.safePage > 1 %}
-              data-action="live#action"
-              data-live-action-param="goToPage"
-              data-live-page-param="{{ this.safePage - 1 }}"
-            {% else %}
-              disabled
-            {% endif %}
-            aria-label="{{ 'ui.pagination.prev'|trans(domain='app') }}"
-            class="relative w-10 {% if not this.canJumpToEnds %} rounded-l-md {% endif -%} inline-flex items-center justify-center text-slate-500 ring-1 ring-inset ring-slate-300 enabled:hover:bg-slate-50 focus:z-1 focus:outline-offset-0 disabled:opacity-50  disabled:cursor-not-allowed">
-            {{ ux_icon('lucide:chevron-left', {class: 'h-4 w-4'}) }}
-          </button>
-
-          {# Show ellipsis before if we're not at the start #}
-          {% if this.getPaginationRange()|first > 1 and this.showEllipsis %}
-              <span aria-label="{{'ui.pagination.more_pages'|trans(domain: 'app')}}" class="relative w-10 inline-flex items-center justify-center text-sm font-semibold text-slate-700 ring-1 ring-inset ring-slate-300 focus:outline-offset-0">...</span>
-          {% endif %}
-
-          {% for num in this.getPaginationRange() %}
-            <button type="button"
-              {% if num != this.safePage %}
-                data-action="live#action"
-                data-live-action-param="goToPage"
-                data-live-page-param="{{ num }}"
-                aria-label="{{ 'ui.pagination.to_page'|trans(arguments={'%pageNumber%': num},domain='app') }}"
-              {% else %}
-                aria-label="{{ 'ui.pagination.page'|trans(arguments={'%pageNumber%': num},domain='app') }}"
-                aria-current="page"
-                disabled
-              {% endif %}
-              class="relative w-10 inline-flex items-center justify-center text-sm font-semibold ring-1 ring-inset ring-slate-300 focus:z-2 focus:outline-offset-0 {% if num == this.safePage %} z-1 underline underline-offset-2 bg-linear-to-tr from-indigo-200 to-indigo-100 text-indigo-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 {% else -%} text-gray-600 enabled:hover:bg-slate-50 {% endif -%}">
-              {{- num -}}
-            </button>
-          {% endfor %}
-
-          {# Show ellipsis after if we're not at the end #}
-          {% if this.getPaginationRange()|last < this.getTotalPages() and this.showEllipsis %}
-              <span aria-label="{{'ui.pagination.more_pages'|trans(domain: 'app')}}" class="relative  w-10 inline-flex items-center justify-center text-sm font-semibold text-slate-700 ring-1 ring-inset ring-slate-300 focus:outline-offset-0">...</span>
-          {% endif %}
-
-          {# Next Button #}
-          <button type="button"
-            {% if this.safePage < this.getTotalPages() %}
-              data-action="live#action"
-              data-live-action-param="goToPage"
-              data-live-page-param="{{ this.safePage + 1 }}"
-            {% else %}
-              disabled
-            {% endif %}
-            aria-label="{{ 'ui.pagination.next'|trans(domain='app') }}"
-            class="relative w-10 {% if not this.canJumpToEnds %} rounded-r-md {% endif -%} inline-flex items-center justify-center text-slate-500 ring-1 ring-inset ring-slate-300 enabled:hover:bg-slate-50 focus:z-1 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed">
-            {{ ux_icon('lucide:chevron-right', {class: 'h-4 w-4'}) }}
-          </button>
-
-          {% if this.canJumpToEnds %}
-            {# Last Page Button #}
-            <button type="button"
-              {% if this.safePage < this.getTotalPages() %}
-                data-action="live#action"
-                data-live-action-param="goToPage"
-                data-live-page-param="{{ this.getTotalPages() }}"
-              {% else %}
-                disabled
-              {% endif %}
-              aria-label="{{ 'ui.pagination.last'|trans(domain='app') }}"
-              class="relative w-10 inline-flex items-center justify-center rounded-r-md text-slate-500 ring-1 ring-inset ring-slate-300 enabled:hover:bg-slate-50 focus:z-1 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed">
-              {{ ux_icon('lucide:chevrons-right', {class: 'h-4 w-4'}) }}
-            </button>
-          {% endif %}
-        </nav>
-      </div>
-    </div>
+    {% if showPagination and totalPaginationPages > 1 %}
+    {{ component('Pagination', {
+        currentPage: this.currentPage,
+        totalCount: this.getTotalCount(),
+        perPage: this.perPage,
+        showPagination: showPagination,
+        maxPaginationLinks: maxPaginationLinks,
+        customPageQueryAlias: customPageQueryAlias,
+        canJumpToEnds: canJumpToEnds,
+        showEllipsis: showEllipsis,
+    }) }}
     {% endif %}
 </div>
