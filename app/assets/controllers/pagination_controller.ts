@@ -20,15 +20,15 @@ export default class extends Controller {
   // private component!: Component;
 
   static values = {
-    currentPage: Number,
-    customPageQueryAlias: String,
+    paginationPage: Number,
+    paginationCustomQueryAlias: String,
   };
 
-  declare readonly hasCurrentPageValue: boolean;
-  declare currentPageValue: number;
+  declare readonly hasPaginationPageValue: boolean;
+  declare paginationPageValue: number;
 
-  declare readonly hasCustomPageQueryAliasValue: boolean;
-  declare readonly customPageQueryAliasValue: string | null;
+  declare readonly hasPaginationCustomQueryAliasValue: boolean;
+  declare readonly paginationCustomQueryAliasValue: string | null;
 
   // stimulus initialize lifecycle method
   async initialize() {
@@ -38,22 +38,22 @@ export default class extends Controller {
   }
 
   // stimulus value changed callback
-  public currentPageValueChanged() {
+  public paginationPageValueChanged() {
     this.updateQueryParam();
   }
 
   private updateQueryParam() {
     const pageQueryAlias =
-      this.hasCustomPageQueryAliasValue &&
-      this.customPageQueryAliasValue !== null
-        ? this.customPageQueryAliasValue
+      this.hasPaginationCustomQueryAliasValue &&
+      this.paginationCustomQueryAliasValue !== null
+        ? this.paginationCustomQueryAliasValue
         : 'p';
 
     const url = new URL(window.location.href);
     const currentPage = url.searchParams.get(pageQueryAlias);
     const expectedValue =
-      this.hasCurrentPageValue && this.currentPageValue > 1
-        ? this.currentPageValue.toString()
+      this.hasPaginationPageValue && this.paginationPageValue > 1
+        ? this.paginationPageValue.toString()
         : null;
 
     // php updated the query param value already - no update needed

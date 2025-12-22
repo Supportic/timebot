@@ -21,6 +21,7 @@ ui:
     show_from_page_to: 'Seite <span class="font-medium">%pageNumber%</span> von <span class="font-medium">%totalPages%</span>'
     label: 'Seitennavigation'
     more_pages: 'es existieren weitere Seiten'
+    loading: 'Lädt...'
 
 seo:
   title_portal: 'Timebot'
