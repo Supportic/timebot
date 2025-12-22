@@ -18,6 +18,28 @@
   </div>
   {% endif %}
 
+  {% if this.searchEnabled %}
+  <div class="flex mb-3 px-4 py-3 rounded-md border-2 border-slate-300 focus-within:border-slate-500 overflow-hidden max-w-md items-center gap-2">
+    <label for="table-search" class="sr-only">{{ 'ui.search.label'|trans }}</label>
+    <input id="table-search" type="text" data-model="debounce(300)|query" placeholder="{{ 'ui.search.placeholder'|trans }}"
+      class="flex-1 outline-none bg-transparent text-gray-600 text-sm h-5" />
+    <button type="button"
+      {% if this.query|length > 0 %}
+        data-action="live#action"
+        data-live-action-param="clearSearch"
+        title="Clear search"
+        class="shrink-0 p-1 transition-colors h-fit"
+      {% else %}
+        disabled
+        class="shrink-0 p-1 invisible h-fit"
+      {% endif %}>
+      {{ ux_icon('lucide:x', {class: 'h-4 w-4 text-slate-400 hover:text-slate-600'}) }}
+      <span class="sr-only">{{ 'ui.search.clear'|trans }}</span>
+    </button>
+    {% if this.query|length == 0 %}{{ ux_icon('lucide:search', {class: 'h-5 w-5 text-gray-400 shrink-0'}) }}{% endif %}
+  </div>
+  {% endif %}
+
   {# no pointer events prevents clicking  #}
   <div data-loading="addClass(opacity-50 pointer-events-none duration-200)" class="transition-opacity">
     {% block total_entries %}{% endblock %}

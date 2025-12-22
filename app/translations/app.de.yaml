@@ -22,6 +22,10 @@ ui:
     label: 'Seitennavigation'
     more_pages: 'es existieren weitere Seiten'
     loading: 'Lädt...'
+  search:
+    placeholder: 'Suchen...'
+    label: 'Suche'
+    clear: 'Suche leeren'
 
 seo:
   title_portal: 'Timebot'

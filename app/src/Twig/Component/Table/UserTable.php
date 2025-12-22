@@ -26,4 +26,13 @@ class UserTable extends BaseTable
     {
         return $this->userRepository;
     }
+
+    /**
+     * Define which User fields are searchable.
+     * @return string[]
+     */
+    protected function getSearchableFields(): array
+    {
+        return ['id', 'username'];
+    }
 }

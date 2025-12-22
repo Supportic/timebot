@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Twig\Component\Table;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveArg;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
@@ -29,11 +30,21 @@ abstract class BaseTable
     use ValidatableComponentTrait;
 
     private const DEFAULT_PAGINATION_QUERY_ALIAS = 'p';
+    private const DEFAULT_SEARCH_QUERY_ALIAS = 'q';
 
     /**
      * @return ServiceEntityRepository<T>
      */
     protected abstract function getRepository(): ServiceEntityRepository;
+
+    /**
+     * Define searchable fields for this table.
+     * Return an array of field names that should be searched when a query is provided.
+     * Example: ['username', 'email', 'firstName', 'lastName']
+     *
+     * @return string[]
+     */
+    protected abstract function getSearchableFields(): array;
 
     #[LiveProp]
     public ?int $maxEntries = null;
@@ -82,6 +93,19 @@ abstract class BaseTable
     // display "..." entries to indicate that there are more pages available...
     public bool $paginationShowEllipsis = true;
 
+    // ##############################
+    // Search
+    // ##############################
+
+    #[LiveProp]
+    #[Assert\Type('bool')]
+    public bool $searchEnabled = false;
+
+    #[LiveProp(writable: true, url: new UrlMapping(as: self::DEFAULT_SEARCH_QUERY_ALIAS))]
+    public string $query = '';
+
+    private string $searchQueryAlias = self::DEFAULT_SEARCH_QUERY_ALIAS;
+
     // include params only when you want to validate them, simple setter not needed
     public function mount(
         ?int $maxEntries = null,
@@ -91,6 +115,7 @@ abstract class BaseTable
         int $paginationPage = 1,
         bool $paginationCanJumpToEnds = true,
         bool $paginationShowEllipsis = true,
+        bool $searchEnabled = false,
     ): void {
         $this->maxEntries = $maxEntries !== null && $maxEntries <= 0 ? null : $maxEntries;
         $this->paginationPerPageLimit = $paginationPerPageLimit <= 0 ? 10 : $paginationPerPageLimit;
@@ -103,6 +128,8 @@ abstract class BaseTable
 
         // 4 links are recommended to avoid visual jumps where the ellipsis gets added
         $this->paginationMaxNavItems = ($paginationShowEllipsis && $paginationMaxNavItems < 4) ? 4 : $paginationMaxNavItems;
+
+        $this->searchEnabled = $searchEnabled;
 
         // Initial clamp - needs to be at the end
         $this->paginationPage = $this->getPaginationSafePage($paginationPage);
@@ -118,6 +145,10 @@ abstract class BaseTable
             return $this->getPaginationEntries();
         }
 
+        if ($this->searchEnabled && !empty($this->query)) {
+            return $this->getSearchResults($this->maxEntries);
+        }
+
         return $this->getRepository()->findBy([], ['id' => 'ASC'], $this->maxEntries);
     }
 
@@ -126,7 +157,12 @@ abstract class BaseTable
      */
     public function getTotalEntryCount(): int
     {
-        $total = $this->getRepository()->count([]);
+        if ($this->searchEnabled && !empty($this->query)) {
+            $total = $this->getSearchResultCount();
+        } else {
+            $total = $this->getRepository()->count([]);
+        }
+
         return ($this->maxEntries !== null) ? min($total, $this->maxEntries) : $total;
     }
 
@@ -159,7 +195,15 @@ abstract class BaseTable
             $limit = min($this->paginationPerPageLimit, max(0, $this->maxEntries - $offset));
         }
 
-        return ($limit <= 0) ? [] : $this->getRepository()->findBy([], ['id' => 'ASC'], $limit, $offset);
+        if ($limit <= 0) {
+            return [];
+        }
+
+        if ($this->searchEnabled && !empty($this->query)) {
+            return $this->getSearchResults($limit, $offset);
+        }
+
+        return $this->getRepository()->findBy([], ['id' => 'ASC'], $limit, $offset);
     }
 
     public function showPagination(): bool
@@ -205,5 +249,81 @@ abstract class BaseTable
     {
         // sleep(2); // artificially delay
         $this->paginationPage = $this->getPaginationSafePage($page);
+    }
+
+    // ##############################
+    // Search
+    // ##############################
+
+    #[LiveAction]
+    public function clearSearch(): void
+    {
+        $this->query = '';
+        $this->paginationPage = 1;
+    }
+
+    /**
+     * Build a QueryBuilder for searching entities based on the current query.
+     * Searches across all fields defined in getSearchableFields().
+     */
+    protected function buildSearchQueryBuilder(): QueryBuilder
+    {
+        $qb = $this->getRepository()->createQueryBuilder('entity');
+        $searchableFields = $this->getSearchableFields();
+
+        if (empty($searchableFields) || empty($this->query)) {
+            return $qb;
+        }
+
+        $orExpressions = [];
+        $searchQuery = '%' . $this->query . '%';
+
+        foreach ($searchableFields as $index => $field) {
+            $orExpressions[] = $qb->expr()->like("entity.{$field}", ":search_{$index}");
+        }
+
+        if (!empty($orExpressions)) {
+            $qb->where($qb->expr()->orX(...$orExpressions));
+
+            foreach ($searchableFields as $index => $field) {
+                $qb->setParameter("search_{$index}", $searchQuery);
+            }
+        }
+
+        return $qb;
+    }
+
+    /**
+     * Get search results with optional limit and offset for pagination.
+     * @return array<int, T>
+     */
+    protected function getSearchResults(?int $limit = null, ?int $offset = null): array
+    {
+        $qb = $this->buildSearchQueryBuilder();
+
+        $qb->orderBy('entity.id', 'ASC');
+
+        if ($offset !== null) {
+            $qb->setFirstResult($offset);
+        }
+
+        if ($limit !== null) {
+            $qb->setMaxResults($limit);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Get the total count of search results.
+     */
+    protected function getSearchResultCount(): int
+    {
+        $qb = $this->buildSearchQueryBuilder();
+
+        // Use COUNT for efficiency
+        $qb->select('COUNT(entity.id)');
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 }
