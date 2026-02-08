@@ -154,8 +154,9 @@ abstract class BaseTable
 
     /**
      * Get the total count, respecting maxEntries limit
+     * Search results may return different amount of items
      */
-    public function getTotalEntryCount(): int
+    public function getMaxEntryCount(): int
     {
         if ($this->searchEnabled && !empty($this->query)) {
             $total = $this->getSearchResultCount();
@@ -164,6 +165,16 @@ abstract class BaseTable
         }
 
         return ($this->maxEntries !== null) ? min($total, $this->maxEntries) : $total;
+    }
+
+    /**
+     * Search results may return different amount of items
+     */
+    public function getTotalEntryCount(): int
+    {
+        return $this->searchEnabled && !empty($this->query)
+            ? $this->getSearchResultCount()
+            : $this->getRepository()->count([]);
     }
 
     // ##############################
@@ -226,7 +237,7 @@ abstract class BaseTable
 
     public function getPaginationTotalPages(): int
     {
-        return (int) ceil($this->getTotalEntryCount() / $this->paginationPerPageLimit);
+        return (int) ceil($this->getMaxEntryCount() / $this->paginationPerPageLimit);
     }
 
     public function getPaginationRange(): array
