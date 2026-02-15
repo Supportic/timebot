@@ -10,13 +10,13 @@
 {% endblock %}
 
 {% block body %}
-  <div class="flex">
+  <div class="flex h-screen overflow-y-hidden">
     {% block sidebar %}
       {% include 'admin/partials/_sidebar.html.twig' %}
     {% endblock %}
 
-    <main class="flex flex-col w-full">
-      <div class="flex items-center justify-between h-[57px] border-b px-6">
+    <main class="flex flex-col flex-1 min-w-0">
+      <div class="flex items-center justify-between h-[57px] border-b px-6 shrink-0">
         <div>
           {% block heading -%}
             {% if heading is defined and heading is not empty -%}
@@ -28,7 +28,7 @@
           {% include 'admin/partials/_app_version.html.twig' %}
         </div>
       </div>
-      <div class="py-4 px-6">
+      <div class="flex-1 overflow-auto py-4 px-6">
         {% block content %}
 
         {% endblock %}
