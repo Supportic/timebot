@@ -37,6 +37,14 @@ abstract class BaseTable
      */
     protected abstract function getRepository(): ServiceEntityRepository;
 
+
+    /**
+     * Adding null will display all available entries. (warning: performance)
+     * @var array<int, int|null>
+     */
+    #[LiveProp]
+    public array $maxEntriesSelectionChoices = [10, 25, 50, 75, 100];
+
     /**
      * Define searchable fields for this table.
      * Return an array of field names that should be searched when a query is provided.
@@ -46,8 +54,8 @@ abstract class BaseTable
      */
     protected abstract function getSearchableFields(): array;
 
-    #[LiveProp]
-    public ?int $maxEntries = null;
+    #[LiveProp(writable: true)]
+    public ?int $maxEntries = 10;
 
     // ##############################
     // Pagination
@@ -75,10 +83,6 @@ abstract class BaseTable
      */
     #[LiveProp]
     public ?string $paginationCustomQueryAlias = null;
-
-    #[LiveProp(writable: true)]
-    #[Assert\Positive]
-    public int $paginationPerPageLimit = 10;
 
     #[LiveProp]
     // null means show all
@@ -108,17 +112,17 @@ abstract class BaseTable
 
     // include params only when you want to validate them, simple setter not needed
     public function mount(
-        ?int $maxEntries = null,
         bool $paginationEnabled = true,
-        int $paginationPerPageLimit = 10,
         int $paginationMaxNavItems = 4,
         int $paginationPage = 1,
         bool $paginationCanJumpToEnds = true,
         bool $paginationShowEllipsis = true,
         bool $searchEnabled = false,
     ): void {
-        $this->maxEntries = $maxEntries !== null && $maxEntries <= 0 ? null : $maxEntries;
-        $this->paginationPerPageLimit = $paginationPerPageLimit <= 0 ? 10 : $paginationPerPageLimit;
+        // 'strlen' is a common shorthand to filter out null
+        $maxEntries = min(array_filter($this->maxEntriesSelectionChoices, 'strlen'));
+
+        $this->maxEntries = $maxEntries !== null && $maxEntries <= 0 ? $this->maxEntries : $maxEntries;
 
         // hide pagination when max links are 0 or less
         $this->paginationEnabled = $paginationMaxNavItems <= 0 ? false : $paginationEnabled;
@@ -153,10 +157,22 @@ abstract class BaseTable
     }
 
     /**
-     * Get the total count, respecting maxEntries limit
-     * Search results may return different amount of items
+     * Returns the total count from the database (or search results if searching), without any limit applied
+     * Used for pagination calculations.
      */
-    public function getMaxEntryCount(): int
+    public function getTotalCount(): int
+    {
+        return $this->searchEnabled && !empty($this->query)
+            ? $this->getSearchResultCount()
+            : $this->getRepository()->count([]);
+    }
+
+    /**
+     * Get the total count capped by the maxEntries limit
+     * When maxEntries is null, shows all entries.
+     * Used for display purposes-
+     */
+    public function getLimitedCount(): int
     {
         if ($this->searchEnabled && !empty($this->query)) {
             $total = $this->getSearchResultCount();
@@ -164,17 +180,8 @@ abstract class BaseTable
             $total = $this->getRepository()->count([]);
         }
 
+        // If maxEntries is null, show all entries
         return ($this->maxEntries !== null) ? min($total, $this->maxEntries) : $total;
-    }
-
-    /**
-     * Search results may return different amount of items
-     */
-    public function getTotalEntryCount(): int
-    {
-        return $this->searchEnabled && !empty($this->query)
-            ? $this->getSearchResultCount()
-            : $this->getRepository()->count([]);
     }
 
     // ##############################
@@ -198,17 +205,8 @@ abstract class BaseTable
     public function getPaginationEntries(): array
     {
         $safePage = $this->getPaginationSafePage();
-        $offset = ($safePage - 1) * $this->paginationPerPageLimit;
-
-        // Calculate limit: normally perPage, but capped if we'd exceed maxEntries
-        $limit = $this->paginationPerPageLimit;
-        if ($this->maxEntries !== null) {
-            $limit = min($this->paginationPerPageLimit, max(0, $this->maxEntries - $offset));
-        }
-
-        if ($limit <= 0) {
-            return [];
-        }
+        $offset = ($safePage - 1) * $this->maxEntries;
+        $limit = $this->maxEntries;
 
         if ($this->searchEnabled && !empty($this->query)) {
             return $this->getSearchResults($limit, $offset);
@@ -237,7 +235,12 @@ abstract class BaseTable
 
     public function getPaginationTotalPages(): int
     {
-        return (int) ceil($this->getMaxEntryCount() / $this->paginationPerPageLimit);
+        // When maxEntries is null, show all on one page (no pagination)
+        if ($this->maxEntries === null) {
+            return 1;
+        }
+
+        return (int) ceil($this->getTotalCount() / $this->maxEntries);
     }
 
     public function getPaginationRange(): array

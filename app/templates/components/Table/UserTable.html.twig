@@ -8,11 +8,7 @@
 
 {% block total_entries %}
 <p class="text-sm text-slate-700 mb-4">
-    {%- if not this.paginationEnabled and this.maxEntries is not null and this.getMaxEntryCount() < this.getTotalEntryCount() %}
-      {{- 'users.table.limited_users_found'|trans(arguments={'%amount%': this.getMaxEntryCount(), '%total_amount%': this.getTotalEntryCount()})|raw -}}
-    {% else %}
-      {{- 'users.table.users_found'|trans(arguments={'%amount%': this.getMaxEntryCount()})|raw -}}
-    {% endif -%}
+    {{- 'users.table.users_found'|trans(arguments={'%amount%': this.getTotalCount()})|raw -}}
 </p>
 {% endblock %}
 
@@ -50,6 +46,7 @@
             {{ ux_icon('lucide:trash-2', {class: 'h-4 w-4'}) }}
             <span class="sr-only">{{ 'users.table.body.actions.delete'|trans }}</span>
           </a>
+          {# superadmins are not allowed to impersonate other superadmins #}
           {% if is_granted('ROLE_ALLOWED_TO_SWITCH') and user.role != enum('App\\Enum\\Role').ROLE_SUPER_ADMIN -%}
             <a class="{{ table_action_link_classes }} hover:text-indigo-600" href="{{ path('admin_dashboard', { (switch_user_parameter): user.username }) }}" title="{{ 'users.table.body.actions.impersonate'|trans }}">
               {{ ux_icon('lucide:bot', {class: 'h-4 w-4'}) }}

@@ -26,6 +26,9 @@ ui:
     placeholder: 'Suchen...'
     label: 'Suche'
     clear: 'Suche leeren'
+  max_entries:
+    label: 'Einträge pro Seite'
+    all: 'Alle'
 
 seo:
   title_portal: 'Timebot'
