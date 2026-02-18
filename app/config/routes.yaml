@@ -1,0 +1,45 @@
+# yaml-language-server: $schema=../vendor/symfony/routing/Loader/schema/routing.schema.json
+
+# This file is the entry point to configure the routes of your app.
+# Methods with the #[Route] attribute are automatically imported.
+# See also https://symfony.com/doc/current/routing.html
+
+# To list all registered routes, run the following command:
+#   bin/console debug:router
+
+controllers:
+  # resource: routing.controllers
+  resource:
+    path: ../src/Controller/Frontend
+    namespace: App\Controller\Frontend
+  type: attribute
+  prefix:
+    'en': '' # don't prefix URLs for English, the default locale
+    'de' : '/de'
+  # defaults:
+  #   _locale: '%app.default_locale%' # already set via default_locale
+  # requirements:
+  #   _locale: '%app.supported_locales%' # already set via enabled_locales
+
+kernel:
+  resource: App\Kernel
+  type: attribute
+
+admin_api_v1_controllers:
+  resource: ../src/Controller/AdminApi
+  type: attribute
+
+admin_internal_controllers:
+  resource: ../src/Controller/Admin/Internal
+  type: attribute
+
+admin_view_controllers:
+  resource: ../src/Controller/Admin/View
+  type: attribute
+  prefix:
+    'en': '' # don't prefix URLs for English, the default locale
+    'de' : '/de'
+  # defaults:
+  #   _locale: '%app.default_locale%' # already set via default_locale
+  # requirements:
+  #   _locale: '%app.supported_locales%' # already set via enabled_locales

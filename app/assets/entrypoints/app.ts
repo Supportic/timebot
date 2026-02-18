@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import 'unfonts.css';
-import '@/bootstrap.ts';
+import '@/stimulus_bootstrap';
 
 import { PrimeVue, Aura } from '@/vue/plugins/primevue.ts';
 import { createPinia } from 'pinia';

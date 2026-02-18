@@ -60,7 +60,6 @@ export default defineConfig((config: UserConfig): UserConfig => {
       Icons({ compiler: 'vue3', scale: 1 }),
       Components({
         dts: './assets/icons.d.ts', // enable typescript support (create on build)
-        version: 3,
         resolvers: [
           IconsResolver({
             prefix: 'icon',

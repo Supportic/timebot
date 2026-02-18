@@ -5,24 +5,30 @@ namespace App\Entity\Trait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Doctrine\DBAL\Schema\DefaultExpression\CurrentTimestamp;
+use Doctrine\DBAL\Types\Types;
 
 trait TimestampableTrait
 {
-    #[ORM\Column('created_at')]
+    #[ORM\Column(
+        'created_at',
+        type: Types::DATETIME_IMMUTABLE,
+        options: ['default' => new CurrentTimestamp()],
+        insertable: false,
+        updatable: false
+    )]
     #[Groups(['api'])]
     #[Gedmo\Timestampable(on: 'create')]
     private \DateTimeImmutable $createdAt;
 
-    #[ORM\Column('updated_at')]
+    #[ORM\Column(
+        'updated_at',
+        type: Types::DATETIME_IMMUTABLE,
+        options: ['default' => new CurrentTimestamp()]
+    )]
     #[Groups(['api'])]
     #[Gedmo\Timestampable(on: 'update')]
     private \DateTimeImmutable $updatedAt;
-
-    public function __construct()
-    {
-        $this->createdAt = new \DateTimeImmutable();
-        $this->updatedAt = $this->createdAt;
-    }
 
     public function getCreatedAt(): \DateTimeImmutable
     {
