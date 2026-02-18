@@ -1,8 +1,4 @@
-import {
-  trans,
-  LOGIN_FORM_FIELD_REVEAL_PASSWORD_BUTTON_TITLE_REVEAL,
-  LOGIN_FORM_FIELD_REVEAL_PASSWORD_BUTTON_TITLE_CONCEAL,
-} from '@/translator';
+import { trans } from '@/translator';
 
 export default class RevealPasswordButton {
   private isPasswordVisible: boolean = false;
@@ -54,7 +50,7 @@ export default class RevealPasswordButton {
   public revealPassword = (): void => {
     this.PasswordInput.type = 'text';
     const title = trans(
-      LOGIN_FORM_FIELD_REVEAL_PASSWORD_BUTTON_TITLE_CONCEAL,
+      'login.form_field.reveal_password_button.title_conceal',
       {},
       'login',
     );
@@ -68,7 +64,7 @@ export default class RevealPasswordButton {
   public concealPassword = (): void => {
     this.PasswordInput.type = 'password';
     const title = trans(
-      LOGIN_FORM_FIELD_REVEAL_PASSWORD_BUTTON_TITLE_REVEAL,
+      'login.form_field.reveal_password_button.title_reveal',
       {},
       'login',
     );

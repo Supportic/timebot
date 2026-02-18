@@ -19,7 +19,7 @@ services:
     build:
       context: ./.docker/service/php
       args:
-        - PHP_VER=${PHP_VER:-8.3-fpm-trixie}
+        - PHP_VER=${PHP_VER:-8.4-fpm-trixie}
         - UID=${UID}
         - GID=${GID}
         - UNAME=${UNAME}
@@ -63,7 +63,7 @@ services:
   ########################
   db:
     container_name: ${PROJECT_NAME}-db
-    image: ${DB_IMAGE:-mariadb}:${DB_IMAGE_VER:-11.4}
+    image: ${DB_IMAGE:-mariadb}:${DB_IMAGE_VER:-12.2}
     healthcheck:
       test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
       start_period: 10s

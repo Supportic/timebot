@@ -1,10 +1,3 @@
-import {
-  trans,
-  // getLocale,
-  setLocaleFallbacks,
-  throwWhenNotFound,
-} from '@symfony/ux-translator';
-import { localeFallbacks } from '../var/translations/configuration';
 /*
  * This file is part of the Symfony UX Translator package.
  *
@@ -14,19 +7,14 @@ import { localeFallbacks } from '../var/translations/configuration';
  * If you use TypeScript, you can rename this file to "translator.ts" to take advantage of types checking.
  */
 
-setLocaleFallbacks(localeFallbacks);
-// using this will throw an error when a translation key is missing
-throwWhenNotFound(true);
+import { createTranslator } from '@symfony/ux-translator';
+import { messages, localeFallbacks } from '../var/translations/index.js';
 
-// type Lang = 'en' | 'de' | undefined;
+const translator = createTranslator({
+  messages,
+  localeFallbacks,
+  throwWhenNotFound: true,
+});
 
-/**
- * ux-translator automatically detects the current language when using trans()
- * if you still want to read and set it, use this helper for the local param in trans function
- */
-// const getCurrentLocale = (): Lang => {
-//   return getLocale() as Lang;
-// };
-
-export { trans };
-export * from '../var/translations';
+// Allow you to use `import { trans } from './translator';` in your assets
+export const { trans } = translator;

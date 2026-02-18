@@ -19,8 +19,8 @@ RUN echo ${UNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${UNAME} &&\
 USER ${UNAME}
 
 # install nvm (setup .bashrc), Node.js
-ARG NVM_VERSION=0.40.2
-ARG NODE_VERSION=24.4.0
+ARG NVM_VERSION=0.40.4
+ARG NODE_VERSION=24.13.1
 ENV NVM_DIR="/home/${UNAME}/.nvm"
 
 # not supported for NVM
