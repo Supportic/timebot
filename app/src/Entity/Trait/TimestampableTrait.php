@@ -10,11 +10,14 @@ use Doctrine\DBAL\Types\Types;
 
 trait TimestampableTrait
 {
+    // https://github.com/doctrine-extensions/DoctrineExtensions/blob/main/doc/timestampable.md#using-traits
+    // use \Gedmo\Timestampable\Traits\TimestampableEntity;
+
     #[ORM\Column(
         'created_at',
         type: Types::DATETIME_IMMUTABLE,
         options: ['default' => new CurrentTimestamp()],
-        insertable: false,
+        // Prevent any future updates to this field
         updatable: false
     )]
     #[Groups(['api'])]
@@ -24,7 +27,7 @@ trait TimestampableTrait
     #[ORM\Column(
         'updated_at',
         type: Types::DATETIME_IMMUTABLE,
-        options: ['default' => new CurrentTimestamp()]
+        options: ['default' => new CurrentTimestamp()],
     )]
     #[Groups(['api'])]
     #[Gedmo\Timestampable(on: 'update')]
@@ -35,9 +38,15 @@ trait TimestampableTrait
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    /**
+     * Using \DateTimeInterface allows you to pass either
+     * Mutable or Immutable objects while maintaining internal immutability.
+     */
+    public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
-        $this->createdAt = $createdAt;
+        $this->createdAt = $createdAt instanceof \DateTime
+            ? \DateTimeImmutable::createFromMutable($createdAt)
+            : $createdAt;
 
         return $this;
     }
@@ -47,9 +56,15 @@ trait TimestampableTrait
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    /**
+     * Using \DateTimeInterface allows you to pass either
+     * Mutable or Immutable objects while maintaining internal immutability.
+     */
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): static
     {
-        $this->updatedAt = $updatedAt;
+        $this->updatedAt = $updatedAt instanceof \DateTime
+            ? \DateTimeImmutable::createFromMutable($updatedAt)
+            : $updatedAt;
 
         return $this;
     }

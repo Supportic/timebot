@@ -7,6 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Attribute\Groups;
 
+/**
+ * https://github.com/doctrine-extensions/DoctrineExtensions/blob/main/doc/soft-deleteable.md
+ * timeAware - can schedule deletions
+ * hardDelete - allows deleting a second time to remove the entry completely
+ */
 #[Gedmo\SoftDeleteable(fieldName: 'deleted_at', timeAware: false, hardDelete: true)]
 trait SoftDeletableTrait
 {
@@ -16,18 +21,24 @@ trait SoftDeletableTrait
      */
     // use SoftDeleteableEntity;
 
-    #[ORM\Column('deleted_at', type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[ORM\Column('deleted_at', type: Types::DATETIME_IMMUTABLE, nullable: true)]
     #[Groups(['api'])]
-    private ?\DateTime $deletedAt = null;
+    private ?\DateTimeImmutable $deletedAt = null;
 
-    public function getDeletedAt(): ?\DateTime
+    public function getDeletedAt(): ?\DateTimeImmutable
     {
         return $this->deletedAt;
     }
 
-    public function setDeletedAt(?\DateTime $deletedAt): static
+    /**
+     * Using \DateTimeInterface allows you to pass either
+     * Mutable or Immutable objects while maintaining internal immutability.
+     */
+    public function setDeletedAt(?\DateTimeInterface $deletedAt): static
     {
-        $this->deletedAt = $deletedAt;
+        $this->deletedAt = $deletedAt instanceof \DateTime
+            ? \DateTimeImmutable::createFromMutable($deletedAt)
+            : $deletedAt;
 
         return $this;
     }
