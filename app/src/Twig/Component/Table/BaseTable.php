@@ -258,6 +258,25 @@ abstract class BaseTable
         return range(max(1, $end - $this->paginationMaxNavItems + 1), $end);
     }
 
+
+    /**
+     * Returns the offset start number of the visible pagination entries
+     * e.g. <10>-15 of 15
+     */
+    public function getPaginationOffsetStart(): int
+    {
+        return ($this->getPaginationSafePage() - 1) * $this->maxEntries + 1;
+    }
+
+    /**
+     * Returns the offset end number of the visible pagination entries
+     * e.g. 10-<15> of 15
+     */
+    public function getPaginationOffsetEnd(): int
+    {
+        return min($this->getPaginationSafePage() * $this->maxEntries, $this->getTotalCount());
+    }
+
     #[LiveAction]
     public function loadPaginationPage(#[LiveArg] int $page): void
     {

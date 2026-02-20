@@ -1,7 +1,5 @@
 users:
   table:
-    users_found: 'Users found: <span class="font-medium">%amount%</span>'
-    limited_users_found: 'Users found: show <span class="font-medium">%amount%</span> of <span class="font-medium">%total_amount%</span>'
     no_users: 'No users found'
     head:
       username: Username

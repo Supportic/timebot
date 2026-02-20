@@ -29,6 +29,7 @@ ui:
   max_entries:
     label: 'Einträge pro Seite'
     all: 'Alle'
+  total_entries: '<span class="font-medium">%paginationStart%</span> - <span class="font-medium">%paginationEnd%</span> von <span class="font-medium">%totalAmount%</span>'
 
 seo:
   title_portal: 'Timebot'

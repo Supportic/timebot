@@ -6,12 +6,6 @@
 {% set table_data_classes = 'p-3 border border-slate-200' %}
 {% set table_action_link_classes = 'inline-flex items-center justify-center rounded-md bg-white p-1.5 text-slate-500 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50' %}
 
-{% block total_entries %}
-<p class="text-sm text-slate-700 mb-4">
-    {{- 'users.table.users_found'|trans(arguments={'%amount%': this.getTotalCount()})|raw -}}
-</p>
-{% endblock %}
-
 {% block table_head %}
 <tr>
   <th class="{{ table_head_classes }}">ID</th>
