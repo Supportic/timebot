@@ -365,4 +365,9 @@ abstract class BaseTable
 
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
+
+    public function exceedsPaginationDisplayLimit(): bool
+    {
+        return $this->getPaginationTotalPages() > 100;
+    }
 }

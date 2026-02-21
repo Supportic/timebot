@@ -19,8 +19,8 @@ ui:
     next: 'go to next page'
     first: 'go to first page'
     last: 'got to last page'
-    show_page_of: 'of <span class="font-medium ml-0.5">%totalPages%</span>'
-    show_from_page_to: 'Page <span class="font-medium">%pageNumber%</span> of <span class="font-medium">%totalPages%</span>'
+    show_page_of: 'of %totalPages%'
+    show_from_page_to: 'Page %pageNumber% of %totalPages%'
     label: 'Page navigation'
     more_pages: 'more pages are available'
     loading: 'loading...'
@@ -31,7 +31,7 @@ ui:
   max_entries:
     label: 'Entries per page'
     all: 'All'
-  total_entries: '<span class="font-medium">%paginationStart%</span> - <span class="font-medium">%paginationEnd%</span> of <span class="font-medium">%totalAmount%</span>'
+  total_entries: '%paginationStart% - %paginationEnd% of %totalAmount%'
 
 seo:
   title_portal: 'Timebot'

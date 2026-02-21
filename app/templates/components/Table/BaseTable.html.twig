@@ -57,7 +57,8 @@
   <div class="flex items-center justify-between py-4">
     <div class="hidden sm:flex sm:flex-1 sm:items-center sm:flex-wrap gap-y-3">
 
-      {% if this.showPagination() %}
+      {# display type changes > 100 entries, this information will be redundant #}
+      {% if this.showPagination() and not this.exceedsPaginationDisplayLimit() %}
         {% if this.paginationSelectEnabled %}
         <div class="flex flex-row items-center gap-x-2">
           <label for="table-pagination-page-select" class="text-sm text-gray-700 whitespace-nowrap">
@@ -73,12 +74,12 @@
             {{ ux_icon('lucide:chevron-down', {class: 'h-4 w-4 col-start-1 justify-self-end pointer-events-none relative right-2 row-start-1 self-center z-1'}) }}
           </div>
           <span class="text-sm text-slate-700">
-              {{- 'ui.pagination.show_page_of'|trans(arguments={'%totalPages%': this.getPaginationTotalPages() })|raw -}}
+              {{- 'ui.pagination.show_page_of'|trans(arguments={'%totalPages%': '<span class="font-medium ml-0.5">'~this.getPaginationTotalPages()~'</span>' })|raw -}}
           </span>
         </div>
         {% else %}
           <p class="text-sm text-slate-700">
-            {{- 'ui.pagination.show_from_page_to'|trans(arguments={'%pageNumber%': this.getPaginationSafePage(), '%totalPages%': this.getPaginationTotalPages() })|raw -}}
+            {{- 'ui.pagination.show_from_page_to'|trans(arguments={'%pageNumber%': '<span class="font-medium">'~this.getPaginationSafePage()~'</span>', '%totalPages%': '<span class="font-medium">'~this.getPaginationTotalPages()~'</span>' })|raw -}}
           </p>
         {% endif %}
       {% endif %}
@@ -124,37 +125,46 @@
               </button>
             </li>
 
-            {# Show ellipsis before if we're not at the start #}
-            {% if this.getPaginationRange()|first > 1 and this.paginationShowEllipsis %}
-            <li class="flex">
-              <span aria-label="{{'ui.pagination.more_pages'|trans}}" class="w-10 inline-flex items-center justify-center text-sm font-semibold text-slate-700 ring-1 ring-inset ring-slate-300 focus:outline-offset-0">...</span>
-            </li>
-            {% endif %}
-
-            {% for num in this.getPaginationRange() %}
-            <li class="flex">
-              <button type="button"
-                {% if num != this.getPaginationSafePage() %}
-                  data-action="live#action"
-                  data-live-action-param="loadPaginationPage"
-                  data-live-page-param="{{ num }}"
-                  aria-label="{{ 'ui.pagination.to_page'|trans(arguments={'%pageNumber%': num}) }}"
-                {% else %}
-                  aria-label="{{ 'ui.pagination.page_number'|trans(arguments={'%pageNumber%': num}) }}"
-                  aria-current="page"
-                  disabled aria-disabled="true"
-                {% endif %}
-                class="min-w-10 px-4 inline-flex items-center justify-center text-sm font-semibold ring-1 ring-inset ring-slate-300 focus:z-2 focus:outline-offset-0 overflow-x-clip {% if num == this.getPaginationSafePage() %} z-1 underline underline-offset-2 bg-linear-to-tr from-indigo-200 to-indigo-100 text-indigo-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 {% else -%} text-gray-600 enabled:hover:bg-slate-50 {% endif -%}">
-                {{- num -}}
-              </button>
-            </li>
-            {% endfor %}
-
-            {# Show ellipsis after if we're not at the end #}
-            {% if this.getPaginationRange()|last < this.getPaginationTotalPages() and this.paginationShowEllipsis %}
-            <li class="flex">
+            {# at some point the numbers are getting too big, that's why change the display type #}
+            {% if not this.exceedsPaginationDisplayLimit()  %}
+              {# Show ellipsis before if we're not at the start #}
+              {% if this.getPaginationRange()|first > 1 and this.paginationShowEllipsis %}
+              <li class="flex">
                 <span aria-label="{{'ui.pagination.more_pages'|trans}}" class="w-10 inline-flex items-center justify-center text-sm font-semibold text-slate-700 ring-1 ring-inset ring-slate-300 focus:outline-offset-0">...</span>
-            </li>
+              </li>
+              {% endif %}
+
+              {% for num in this.getPaginationRange() %}
+              <li class="flex">
+                <button type="button"
+                  {% if num != this.getPaginationSafePage() %}
+                    data-action="live#action"
+                    data-live-action-param="loadPaginationPage"
+                    data-live-page-param="{{ num }}"
+                    aria-label="{{ 'ui.pagination.to_page'|trans(arguments={'%pageNumber%': num}) }}"
+                  {% else %}
+                    aria-label="{{ 'ui.pagination.page_number'|trans(arguments={'%pageNumber%': num}) }}"
+                    aria-current="page"
+                    disabled aria-disabled="true"
+                  {% endif %}
+                  class="min-w-10 px-4 inline-flex items-center justify-center text-sm font-semibold ring-1 ring-inset ring-slate-300 focus:z-2 focus:outline-offset-0 overflow-x-clip {% if num == this.getPaginationSafePage() %} z-1 underline underline-offset-2 bg-linear-to-tr from-indigo-200 to-indigo-100 text-indigo-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 {% else -%} text-gray-600 enabled:hover:bg-slate-50 {% endif -%}">
+                  {{- num -}}
+                </button>
+              </li>
+              {% endfor %}
+
+              {# Show ellipsis after if we're not at the end #}
+              {% if this.getPaginationRange()|last < this.getPaginationTotalPages() and this.paginationShowEllipsis %}
+              <li class="flex">
+                  <span aria-label="{{'ui.pagination.more_pages'|trans}}" class="w-10 inline-flex items-center justify-center text-sm font-semibold text-slate-700 ring-1 ring-inset ring-slate-300 focus:outline-offset-0">...</span>
+              </li>
+              {% endif %}
+            {% else %}
+              <div class="min-w-10 px-4 inline-flex items-center gap-x-1 justify-center text-sm text-slate-700 ring-1 ring-inset ring-slate-300" aria-label="{{ 'ui.pagination.show_from_page_to'|trans(arguments={'%pageNumber%': this.getPaginationSafePage(), '%totalPages%': this.getPaginationTotalPages()}) }}">
+                <span class="font-medium">{{this.getPaginationSafePage()}}</span>
+                <span>/</span>
+                <span>{{this.getPaginationTotalPages()}}</span>
+              </div>
             {% endif %}
 
             {# Next Button #}
@@ -218,9 +228,9 @@
         {% if this.showPagination() %}
         <p class="text-sm text-slate-700">
           {{- 'ui.total_entries'|trans(arguments={
-            '%paginationStart%': this.getPaginationOffsetStart(),
-            '%paginationEnd%': this.getPaginationOffsetEnd(),
-            '%totalAmount%': this.getTotalCount()
+            '%paginationStart%': '<span class="font-medium">'~this.getPaginationOffsetStart()~'</span>',
+            '%paginationEnd%': '<span class="font-medium">'~this.getPaginationOffsetEnd()~'</span>',
+            '%totalAmount%': '<span class="font-medium">'~this.getTotalCount()~'</span>'
           })|raw -}}
         </p>
         {% else %}
