@@ -58,11 +58,29 @@
     <div class="hidden sm:flex sm:flex-1 sm:items-center sm:flex-wrap gap-y-3">
 
       {% if this.showPagination() %}
-      <div>
-        <p class="text-sm text-slate-700">
+        {% if this.paginationSelectEnabled %}
+        <div class="flex flex-row items-center gap-x-2">
+          <label for="table-pagination-page-select" class="text-sm text-gray-700 whitespace-nowrap">
+            {{- 'ui.pagination.page_select_label'|trans -}}
+          </label>
+          <div class="grid h-10">
+            {# TODO the entries here are dynamic in size. Make sure to scale the select field. #}
+            <select data-model="paginationPage" id="table-pagination-page-select" class="font-medium col-start-1 row-start-1 pl-4 pr-7 py-2 shadow-sm rounded-md cursor-pointer appearance-none ring-1 ring-inset ring-slate-300 focus:outline-offset-0 enabled:hover:bg-slate-50">
+              {% for num in this.getPaginationRange()%}
+                  <option value="{{ num }}" {% if this.getPaginationSafePage() == num %}selected{% endif %}>{{num}}</option>
+              {% endfor %}
+            </select>
+            {{ ux_icon('lucide:chevron-down', {class: 'h-4 w-4 col-start-1 justify-self-end pointer-events-none relative right-2 row-start-1 self-center z-1'}) }}
+          </div>
+          <span class="text-sm text-slate-700">
+              {{- 'ui.pagination.show_page_of'|trans(arguments={'%totalPages%': this.getPaginationTotalPages() })|raw -}}
+          </span>
+        </div>
+        {% else %}
+          <p class="text-sm text-slate-700">
             {{- 'ui.pagination.show_from_page_to'|trans(arguments={'%pageNumber%': this.getPaginationSafePage(), '%totalPages%': this.getPaginationTotalPages() })|raw -}}
-        </p>
-      </div>
+          </p>
+        {% endif %}
       {% endif %}
 
       {# ################################# #}
@@ -71,110 +89,109 @@
       {% if this.showPagination() %}
       <div class="flex flex-1 justify-center">
         <nav class="isolate h-10 inline-flex rounded-md shadow-sm" aria-label="{{ 'ui.pagination.label'|trans }}">
-        <ul class="flex -space-x-px">
+          <ul class="flex -space-x-px">
+            {% if this.paginationCanJumpToEnds %}
+            {# First Page Button #}
+            <li class="flex">
+              <button type="button"
+                {% if this.getPaginationSafePage() > 1 %}
+                  data-action="live#action"
+                  data-live-action-param="loadPaginationPage"
+                  data-live-page-param="1"
+                {% else %}
+                  disabled aria-disabled="true"
+                {% endif %}
+                aria-label="{{ 'ui.pagination.first'|trans }}"
+                class="w-10 inline-flex items-center justify-center rounded-l-md text-slate-500 ring-1 ring-inset ring-slate-300 enabled:hover:bg-slate-50 focus:z-1 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed">
+                {{ ux_icon('lucide:chevrons-left', {class: 'h-4 w-4'}) }}
+              </button>
+            </li>
+            {% endif %}
 
-          {% if this.paginationCanJumpToEnds %}
-          {# First Page Button #}
-          <li class="flex">
-            <button type="button"
-              {% if this.getPaginationSafePage() > 1 %}
-                data-action="live#action"
-                data-live-action-param="loadPaginationPage"
-                data-live-page-param="1"
-              {% else %}
-                disabled aria-disabled="true"
-              {% endif %}
-              aria-label="{{ 'ui.pagination.first'|trans }}"
-              class="w-10 inline-flex items-center justify-center rounded-l-md text-slate-500 ring-1 ring-inset ring-slate-300 enabled:hover:bg-slate-50 focus:z-1 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed">
-              {{ ux_icon('lucide:chevrons-left', {class: 'h-4 w-4'}) }}
-            </button>
-          </li>
-          {% endif %}
+            {# Previous Button #}
+            <li class="flex">
+              <button type="button"
+                {% if this.getPaginationSafePage() > 1 %}
+                  data-action="live#action"
+                  data-live-action-param="loadPaginationPage"
+                  data-live-page-param="{{ this.getPaginationSafePage() - 1 }}"
+                {% else %}
+                  disabled aria-disabled="true"
+                {% endif %}
+                aria-label="{{ 'ui.pagination.prev'|trans }}"
+                class="w-10 inline-flex items-center justify-center text-slate-500 ring-1 ring-inset ring-slate-300 enabled:hover:bg-slate-50 focus:z-1 focus:outline-offset-0 disabled:opacity-50  disabled:cursor-not-allowed {% if not this.paginationCanJumpToEnds %} rounded-l-md {% endif -%}">
+                {{ ux_icon('lucide:chevron-left', {class: 'h-4 w-4'}) }}
+              </button>
+            </li>
 
-          {# Previous Button #}
-          <li class="flex">
-            <button type="button"
-              {% if this.getPaginationSafePage() > 1 %}
-                data-action="live#action"
-                data-live-action-param="loadPaginationPage"
-                data-live-page-param="{{ this.getPaginationSafePage() - 1 }}"
-              {% else %}
-                disabled aria-disabled="true"
-              {% endif %}
-              aria-label="{{ 'ui.pagination.prev'|trans }}"
-              class="w-10 inline-flex items-center justify-center text-slate-500 ring-1 ring-inset ring-slate-300 enabled:hover:bg-slate-50 focus:z-1 focus:outline-offset-0 disabled:opacity-50  disabled:cursor-not-allowed {% if not this.paginationCanJumpToEnds %} rounded-l-md {% endif -%}">
-              {{ ux_icon('lucide:chevron-left', {class: 'h-4 w-4'}) }}
-            </button>
-          </li>
-
-          {# Show ellipsis before if we're not at the start #}
-          {% if this.getPaginationRange()|first > 1 and this.paginationShowEllipsis %}
-          <li class="flex">
-            <span aria-label="{{'ui.pagination.more_pages'|trans}}" class="w-10 inline-flex items-center justify-center text-sm font-semibold text-slate-700 ring-1 ring-inset ring-slate-300 focus:outline-offset-0">...</span>
-          </li>
-          {% endif %}
-
-          {% for num in this.getPaginationRange() %}
-          <li class="flex">
-            <button type="button"
-              {% if num != this.getPaginationSafePage() %}
-                data-action="live#action"
-                data-live-action-param="loadPaginationPage"
-                data-live-page-param="{{ num }}"
-                aria-label="{{ 'ui.pagination.to_page'|trans(arguments={'%pageNumber%': num}) }}"
-              {% else %}
-                aria-label="{{ 'ui.pagination.page'|trans(arguments={'%pageNumber%': num}) }}"
-                aria-current="page"
-                disabled aria-disabled="true"
-              {% endif %}
-              class="w-10 inline-flex items-center justify-center text-sm font-semibold ring-1 ring-inset ring-slate-300 focus:z-2 focus:outline-offset-0 {% if num == this.getPaginationSafePage() %} z-1 underline underline-offset-2 bg-linear-to-tr from-indigo-200 to-indigo-100 text-indigo-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 {% else -%} text-gray-600 enabled:hover:bg-slate-50 {% endif -%}">
-              {{- num -}}
-            </button>
-          </li>
-          {% endfor %}
-
-          {# Show ellipsis after if we're not at the end #}
-          {% if this.getPaginationRange()|last < this.getPaginationTotalPages() and this.paginationShowEllipsis %}
-          <li class="flex">
+            {# Show ellipsis before if we're not at the start #}
+            {% if this.getPaginationRange()|first > 1 and this.paginationShowEllipsis %}
+            <li class="flex">
               <span aria-label="{{'ui.pagination.more_pages'|trans}}" class="w-10 inline-flex items-center justify-center text-sm font-semibold text-slate-700 ring-1 ring-inset ring-slate-300 focus:outline-offset-0">...</span>
-          </li>
-          {% endif %}
+            </li>
+            {% endif %}
 
-          {# Next Button #}
-          <li class="flex">
-            <button type="button"
-              {% if this.getPaginationSafePage() < this.getPaginationTotalPages() %}
-                data-action="live#action"
-                data-live-action-param="loadPaginationPage"
-                data-live-page-param="{{ this.getPaginationSafePage() + 1 }}"
-              {% else %}
-                disabled aria-disabled="true"
-              {% endif %}
-              aria-label="{{ 'ui.pagination.next'|trans }}"
-              class="w-10 inline-flex items-center justify-center text-slate-500 ring-1 ring-inset ring-slate-300 enabled:hover:bg-slate-50 focus:z-1 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed {% if not this.paginationCanJumpToEnds %} rounded-r-md {% endif -%}">
-              {{ ux_icon('lucide:chevron-right', {class: 'h-4 w-4'}) }}
-            </button>
-          </li>
+            {% for num in this.getPaginationRange() %}
+            <li class="flex">
+              <button type="button"
+                {% if num != this.getPaginationSafePage() %}
+                  data-action="live#action"
+                  data-live-action-param="loadPaginationPage"
+                  data-live-page-param="{{ num }}"
+                  aria-label="{{ 'ui.pagination.to_page'|trans(arguments={'%pageNumber%': num}) }}"
+                {% else %}
+                  aria-label="{{ 'ui.pagination.page_number'|trans(arguments={'%pageNumber%': num}) }}"
+                  aria-current="page"
+                  disabled aria-disabled="true"
+                {% endif %}
+                class="min-w-10 px-4 inline-flex items-center justify-center text-sm font-semibold ring-1 ring-inset ring-slate-300 focus:z-2 focus:outline-offset-0 overflow-x-clip {% if num == this.getPaginationSafePage() %} z-1 underline underline-offset-2 bg-linear-to-tr from-indigo-200 to-indigo-100 text-indigo-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 {% else -%} text-gray-600 enabled:hover:bg-slate-50 {% endif -%}">
+                {{- num -}}
+              </button>
+            </li>
+            {% endfor %}
 
-          {% if this.paginationCanJumpToEnds %}
-          {# Last Page Button #}
-          <li class="flex">
-            <button type="button"
-              {% if this.getPaginationSafePage() < this.getPaginationTotalPages() %}
-                data-action="live#action"
-                data-live-action-param="loadPaginationPage"
-                data-live-page-param="{{ this.getPaginationTotalPages() }}"
-              {% else %}
-                disabled aria-disabled="true"
-              {% endif %}
-              aria-label="{{ 'ui.pagination.last'|trans }}"
-              class="w-10 inline-flex items-center justify-center rounded-r-md text-slate-500 ring-1 ring-inset ring-slate-300 enabled:hover:bg-slate-50 focus:z-1 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed">
-              {{ ux_icon('lucide:chevrons-right', {class: 'h-4 w-4'}) }}
-            </button>
-          </li>
-          {% endif %}
-        </ul>
-      </nav>
+            {# Show ellipsis after if we're not at the end #}
+            {% if this.getPaginationRange()|last < this.getPaginationTotalPages() and this.paginationShowEllipsis %}
+            <li class="flex">
+                <span aria-label="{{'ui.pagination.more_pages'|trans}}" class="w-10 inline-flex items-center justify-center text-sm font-semibold text-slate-700 ring-1 ring-inset ring-slate-300 focus:outline-offset-0">...</span>
+            </li>
+            {% endif %}
+
+            {# Next Button #}
+            <li class="flex">
+              <button type="button"
+                {% if this.getPaginationSafePage() < this.getPaginationTotalPages() %}
+                  data-action="live#action"
+                  data-live-action-param="loadPaginationPage"
+                  data-live-page-param="{{ this.getPaginationSafePage() + 1 }}"
+                {% else %}
+                  disabled aria-disabled="true"
+                {% endif %}
+                aria-label="{{ 'ui.pagination.next'|trans }}"
+                class="w-10 inline-flex items-center justify-center text-slate-500 ring-1 ring-inset ring-slate-300 enabled:hover:bg-slate-50 focus:z-1 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed {% if not this.paginationCanJumpToEnds %} rounded-r-md {% endif -%}">
+                {{ ux_icon('lucide:chevron-right', {class: 'h-4 w-4'}) }}
+              </button>
+            </li>
+
+            {% if this.paginationCanJumpToEnds %}
+            {# Last Page Button #}
+            <li class="flex">
+              <button type="button"
+                {% if this.getPaginationSafePage() < this.getPaginationTotalPages() %}
+                  data-action="live#action"
+                  data-live-action-param="loadPaginationPage"
+                  data-live-page-param="{{ this.getPaginationTotalPages() }}"
+                {% else %}
+                  disabled aria-disabled="true"
+                {% endif %}
+                aria-label="{{ 'ui.pagination.last'|trans }}"
+                class="w-10 inline-flex items-center justify-center rounded-r-md text-slate-500 ring-1 ring-inset ring-slate-300 enabled:hover:bg-slate-50 focus:z-1 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed">
+                {{ ux_icon('lucide:chevrons-right', {class: 'h-4 w-4'}) }}
+              </button>
+            </li>
+            {% endif %}
+          </ul>
+        </nav>
       </div>
       {% endif %}
 
@@ -184,8 +201,8 @@
             {{- 'ui.max_entries.label'|trans -}}
           </label>
 
-          <div class="grid h-10 w-20 ">
-            <select data-model="maxEntries" id="table-max-entries-select" class="col-start-1 row-start-1 px-4 py-2 shadow-sm rounded-md cursor-pointer appearance-none ring-1 ring-inset ring-slate-300 focus:outline-offset-0 enabled:hover:bg-slate-50">
+          <div class="grid h-10">
+            <select data-model="maxEntries" id="table-max-entries-select" class="col-start-1 row-start-1 px-4 pl-4 pr-7 shadow-sm rounded-md cursor-pointer appearance-none ring-1 ring-inset ring-slate-300 focus:outline-offset-0 enabled:hover:bg-slate-50">
               {% for maxEntry in this.maxEntriesSelectionChoices %}
                 {% if maxEntry is null %}
                   <option value="" {% if this.maxEntries is null %}selected{% endif %}>{{ 'ui.max_entries.all'|trans }}</option>

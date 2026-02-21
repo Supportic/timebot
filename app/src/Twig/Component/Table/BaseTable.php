@@ -97,6 +97,10 @@ abstract class BaseTable
     // display "..." entries to indicate that there are more pages available...
     public bool $paginationShowEllipsis = true;
 
+    #[LiveProp]
+    #[Assert\Type('bool')]
+    public bool $paginationSelectEnabled = false;
+
     // ##############################
     // Search
     // ##############################
@@ -118,6 +122,7 @@ abstract class BaseTable
         bool $paginationCanJumpToEnds = true,
         bool $paginationShowEllipsis = true,
         bool $searchEnabled = false,
+        bool $paginationSelectEnabled = false,
     ): void {
         // 'strlen' is a common shorthand to filter out null
         $maxEntries = min(array_filter($this->maxEntriesSelectionChoices, 'strlen'));
@@ -134,6 +139,7 @@ abstract class BaseTable
         $this->paginationMaxNavItems = ($paginationShowEllipsis && $paginationMaxNavItems < 4) ? 4 : $paginationMaxNavItems;
 
         $this->searchEnabled = $searchEnabled;
+        $this->paginationSelectEnabled = $paginationSelectEnabled;
 
         // Initial clamp - needs to be at the end
         $this->paginationPage = $this->getPaginationSafePage($paginationPage);

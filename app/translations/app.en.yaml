@@ -12,13 +12,15 @@ ui:
     logout: Logout
     exit_impersonation: Exit Impersonation
   pagination:
-    page: 'go to page %pageNumber%'
+    page_select_label: 'Showing page'
+    page_number: 'Page %pageNumber%'
     to_page: 'go to page %pageNumber%'
     prev: 'go to previous page'
     next: 'go to next page'
     first: 'go to first page'
     last: 'got to last page'
-    show_from_page_to: 'Showing page <span class="font-medium">%pageNumber%</span> of <span class="font-medium">%totalPages%</span>'
+    show_page_of: 'of <span class="font-medium ml-0.5">%totalPages%</span>'
+    show_from_page_to: 'Page <span class="font-medium">%pageNumber%</span> of <span class="font-medium">%totalPages%</span>'
     label: 'Page navigation'
     more_pages: 'more pages are available'
     loading: 'loading...'
