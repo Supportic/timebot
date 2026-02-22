@@ -12,7 +12,9 @@ ui:
     logout: Logout
     exit_impersonation: Exit Impersonation
   pagination:
+    page_select_aria: Page selection
     page_select_label: 'Showing page'
+    page_select: '%pageNumber% of %totalPages%'
     page_number: 'Page %pageNumber%'
     to_page: 'go to page %pageNumber%'
     prev: 'go to previous page'
@@ -31,7 +33,7 @@ ui:
   max_entries:
     label: 'Entries per page'
     all: 'All'
-  total_entries: '%paginationStart% - %paginationEnd% of %totalAmount%'
+  subset_entries: '%paginationStart% - %paginationEnd% of %totalAmount%'
 
 seo:
   title_portal: 'Timebot'

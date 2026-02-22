@@ -61,12 +61,11 @@
       {% if this.showPagination() and not this.exceedsPaginationDisplayLimit() %}
         {% if this.paginationSelectEnabled %}
         <div class="flex flex-row items-center gap-x-2">
-          <label for="table-pagination-page-select" class="text-sm text-gray-700 whitespace-nowrap">
+          <label for="table-pagination-page-alternative-select" class="text-sm text-gray-700 whitespace-nowrap">
             {{- 'ui.pagination.page_select_label'|trans -}}
           </label>
           <div class="grid h-10">
-            {# TODO the entries here are dynamic in size. Make sure to scale the select field. #}
-            <select data-model="paginationPage" id="table-pagination-page-select" class="font-medium col-start-1 row-start-1 pl-4 pr-7 py-2 shadow-sm rounded-md cursor-pointer appearance-none ring-1 ring-inset ring-slate-300 focus:outline-offset-0 enabled:hover:bg-slate-50">
+            <select data-model="paginationPage" id="table-pagination-page-alternative-select" class="font-medium col-start-1 row-start-1 pl-4 pr-7 py-2 shadow-sm rounded-md cursor-pointer appearance-none ring-1 ring-inset ring-slate-300 focus:outline-offset-0 enabled:hover:bg-slate-50">
               {% for num in this.getPaginationRange()%}
                   <option value="{{ num }}" {% if this.getPaginationSafePage() == num %}selected{% endif %}>{{num}}</option>
               {% endfor %}
@@ -160,10 +159,18 @@
               </li>
               {% endif %}
             {% else %}
-              <div class="min-w-10 px-4 inline-flex items-center gap-x-1 justify-center text-sm text-slate-700 ring-1 ring-inset ring-slate-300" aria-label="{{ 'ui.pagination.show_from_page_to'|trans(arguments={'%pageNumber%': this.getPaginationSafePage(), '%totalPages%': this.getPaginationTotalPages()}) }}">
-                <span class="font-medium">{{this.getPaginationSafePage()}}</span>
-                <span>/</span>
-                <span>{{this.getPaginationTotalPages()}}</span>
+              <div class="inline-flex items-center gap-x-1 justify-center">
+                <label for="table-pagination-page-select" class="sr-only">
+                  {{- 'ui.pagination.page_select_aria'|trans -}}
+                </label>
+                <div class="grid h-10">
+                  <select data-model="paginationPage" id="table-pagination-page-select" class="min-w-20 text-sm font-semibold ring-1 ring-inset ring-slate-300 focus:z-1 focus:outline-offset-0 overflow-x-clip col-start-1 row-start-1 pl-4 pr-8 py-2 shadow-sm cursor-pointer appearance-none enabled:hover:bg-slate-50">
+                    {% for num in this.getPaginationRange()%}
+                        <option value="{{ num }}" {% if this.getPaginationSafePage() == num %}selected{% endif %}>{{- 'ui.pagination.page_select'|trans(arguments={'%pageNumber%': num, '%totalPages%': this.getPaginationTotalPages() })|raw -}}</option>
+                    {% endfor %}
+                  </select>
+                  {{ ux_icon('lucide:chevrons-up-down', {class: 'h-4 w-4 col-start-1 justify-self-end pointer-events-none relative right-2 row-start-1 self-center z-1'}) }}
+                </div>
               </div>
             {% endif %}
 
@@ -227,7 +234,7 @@
 
         {% if this.showPagination() %}
         <p class="text-sm text-slate-700">
-          {{- 'ui.total_entries'|trans(arguments={
+          {{- 'ui.subset_entries'|trans(arguments={
             '%paginationStart%': '<span class="font-medium">'~this.getPaginationOffsetStart()~'</span>',
             '%paginationEnd%': '<span class="font-medium">'~this.getPaginationOffsetEnd()~'</span>',
             '%totalAmount%': '<span class="font-medium">'~this.getTotalCount()~'</span>'
