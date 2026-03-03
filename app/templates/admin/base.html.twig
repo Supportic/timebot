@@ -10,13 +10,13 @@
 {% endblock %}
 
 {% block body %}
-  <div class="flex h-screen overflow-y-hidden">
+  <div class="flex">
     {% block sidebar %}
       {% include 'admin/partials/_sidebar.html.twig' %}
     {% endblock %}
 
-    <main class="flex flex-col flex-1 min-w-0">
-      <div class="flex items-center justify-between h-[57px] border-b px-6 shrink-0">
+    <main class="flex flex-col flex-1 h-screen overflow-x-hidden overflow-y-auto">
+      <div class="sticky top-0 z-1 flex items-center justify-between h-[57px] border-b px-6 shrink-0 bg-white">
         <div>
           {% block heading -%}
             {% if heading is defined and heading is not empty -%}
@@ -28,10 +28,19 @@
           {% include 'admin/partials/_app_version.html.twig' %}
         </div>
       </div>
-      <div class="flex-1 overflow-auto py-4 px-6">
-        {% block content %}
 
+      <div class="flex flex-col flex-1 has-[.breadcrumb]:pt-4 md:py-6 md:px-6 bg-gray-50">
+        {% block breadcrumb %}
+          {# <div class="breadcrumb mb-4 bg-white rounded p-2">
+            <p>breadcrumb</p>
+          </div> #}
         {% endblock %}
+
+        <div class="grid grid-cols-12 gap-4 md:gap-6 flex-1 overflow-x-auto bg-white md:shadow-lg md:rounded-md p-5 w-full">
+          {% block content %}
+
+          {% endblock %}
+        </div>
       </div>
     </main>
   </div>

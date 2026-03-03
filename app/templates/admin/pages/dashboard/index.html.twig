@@ -1,10 +1,14 @@
 {% trans_default_domain 'app' %}
 {% extends 'admin/base.html.twig' %}
 
-{% block title_page %}{{ 'seo.title_page.dashboard'|trans }}{% endblock %}
+{% block title_page %}
+  {{ 'seo.title_page.dashboard'|trans }}
+{% endblock %}
 
 {% set heading = 'ui.nav.dashboard'|trans %}
 
 {% block content %}
-  <p>Content</p>
+  <div class="col-span-12 xl:col-span-12">
+    <p>Content</p>
+  </div>
 {% endblock %}
