@@ -109,10 +109,10 @@ abstract class BaseTable
     #[Assert\Type('bool')]
     public bool $searchEnabled = false;
 
-    #[LiveProp(writable: true, url: new UrlMapping(as: self::DEFAULT_SEARCH_QUERY_ALIAS))]
-    public string $query = '';
-
     private string $searchQueryAlias = self::DEFAULT_SEARCH_QUERY_ALIAS;
+
+    #[LiveProp(writable: true, url: new UrlMapping(as: self::DEFAULT_SEARCH_QUERY_ALIAS), onUpdated: 'onQueryUpdated')]
+    public ?string $query = null;
 
     // include params only when you want to validate them, simple setter not needed
     public function mount(
@@ -294,10 +294,18 @@ abstract class BaseTable
     // Search
     // ##############################
 
+    public function onQueryUpdated(): void
+    {
+        // setting query to null will remove the query parameter from the url
+        if ('' === trim((string) $this->query)) {
+            $this->query = null;
+        }
+    }
+
     #[LiveAction]
     public function clearSearch(): void
     {
-        $this->query = '';
+        $this->query = null;
         $this->paginationPage = 1;
     }
 
