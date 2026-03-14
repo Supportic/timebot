@@ -13,14 +13,14 @@
   },
   "dependencies": {
     "@primevue/themes": "^4.5.4",
-    "@tailwindcss/postcss": "^4.2.0",
-    "@vitejs/plugin-vue": "^6.0.4",
+    "@tailwindcss/postcss": "^4.2.1",
+    "@vitejs/plugin-vue": "^6.0.5",
     "@vueuse/core": "^14.2.1",
     "pinia": "^3.0.4",
-    "postcss": "^8.5.6",
+    "postcss": "^8.5.8",
     "primevue": "^4.5.4",
     "roboto-fontface": "^0.10.0",
-    "tailwindcss": "^4.2.0",
+    "tailwindcss": "^4.2.1",
     "tailwindcss-primeui": "^0.6.1",
     "vite-plugin-symfony": "^8.2.3",
     "vue": "^3.5.28"
@@ -28,17 +28,17 @@
   "devDependencies": {
     "@babel/types": "^7.29.0",
     "@hotwired/stimulus": "^3.2.2",
-    "@iconify/json": "^2.2.440",
+    "@iconify/json": "^2.2.449",
     "@primevue/auto-import-resolver": "^4.5.4",
     "@symfony/stimulus-bridge": "^4.0.1",
     "@symfony/ux-live-component": "file:vendor/symfony/ux-live-component/assets",
     "@symfony/ux-translator": "file:vendor/symfony/ux-translator/assets",
     "@symfony/ux-vue": "file:vendor/symfony/ux-vue/assets",
-    "@tailwindcss/vite": "^4.2.0",
-    "@types/node": "^25.2.3",
-    "@vue/compiler-sfc": "^3.5.28",
-    "intl-messageformat": "^10.5.11",
-    "sass": "^1.97.3",
+    "@tailwindcss/vite": "^4.2.1",
+    "@types/node": "^25.5.0",
+    "@vue/compiler-sfc": "^3.5.30",
+    "intl-messageformat": "^11.1.2",
+    "sass": "^1.98.0",
     "typescript": "^5.9.3",
     "unplugin-auto-import": "^21.0.0",
     "unplugin-fonts": "^1.4.0",
@@ -47,8 +47,8 @@
     "vite": "^7.3.1",
     "vite-plugin-stimulus-hmr": "^3.0.0",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.0.18",
+    "vitest": "4.1",
     "vue-loader": "^17.4.2",
-    "vue-tsc": "^3.2.4"
+    "vue-tsc": "^3.2.5"
   }
 }
