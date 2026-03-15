@@ -1,15 +1,6 @@
 {% trans_default_domain 'app' %}
 
-{# first login - set sidebar to open #}
-{% if not app.session.has('sidebar_expanded') %}
-  {% do app.session.set('sidebar_expanded', true) %}
-{% endif %}
-
-{% set isExpanded = app.session.get('sidebar_expanded') %}
-
 {% macro Tooltip(text, class) %}
-  {# macro does not have access to global variables #}
-  {% set isExpanded = app.session.get('sidebar_expanded') %}
   {% if class is not empty %}{% set class = class ~ ' ' %}{% endif %}
 
   {% set stayVisibleOnHover = true %}
@@ -21,12 +12,12 @@
   </div>
 {% endmacro %}
 
-{% macro NavItem(route, text, icon) %}
+{% macro NavItem(this, route, text, icon) %}
   {# dont use app.current_route here because the value should be directly set on href #}
-  {% set isActive = app.request.pathInfo == route %}
+  {% set isActive = this.currentPath == route %}
   {% set colors = isActive ? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800' : 'hover:bg-indigo-50 text-gray-600' %}
 
-  <li class="group/navitem relative flex items-center justify-center my-1 font-medium rounded-md transition-colors {{ colors }}">
+  <li class="group/navitem relative flex items-center justify-center first:mt-0.5 font-medium rounded-md transition-colors {{ colors }}">
     <a class="nav-link flex py-2 px-3" href="{{ route }}">
       {% if icon is not empty %}{{ ux_icon(icon, {'font-size': '1.3rem'}) }}{% endif %}
       <span class="w-0 overflow-hidden whitespace-nowrap transition-all">{{ text|e|trim }}</span>
@@ -47,26 +38,34 @@
   </li>
 {% endmacro %}
 
-<div id="sidebar" data-state="{{ isExpanded ? 'expanded' : 'minimized' }}" class="h-screen">
+<div id="sidebar" {{ attributes.without('id').defaults(stimulus_controller('sidebar', {
+    autoMinimizeBreakpoint: 1280,
+    isExpanded: this.isExpanded,
+  })) }}
+  data-state-size="{{this.isExpanded ? 'expanded' : 'minimized'}}"
+  class="z-2 absolute t-0 l-0 -translate-x-50 md:translate-x-0 md:static h-screen"
+>
   <nav class="h-dvh flex flex-col bg-white border-r shadow">
-    <div class="flex items-center p-4 pb-2 h-[57px]">
+    <div class="h-[60px] flex items-center px-4">
       <span id="sidebar-app-name" class="w-0 text-xl overflow-hidden transition-all">{{ 'app.name'|trans(domain = 'app') }}</span>
 
       <div class="mx-auto">
-        <button id="sidebar-toggle" class="p-1.5 rounded-lg shadow bg-gray-50 hover:bg-gray-100">
+        <button id="sidebar-toggle" data-action="sidebar#toggleSidebarSize" class="p-1.5 rounded-lg shadow bg-gray-50 hover:bg-gray-100">
             {{ ux_icon('lucide:chevron-left', {id: 'sidebar-toggle-icon-left','font-size': '1.4rem', 'class': 'hidden' }) }}
             {{ ux_icon('lucide:chevron-right', {id: 'sidebar-toggle-icon-right','font-size': '1.4rem', class: 'block' }) }}
         </button>
       </div>
     </div>
 
-    <ul class="flex-1 px-3">
+    <ul class="flex flex-col flex-1 px-3 gap-y-1">
       {{ _self.NavItem(
+        this,
         path('admin_dashboard'),
         'ui.nav.dashboard'|trans,
         'lucide:layout-dashboard'
       )}}
       {{ _self.NavItem(
+        this,
         'javascript:void(0);',
         'ui.nav.importer'|trans,
         'lucide:import'
@@ -74,11 +73,13 @@
       {% if is_granted(enum('App\\Enum\\Role').ROLE_ADMIN.value)  %}
         <hr class="mx-3" />
         {{ _self.NavItem(
+          this,
           path('admin_users'),
           'ui.nav.users'|trans,
           'lucide:circle-user-round'
         )}}
         {{ _self.NavItem(
+          this,
           'javascript:void(0);',
           'ui.nav.settings'|trans,
           'lucide:settings'
@@ -86,8 +87,8 @@
       {% endif %}
     </ul>
 
-    <div id="sidebar-profile-menu" class="group/profile flex flex-col overflow-y-clip">
-      <button id="sidebar-profile-button" class="z-1 w-full border-t flex p-3 text-start items-center justify-center bg-white hover:bg-indigo-50">
+    <div id="sidebar-profile-menu" data-sidebar-target="profileMenu" data-action=" focusout->sidebar#closeSidebarProfileMenu" class="group/profile flex flex-col overflow-y-clip">
+      <button id="sidebar-profile-button" data-action="click->sidebar#toggleSidebarProfileMenu" class="z-1 w-full border-t flex p-3 text-start items-center justify-center bg-white hover:bg-indigo-50">
         <div class="relative">
           {{ renderProfileIcon(size: 40, fontSize: 18) }}
           {% if is_granted('IS_IMPERSONATOR') %}

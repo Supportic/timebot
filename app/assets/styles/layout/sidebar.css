@@ -1,8 +1,8 @@
 #sidebar {
   /* SIDEBAR OPEN */
-  &[data-state='expanded'] {
+  &[data-state-size='expanded'] {
     #sidebar-app-name {
-      @apply w-32;
+      @apply md:w-32;
     }
 
     /* move icon to the right */
@@ -12,7 +12,7 @@
 
     #sidebar-user-profile,
     .nav-link span {
-      @apply w-52 ml-3;
+      @apply md:w-52 ml-3;
     }
 
     #sidebar-toggle-icon-left {

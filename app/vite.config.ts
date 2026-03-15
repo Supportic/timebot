@@ -137,7 +137,6 @@ export default defineConfig((config: UserConfig): UserConfig => {
 
           // backend JS
           app: './assets/entrypoints/app.ts',
-          sidebar: './assets/entrypoints/sidebar.ts',
           // backend CSS
           global: './assets/styles/global.css',
         },
