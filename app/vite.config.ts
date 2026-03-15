@@ -170,9 +170,12 @@ export default defineConfig((config: UserConfig): UserConfig => {
       host: '0.0.0.0',
       port: 3000,
       hmr: {
-        host: '192.168.178.37', // localhost or your Docker host IP
+        // Allow accessing from other devices on the network
+        host: process.env.VITE_HMR_HOST || '192.168.178.37',
         protocol: 'ws',
+        port: parseInt(process.env.VITE_HMR_PORT || '3000'),
       },
+      cors: true,
       fs: {
         allow: ['.'],
       },
