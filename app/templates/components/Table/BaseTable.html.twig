@@ -12,7 +12,7 @@
   {% if this.searchEnabled %}
   <div class="flex mb-3 px-4 py-3 rounded-md border-2 border-slate-300 focus-within:border-slate-500 overflow-hidden max-w-md items-center gap-2">
     <label for="table-search" class="sr-only">{{ 'ui.search.label'|trans }}</label>
-    <input id="table-search" type="text" data-model="debounce(300)|query" placeholder="{{ 'ui.search.placeholder'|trans }}"
+    <input id="table-search" type="text" data-model="debounce(800)|query" placeholder="{{ 'ui.search.placeholder'|trans }}"
       class="flex-1 outline-none bg-transparent text-gray-600 text-sm h-5" />
     <button type="button"
       {% if this.query|length > 0 %}
@@ -32,7 +32,7 @@
   {% endif %}
 
   {# no pointer events prevents clicking  #}
-  <div data-loading="addClass(opacity-50 pointer-events-none duration-200)" class="transition-opacity relative">
+  <div data-loading="addClass(opacity-50 pointer-events-none duration-200)" class="transition-opacity relative overflow-x-auto">
     <div data-loading="action(loadPaginationPage)|show model(maxEntries)|show" class="hidden absolute inset-0 z-10 items-center justify-center bg-white/50 backdrop-blur-[1px] transition-all duration-200">
       <div class="flex flex-col items-center gap-2 rounded-lg bg-white p-4 shadow-lg ring-1 ring-slate-900/5">
           {{ ux_icon('lucide:loader-2', {class: 'h-8 w-8 animate-spin text-indigo-600'}) }}
