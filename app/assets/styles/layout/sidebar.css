@@ -11,7 +11,7 @@
 
   /* SIDEBAR EXPANDED */
   &[data-sidebar-expanded='true'],
-  &[data-sidebar-open='true'] {
+  &[data-sidebar-open='true']  {
     #sidebar-app-name {
       @apply w-32;
     }

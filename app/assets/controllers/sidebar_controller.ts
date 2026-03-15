@@ -23,12 +23,9 @@ export default class extends Controller {
   // declare readonly profileMenuTargets: HTMLElement[];
 
   static values = {
-    autoMinimizeBreakpoint: Number,
     isExpanded: Boolean,
   };
 
-  declare readonly hasAutoMinimizeBreakpointValue: Boolean;
-  declare autoMinimizeBreakpointValue: number;
   private readonly RESIZE_DEBOUNCE_MS: number = 100;
 
   declare readonly hasIsExpandedValue: Boolean;
@@ -36,12 +33,20 @@ export default class extends Controller {
 
   static outlets = [];
 
-
   // stimulus initialize lifecycle method
   public async initialize() {
     this.component = await getComponent(this.element as HTMLElement);
 
     this.initializeResizeObserver();
+  }
+
+  public disconnect(): void {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+    if (this.resizeTimeout) {
+      clearTimeout(this.resizeTimeout);
+    }
   }
 
   public async toggleSidebarSize() {
@@ -65,8 +70,10 @@ export default class extends Controller {
     });
   };
 
-  // Minimize sidebar when window resizes below threshold with debouncing
+  // Minimize sidebar when window resizes below desktop threshold and above mobile threshold
   private initializeResizeObserver = (): void => {
+    const MOBILE_BREAKPOINT = 768; // md breakpoint
+    const DESKTOP_BREAKPOINT = 1280; // xl breakpoint
     let previousWidth = window.innerWidth;
 
     this.resizeObserver = new ResizeObserver(() => {
@@ -78,12 +85,17 @@ export default class extends Controller {
       this.resizeTimeout = window.setTimeout(() => {
         const currentWidth = window.innerWidth;
 
-        // Only minimize if we actually cross the threshold from large to small
-        const crossedThreshold =
-          previousWidth >= this.autoMinimizeBreakpointValue &&
-          currentWidth < this.autoMinimizeBreakpointValue;
+        // Minimize if crossing desktop threshold from large to small
+        const crossedDesktopThreshold =
+          previousWidth >= DESKTOP_BREAKPOINT &&
+          currentWidth < DESKTOP_BREAKPOINT;
 
-        if (crossedThreshold) {
+        // Minimize if crossing mobile threshold from small to large (going upwards)
+        const crossedMobileThresholdUp =
+          previousWidth < MOBILE_BREAKPOINT &&
+          currentWidth >= MOBILE_BREAKPOINT;
+
+        if (crossedDesktopThreshold || crossedMobileThresholdUp) {
           this.minimizeSidebar();
         }
 

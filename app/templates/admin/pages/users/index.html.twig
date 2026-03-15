@@ -11,10 +11,6 @@
   <div class="col-span-12 xl:col-span-12">
     {# <div {{ vue_component('DataTable', { users: users }) }}>Loading...</div> #}
 
-    {# <div {{ stimulus_controller('hello') }} class="mb-4">
-    <div {{ stimulus_target('hello', 'output') }}></div>
-  </div> #}
-
     <twig:Table:UserTable :searchEnabled="true" :paginationSelectEnabled="true" />
   </div>
 {% endblock %}

@@ -38,14 +38,14 @@
   </li>
 {% endmacro %}
 
-<div id="sidebar" {{ attributes.without('id').defaults(stimulus_controller('sidebar', {
-    autoMinimizeBreakpoint: 1280,
+<div id="sidebar"
+  {{ attributes.without('id').defaults(stimulus_controller('sidebar', {
     isExpanded: this.isExpanded,
   })) }}
   {{stimulus_target('app', 'sidebar')}}
   data-sidebar-open="false"
   data-sidebar-expanded="{{this.isExpanded ? 'true' : 'false'}}"
-  class="z-2 t-0 l-0 h-screen"
+  class="z-2 t-0 l-0 h-dvh"
 >
   <nav class="h-dvh flex flex-col bg-white border-r shadow">
     <div class="h-[60px] flex items-center px-4">
