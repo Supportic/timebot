@@ -62,6 +62,11 @@ build-assets:
 watch-assets:
 	$(NPM) run dev
 
+version-bump-minor:
+	$(SYMFONY) console app:version:bump --minor 1
+version-bump-path:
+	$(SYMFONY) console app:version:bump --patch 1
+
 recreate-db:
 	$(SYMFONY) console doctrine:database:drop --if-exists --no-interaction --force --connection=default
 	$(SYMFONY) console doctrine:database:create --connection=default
