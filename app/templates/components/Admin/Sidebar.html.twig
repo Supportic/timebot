@@ -42,17 +42,30 @@
     autoMinimizeBreakpoint: 1280,
     isExpanded: this.isExpanded,
   })) }}
-  data-state-size="{{this.isExpanded ? 'expanded' : 'minimized'}}"
-  class="z-2 absolute t-0 l-0 -translate-x-50 md:translate-x-0 md:static h-screen"
+  {{stimulus_target('app', 'sidebar')}}
+  data-sidebar-open="false"
+  data-sidebar-expanded="{{this.isExpanded ? 'true' : 'false'}}"
+  class="z-2 t-0 l-0 h-screen"
 >
   <nav class="h-dvh flex flex-col bg-white border-r shadow">
     <div class="h-[60px] flex items-center px-4">
       <span id="sidebar-app-name" class="w-0 text-xl overflow-hidden transition-all">{{ 'app.name'|trans(domain = 'app') }}</span>
 
       <div class="mx-auto">
-        <button id="sidebar-toggle" data-action="sidebar#toggleSidebarSize" class="p-1.5 rounded-lg shadow bg-gray-50 hover:bg-gray-100">
+        <button id="sidebar-toggle"
+          {{stimulus_action('sidebar', 'toggleSidebarSize')}}
+          class="hidden md:block p-1.5 rounded-lg shadow bg-gray-50 hover:bg-gray-100"
+        >
             {{ ux_icon('lucide:chevron-left', {id: 'sidebar-toggle-icon-left','font-size': '1.4rem', 'class': 'hidden' }) }}
             {{ ux_icon('lucide:chevron-right', {id: 'sidebar-toggle-icon-right','font-size': '1.4rem', class: 'block' }) }}
+        </button>
+
+        <button
+          id="sidebar-toggle-close"
+          {{stimulus_action('app', 'toggleSidebarVisibility', 'click')}}
+          class="p-2.5 relative inline-flex md:hidden items-center justify-center before:content-[''] before:absolute before:inset-0 before:m-auto before:w-6 before:h-6 before:bg-gray-50 before:rounded-full before:scale-50 hover:before:scale-200 before:opacity-0 hover:before:opacity-100 before:transition-all before:duration-400 before:ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+        >
+            {{ ux_icon('lucide:arrow-left', {id: 'sidebar-toggle-close-icon','font-size': '1.5rem', class: 'z-1'}) }}
         </button>
       </div>
     </div>
@@ -87,8 +100,15 @@
       {% endif %}
     </ul>
 
-    <div id="sidebar-profile-menu" data-sidebar-target="profileMenu" data-action=" focusout->sidebar#closeSidebarProfileMenu" class="group/profile flex flex-col overflow-y-clip">
-      <button id="sidebar-profile-button" data-action="click->sidebar#toggleSidebarProfileMenu" class="z-1 w-full border-t flex p-3 text-start items-center justify-center bg-white hover:bg-indigo-50">
+    <div id="sidebar-profile-menu"
+      {{stimulus_target('sidebar', 'profileMenu')}}
+      {{stimulus_action('sidebar', 'closeSidebarProfileMenu', 'focusout')}}
+      class="group/profile flex flex-col overflow-y-clip"
+    >
+      <button id="sidebar-profile-button"
+        {{stimulus_action('sidebar', 'toggleSidebarProfileMenu', 'click')}}
+        class="z-1 w-full border-t flex p-3 text-start items-center justify-center bg-white hover:bg-indigo-50"
+      >
         <div class="relative">
           {{ renderProfileIcon(size: 40, fontSize: 18) }}
           {% if is_granted('IS_IMPERSONATOR') %}

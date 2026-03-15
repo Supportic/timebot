@@ -16,8 +16,7 @@
       class="flex-1 outline-none bg-transparent text-gray-600 text-sm h-5" />
     <button type="button"
       {% if this.query|length > 0 %}
-        data-action="live#action"
-        data-live-action-param="clearSearch"
+        {{live_action('clearSearch')}}
         title="Clear search"
         class="shrink-0 p-1 transition-colors h-fit"
       {% else %}
@@ -95,9 +94,7 @@
             <li class="flex">
               <button type="button"
                 {% if this.getPaginationSafePage() > 1 %}
-                  data-action="live#action"
-                  data-live-action-param="loadPaginationPage"
-                  data-live-page-param="1"
+                  {{live_action('loadPaginationPage', {page: 1})}}
                 {% else %}
                   disabled aria-disabled="true"
                 {% endif %}
@@ -112,9 +109,7 @@
             <li class="flex">
               <button type="button"
                 {% if this.getPaginationSafePage() > 1 %}
-                  data-action="live#action"
-                  data-live-action-param="loadPaginationPage"
-                  data-live-page-param="{{ this.getPaginationSafePage() - 1 }}"
+                  {{live_action('loadPaginationPage', {page: this.getPaginationSafePage() - 1})}}
                 {% else %}
                   disabled aria-disabled="true"
                 {% endif %}
@@ -137,9 +132,7 @@
               <li class="flex">
                 <button type="button"
                   {% if num != this.getPaginationSafePage() %}
-                    data-action="live#action"
-                    data-live-action-param="loadPaginationPage"
-                    data-live-page-param="{{ num }}"
+                    {{live_action('loadPaginationPage', {page: num})}}
                     aria-label="{{ 'ui.pagination.to_page'|trans(arguments={'%pageNumber%': num}) }}"
                   {% else %}
                     aria-label="{{ 'ui.pagination.page_number'|trans(arguments={'%pageNumber%': num}) }}"
@@ -178,9 +171,7 @@
             <li class="flex">
               <button type="button"
                 {% if this.getPaginationSafePage() < this.getPaginationTotalPages() %}
-                  data-action="live#action"
-                  data-live-action-param="loadPaginationPage"
-                  data-live-page-param="{{ this.getPaginationSafePage() + 1 }}"
+                  {{live_action('loadPaginationPage', {page: this.getPaginationSafePage() + 1})}}
                 {% else %}
                   disabled aria-disabled="true"
                 {% endif %}
@@ -195,9 +186,7 @@
             <li class="flex">
               <button type="button"
                 {% if this.getPaginationSafePage() < this.getPaginationTotalPages() %}
-                  data-action="live#action"
-                  data-live-action-param="loadPaginationPage"
-                  data-live-page-param="{{ this.getPaginationTotalPages() }}"
+                  {{live_action('loadPaginationPage', {page: this.getPaginationTotalPages()})}}
                 {% else %}
                   disabled aria-disabled="true"
                 {% endif %}

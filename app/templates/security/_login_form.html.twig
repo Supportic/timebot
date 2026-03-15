@@ -18,7 +18,7 @@
     <button id="revealPasswordButton" class="text-[#bbb] hover:text-slate-500 pointer-events-auto focus:outline-blue-500 absolute right-3" type="button" title="{{ 'reveal_password_button.title_reveal'|trans }}">
       {{ ux_icon('mdi:eye', { 'id': 'revealPasswordButtonIconOff', 'font-size': '1.2rem' }) }}
       {{ ux_icon('mdi:eye-off', { 'id': 'revealPasswordButtonIconOn', 'font-size': '1.2rem', class: 'hidden text-slate-500' }) }}
-      <span id="revealPasswordButtonTitle" class="sr-only">{{ 'reveal_password_button.title_reveal'|trans }}</span>
+      <span id="revealPasswordButtonTitle" class="sr-only">{{ 'login.form_field.reveal_password_button.title_reveal'|trans }}</span>
     </button>
   </div>
 
@@ -34,7 +34,7 @@
   </div> #}
   </div>
 
-  <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}" />
+  <input type="hidden" name="_csrf_token" {{stimulus_controller('csrf-protection')}} value="{{ csrf_token('authenticate') }}" />
 
   {# <input type="hidden" name="_target_path" value="{{ path('admin_dashboard') }}"> #}
 

@@ -20,7 +20,7 @@ export default class extends Controller {
 
   declare readonly hasProfileMenuTarget: boolean;
   declare readonly profileMenuTarget: HTMLElement;
-  declare readonly profileMenuTargets: HTMLElement[];
+  // declare readonly profileMenuTargets: HTMLElement[];
 
   static values = {
     autoMinimizeBreakpoint: Number,
@@ -34,8 +34,11 @@ export default class extends Controller {
   declare readonly hasIsExpandedValue: Boolean;
   declare isExpandedValue: boolean;
 
+  static outlets = [];
+
+
   // stimulus initialize lifecycle method
-  public async connect() {
+  public async initialize() {
     this.component = await getComponent(this.element as HTMLElement);
 
     this.initializeResizeObserver();
@@ -45,8 +48,8 @@ export default class extends Controller {
     this.isExpandedValue = !this.isExpandedValue;
     // improve feeling and change state without request
     this.element.setAttribute(
-      'data-state-size',
-      this.isExpandedValue ? 'expanded' : 'minimized',
+      'data-sidebar-expanded',
+      this.isExpandedValue ? 'true' : 'false',
     );
     this.component.action('saveSidebarStateInSession', {
       isExpanded: this.isExpandedValue,
@@ -56,7 +59,7 @@ export default class extends Controller {
   private minimizeSidebar = (): void => {
     this.isExpandedValue = false;
     // improve feeling and change state without request
-    this.element.setAttribute('data-state-size', 'minimized');
+    this.element.setAttribute('data-sidebar-expanded', 'false');
     this.component.action('saveSidebarStateInSession', {
       isExpanded: false,
     });
@@ -99,7 +102,6 @@ export default class extends Controller {
    * Close the profile menu when you click somewhere else on the page.
    */
   public closeSidebarProfileMenu = (event: FocusEvent): void => {
-
     const relatedTarget = event.relatedTarget as HTMLElement | null;
 
     if (!this.profileMenuTarget.classList.contains('open')) return;

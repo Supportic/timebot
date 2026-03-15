@@ -1,8 +1,19 @@
 #sidebar {
+  @apply absolute md:static transition-transform md:transition-none;
+
   /* SIDEBAR OPEN */
-  &[data-state-size='expanded'] {
+  &[data-sidebar-open='false'] {
+    @apply -translate-x-100 md:translate-x-0;
+  }
+  &[data-sidebar-open='true'] {
+    @apply translate-x-0 md:translate-x-0;
+  }
+
+  /* SIDEBAR EXPANDED */
+  &[data-sidebar-expanded='true'],
+  &[data-sidebar-open='true'] {
     #sidebar-app-name {
-      @apply md:w-32;
+      @apply w-32;
     }
 
     /* move icon to the right */
@@ -12,7 +23,7 @@
 
     #sidebar-user-profile,
     .nav-link span {
-      @apply md:w-52 ml-3;
+      @apply w-52 ml-3;
     }
 
     #sidebar-toggle-icon-left {

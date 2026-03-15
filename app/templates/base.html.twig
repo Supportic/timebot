@@ -29,12 +29,10 @@
       {{ vite_entry_script_tags('global') }}
     {% endblock %}
   </head>
-  <body class="scroll-pt-60 antialiased">
+  <body {{stimulus_controller('app')}} class="scroll-pt-60 antialiased">
     {% block body %}
     <main>
-      {% block main %}
-      {# <div {{ stimulus_controller('hello') }}></div> #}
-      {% endblock %}
+      {% block main %}{% endblock %}
     </main>
     {% endblock %}
   </body>
