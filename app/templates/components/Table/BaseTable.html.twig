@@ -11,8 +11,8 @@
 
   {% if this.searchEnabled %}
   <div class="flex mb-3 px-4 py-3 rounded-md border-2 border-slate-300 focus-within:border-slate-500 overflow-hidden max-w-md items-center gap-2">
-    <label for="table-search" class="sr-only">{{ 'ui.search.label'|trans }}</label>
-    <input id="table-search" type="text" data-model="debounce(800)|query" placeholder="{{ 'ui.search.placeholder'|trans }}"
+    <label for="{{attributes.all().id ~ '-table-search'}}" class="sr-only">{{ 'ui.search.label'|trans }}</label>
+    <input id="{{attributes.all().id ~ '-table-search'}}" type="text" data-model="debounce(800)|query" placeholder="{{ 'ui.search.placeholder'|trans }}"
       class="flex-1 outline-none bg-transparent text-gray-600 text-sm h-5" />
     <button type="button"
       {% if this.query|length > 0 %}
@@ -60,11 +60,11 @@
       {% if this.showPagination() and not this.exceedsPaginationDisplayLimit() %}
         {% if this.paginationSelectEnabled %}
         <div class="flex flex-row items-center gap-x-2">
-          <label for="table-pagination-page-alternative-select" class="text-sm text-gray-700 whitespace-nowrap">
+          <label for="{{attributes.all().id ~ '-table-pagination-page-alternative-select'}}" class="text-sm text-gray-700 whitespace-nowrap">
             {{- 'ui.pagination.page_select_label'|trans -}}
           </label>
           <div class="grid h-10">
-            <select data-model="paginationPage" id="table-pagination-page-alternative-select" class="font-medium col-start-1 row-start-1 pl-4 pr-7 py-2 shadow-sm rounded-md cursor-pointer appearance-none ring-1 ring-inset ring-slate-300 focus:outline-offset-0 enabled:hover:bg-slate-50">
+            <select data-model="paginationPage" id="{{attributes.all().id ~ '-table-pagination-page-alternative-select'}}" class="font-medium col-start-1 row-start-1 pl-4 pr-7 py-2 shadow-sm rounded-md cursor-pointer appearance-none ring-1 ring-inset ring-slate-300 focus:outline-offset-0 enabled:hover:bg-slate-50">
               {% for num in this.getPaginationRange()%}
                   <option value="{{ num }}" {% if this.getPaginationSafePage() == num %}selected{% endif %}>{{num}}</option>
               {% endfor %}
@@ -153,11 +153,11 @@
               {% endif %}
             {% else %}
               <div class="inline-flex items-center gap-x-1 justify-center">
-                <label for="table-pagination-page-select" class="sr-only">
+                <label for="{{attributes.all().id ~ '-table-pagination-page-select'}}" class="sr-only">
                   {{- 'ui.pagination.page_select_aria'|trans -}}
                 </label>
                 <div class="grid h-10">
-                  <select data-model="paginationPage" id="table-pagination-page-select" class="min-w-20 text-sm font-semibold ring-1 ring-inset ring-slate-300 focus:z-1 focus:outline-offset-0 overflow-x-clip col-start-1 row-start-1 pl-4 pr-8 py-2 shadow-sm cursor-pointer appearance-none enabled:hover:bg-slate-50">
+                  <select data-model="paginationPage" id="{{attributes.all().id ~ '-table-pagination-page-select'}}" class="min-w-20 text-sm font-semibold ring-1 ring-inset ring-slate-300 focus:z-1 focus:outline-offset-0 overflow-x-clip col-start-1 row-start-1 pl-4 pr-8 py-2 shadow-sm cursor-pointer appearance-none enabled:hover:bg-slate-50">
                     {% for num in this.getPaginationRange()%}
                         <option value="{{ num }}" {% if this.getPaginationSafePage() == num %}selected{% endif %}>{{- 'ui.pagination.page_select'|trans(arguments={'%pageNumber%': num, '%totalPages%': this.getPaginationTotalPages() })|raw -}}</option>
                     {% endfor %}
@@ -203,12 +203,12 @@
 
       <div class="flex flex-row items-center gap-x-4 ml-auto">
         <div class="flex flex-row items-center gap-x-2">
-          <label for="table-max-entries-select" class="text-sm font-medium text-gray-700 whitespace-nowrap">
+          <label for="{{attributes.all().id ~ '-table-max-entries-select'}}" class="text-sm font-medium text-gray-700 whitespace-nowrap">
             {{- 'ui.max_entries.label'|trans -}}
           </label>
 
           <div class="grid h-10">
-            <select data-model="maxEntries" id="table-max-entries-select" class="col-start-1 row-start-1 px-4 pl-4 pr-7 shadow-sm rounded-md cursor-pointer appearance-none ring-1 ring-inset ring-slate-300 focus:outline-offset-0 enabled:hover:bg-slate-50">
+            <select data-model="maxEntries" id="{{attributes.all().id ~ '-table-max-entries-select'}}" class="col-start-1 row-start-1 px-4 pl-4 pr-7 shadow-sm rounded-md cursor-pointer appearance-none ring-1 ring-inset ring-slate-300 focus:outline-offset-0 enabled:hover:bg-slate-50">
               {% for maxEntry in this.maxEntriesSelectionChoices %}
                 {% if maxEntry is null %}
                   <option value="" {% if this.maxEntries is null %}selected{% endif %}>{{ 'ui.max_entries.all'|trans }}</option>
