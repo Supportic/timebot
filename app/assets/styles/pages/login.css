@@ -54,19 +54,18 @@
 }
 
 html {
-  min-height: 100%;
-  overflow: hidden;
+  min-height: 100dvh;
 }
 
 body {
-  overflow: hidden;
-  height: 100vdh;
+  height: 100dvh;
 }
 
 .gradient-bg {
   position: relative;
   width: 100dvw;
   height: 100dvh;
+  overflow: hidden;
   background: linear-gradient(40deg, var(--color-bg1), var(--color-bg2));
 
   .svgBlur {

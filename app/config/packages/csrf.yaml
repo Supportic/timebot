@@ -1,4 +1,5 @@
 # Enable stateless CSRF protection for forms and logins/logouts
+# https://symfony.com/doc/7.4/reference/configuration/framework.html#csrf-protection
 framework:
     form:
         csrf_protection:
