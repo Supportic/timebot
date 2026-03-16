@@ -162,7 +162,7 @@
                         <option value="{{ num }}" {% if this.getPaginationSafePage() == num %}selected{% endif %}>{{- 'ui.pagination.page_select'|trans(arguments={'%pageNumber%': num, '%totalPages%': this.getPaginationTotalPages() })|raw -}}</option>
                     {% endfor %}
                   </select>
-                  {{ ux_icon('lucide:chevrons-up-down', {class: 'h-4 w-4 col-start-1 justify-self-end pointer-events-none relative right-2 row-start-1 self-center z-1'}) }}
+                  {{ ux_icon('lucide:chevrons-up-down', {class: 'h-4 w-4 col-start-1 justify-self-end pointer-events-none relative right-2 row-start-1 self-center'}) }}
                 </div>
               </div>
             {% endif %}
@@ -217,7 +217,7 @@
                 {% endif %}
               {% endfor %}
             </select>
-            {{ ux_icon('lucide:chevron-down', {class: 'h-4 w-4 col-start-1 justify-self-end pointer-events-none relative right-3 row-start-1 self-center z-1'}) }}
+            {{ ux_icon('lucide:chevron-down', {class: 'h-4 w-4 col-start-1 justify-self-end pointer-events-none relative right-3 row-start-1 self-center'}) }}
           </div>
         </div>
 
