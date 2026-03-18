@@ -1,0 +1,10 @@
+seo:
+  title:
+    page:
+      default: 'Willkommen!'
+      dashboard: 'Dashboard'
+      login: 'Anmelden'
+      users: 'Nutzerverwaltung'
+      settings: 'Einstellungen'
+      profile: 'Profil'
+      importer: 'Importer'

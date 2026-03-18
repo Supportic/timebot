@@ -4,17 +4,25 @@
 <html lang="{{ app.request.locale|replace({ '_': '-' }) }}" dir="ltr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     {% set seoTitle -%}
         {%- block seoTitle -%}
-            {%- block title_portal -%}{{ 'seo.title_portal'|trans }}{%- endblock -%}
-            {%- if block('title_page') is not empty %} {% block title_separator %}-{% endblock %} {% endif -%}
-            {%- block title_page -%}{{ 'seo.title_page.default'|trans }}{%- endblock -%}
+            {# {%- block title_portal -%}{{ seo_title_portal|trim }}{%- endblock -%}
+            {%- if block('title_page') is not empty %} {% block title_separator %}{{ seo_title_separator|trim }}{% endblock %} {% endif -%} #}
+            {# {%- block title_page -%}{{ 'seo.title.page.default'|trans|default('') }}{%- endblock -%} #}
+            {%- block title_page -%}{%- endblock -%}
         {%- endblock -%}
     {%- endset %}
 
-    <title>{{ seoTitle }}</title>
+    {% set seoDescription -%}
+        {%- block seoDescription -%}
+            {%- block description_page -%}{%- endblock -%}
+        {%- endblock -%}
+    {%- endset %}
+
+    {{ render_seo_tags(seoTitle, seoDescription) }}
+
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>" />
     {% block stylesheets %}
       {# for imported styles in TS file #}
@@ -29,11 +37,12 @@
       {{ vite_entry_script_tags('global') }}
     {% endblock %}
   </head>
-  <body {{stimulus_controller('app')}} class="scroll-pt-[60px] antialiased overflow-y-hidden">
+  <body {{ stimulus_controller('app') }} class="scroll-pt-[60px] antialiased overflow-y-hidden">
     {% block body %}
-    <main>
-      {% block main %}{% endblock %}
-    </main>
+      <main>
+        {% block main %}
+        {% endblock %}
+      </main>
     {% endblock %}
   </body>
 </html>

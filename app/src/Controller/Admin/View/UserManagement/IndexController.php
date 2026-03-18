@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin\View\UserManagement;
 
+use App\Component\Routing\Attributes\Seo;
 use App\Enum\Role;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +17,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class IndexController extends AbstractController
 {
     #[Route(path: '/admin/users/', name: 'admin_users')]
+    #[Seo('seo.title.page.users', canonicalUrl: false)]
     public function index(Request $request): Response
     {
         return $this->render(

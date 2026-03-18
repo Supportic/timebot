@@ -34,14 +34,3 @@ ui:
     label: 'Entries per page'
     all: 'All'
   subset_entries: '%paginationStart% - %paginationEnd% of %totalAmount%'
-
-seo:
-  title_portal: 'Timebot'
-  title_page:
-    default: 'Welcome!'
-    dashboard: 'Dashboard'
-    login: 'Login'
-    users: 'Users'
-    settings: 'Settings'
-    profile: 'Profile'
-    importer: 'Importer'

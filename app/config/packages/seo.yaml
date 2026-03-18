@@ -1,0 +1,3 @@
+parameters:
+  app.seo.title.portal: 'Timebot'
+  app.seo.title.separator: '-'

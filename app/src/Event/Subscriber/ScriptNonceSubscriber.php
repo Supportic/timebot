@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EventSubscriber;
+namespace App\Event\Subscriber;
 
 use Pentatrion\ViteBundle\Event\RenderAssetTagEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -9,6 +9,14 @@ use Symfony\Component\DependencyInjection\Attribute\Exclude;
 #[Exclude]
 final class ScriptNonceSubscriber implements EventSubscriberInterface
 {
+
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            RenderAssetTagEvent::class => 'onRenderAssetTag',
+        ];
+    }
+
     public function onRenderAssetTag(RenderAssetTagEvent $event): void
     {
         $tag = $event->getTag();
@@ -22,12 +30,5 @@ final class ScriptNonceSubscriber implements EventSubscriberInterface
 
         // set additional HTML attributes on scrip element
         // $tag->setAttribute('foo', 'bar-modified');
-    }
-
-    public static function getSubscribedEvents(): array
-    {
-        return [
-            RenderAssetTagEvent::class => 'onRenderAssetTag',
-        ];
     }
 }
