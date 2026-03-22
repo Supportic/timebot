@@ -69,7 +69,8 @@
         "sleistner.vscode-fileutils",
         "zyrong.node-modules",
         "codeandstuff.package-json-upgrade",
-        "DEVSENSE.composer-php-vscode"
+        "DEVSENSE.composer-php-vscode",
+        "AndresCevallos.vscode-symfonykd-devkit"
       ],
       "settings": {
         "php.validate.executablePath": "/usr/local/bin/php",
