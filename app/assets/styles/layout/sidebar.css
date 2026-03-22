@@ -1,24 +1,52 @@
-#sidebar {
-  @apply absolute md:static transition-transform md:transition-none;
+/*
+1. make sidebar element span across whole page
+2. that way the overlay is also as big as the parent element
+3. make only the nav slide
+*/
 
-  /* SIDEBAR OPEN */
-  &[data-sidebar-open='false'] {
-    @apply -translate-x-100 md:translate-x-0;
-  }
-  &[data-sidebar-open='true'] {
-    @apply translate-x-0 md:translate-x-0;
+.sidebar {
+  @apply z-2 fixed inset-0 pointer-events-none;
+  @apply md:static md:inset-auto md:pointer-events-auto md:h-dvh;
+
+  .sidebar__overlay {
+    @apply fixed inset-0 bg-gray-900/50 backdrop-blur-sm opacity-0 pointer-events-none md:hidden;
+    /* enable transitions */
+    @apply transition-opacity duration-300 md:transition-none;
   }
 
-  /* SIDEBAR EXPANDED */
+  .sidebar__nav {
+    @apply z-1 w-fit flex flex-col bg-white border-r shadow h-full pointer-events-auto;
+    @apply -translate-x-full md:translate-x-0;
+    /* enable transitions */
+    @apply transition-transform duration-300 ease-in-out md:transition-none;
+  }
+
+  &[data-sidebar-visible-mobile='true'] {
+    @apply pointer-events-auto;
+
+    .sidebar__overlay {
+      @apply opacity-100 pointer-events-auto;
+    }
+
+    .sidebar__nav {
+      @apply translate-x-0;
+    }
+
+    .sidebar__toggle-wrapper {
+      @apply mx-auto;
+    }
+  }
+
+  /* WHEN SIDEBAR EXPANDED OR MOBILE OPEN */
   &[data-sidebar-expanded='true'],
-  &[data-sidebar-open='true']  {
+  &[data-sidebar-visible-mobile='true'] {
     #sidebar-app-name {
       @apply w-32;
     }
 
     /* move icon to the right */
-    #sidebar-app-name + div {
-      @apply mr-0;
+    .sidebar__toggle-wrapper {
+      @apply justify-end;
     }
 
     #sidebar-user-profile,
@@ -33,9 +61,13 @@
     #sidebar-toggle-icon-right {
       @apply hidden;
     }
+  }
 
-    .sidebar-tooltip {
-      @apply hidden;
+  /* align icons when scrollbar visible */
+  &[data-sidebar-expanded='false'] {
+    .navbar__header,
+    .sidebar__list {
+      @apply gutter-stable;
     }
   }
 

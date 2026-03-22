@@ -37,7 +37,12 @@
       {{ vite_entry_script_tags('global') }}
     {% endblock %}
   </head>
-  <body {{ stimulus_controller('app') }} class="scroll-pt-[60px] antialiased overflow-y-hidden">
+  <body
+    id="top"
+    {{ stimulus_controller('app') }}
+    data-app-sidebar-visible-mobile-value="false"
+    class="scroll-pt-[60px] antialiased overflow-y-hidden"
+  >
     {% block body %}
       <main>
         {% block main %}

@@ -64,7 +64,7 @@ watch-assets:
 
 version-bump-minor:
 	$(SYMFONY) console app:version:bump --minor 1
-version-bump-path:
+version-bump-patch:
 	$(SYMFONY) console app:version:bump --patch 1
 
 recreate-db:

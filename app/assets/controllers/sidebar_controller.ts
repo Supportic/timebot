@@ -1,3 +1,5 @@
+import App from '@/controllers/app_controller';
+import SidebarTooltip from '@/controllers/sidebar_tooltip_controller';
 import { Controller } from '@hotwired/stimulus';
 import { getComponent, Component } from '@symfony/ux-live-component';
 
@@ -11,8 +13,8 @@ import { getComponent, Component } from '@symfony/ux-live-component';
 // import.meta.stimulusEnabled = false;
 // import.meta.stimulusIdentifier = 'sidebar';
 
-export default class extends Controller {
-  private component!: Component;
+export default class Sidebar extends Controller {
+  private component: Component | null = null;
   private resizeObserver: ResizeObserver | null = null;
   private resizeTimeout: number | null = null;
 
@@ -31,7 +33,9 @@ export default class extends Controller {
   declare readonly hasIsExpandedValue: Boolean;
   declare isExpandedValue: boolean;
 
-  static outlets = [];
+  static outlets = ['app'];
+
+  declare appOutlet: App;
 
   // stimulus initialize lifecycle method
   public async initialize() {
@@ -51,23 +55,28 @@ export default class extends Controller {
 
   public async toggleSidebarSize() {
     this.isExpandedValue = !this.isExpandedValue;
+  }
+
+  public expandSidebar = (): void => {
+    this.isExpandedValue = true;
+  };
+
+  public minimizeSidebar = (): void => {
+    this.isExpandedValue = false;
+  };
+
+  public isExpandedValueChanged = async (value: boolean): Promise<void> => {
     // improve feeling and change state without request
     this.element.setAttribute(
       'data-sidebar-expanded',
-      this.isExpandedValue ? 'true' : 'false',
+      value ? 'true' : 'false',
     );
-    this.component.action('saveSidebarStateInSession', {
-      isExpanded: this.isExpandedValue,
-    });
-  }
 
-  private minimizeSidebar = (): void => {
-    this.isExpandedValue = false;
-    // improve feeling and change state without request
-    this.element.setAttribute('data-sidebar-expanded', 'false');
-    this.component.action('saveSidebarStateInSession', {
-      isExpanded: false,
-    });
+    if (this.component instanceof Component) {
+      this.component.action('saveSidebarStateInSession', {
+        isExpanded: value,
+      });
+    }
   };
 
   // Minimize sidebar when window resizes below desktop threshold and above mobile threshold
