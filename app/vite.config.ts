@@ -131,7 +131,6 @@ export default defineConfig((config: UserConfig): UserConfig => {
       rollupOptions: {
         input: {
           login_style: './assets/styles/pages/login.css',
-          login: './assets/scripts/pages/login.ts',
 
           // vue: './assets/entrypoints/vue.ts',
 

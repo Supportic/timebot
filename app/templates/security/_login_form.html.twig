@@ -12,13 +12,14 @@
   </div>
 
   <label for="password" class="text-gray-900 text-sm mb-2 block">{{ 'login.form_field.password.label'|trans }}</label>
-  <div class="relative flex items-center">
-    <input id="password" for="password" name="_password" type="password" autocomplete="current-password" required class="w-full text-gray-900 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600" placeholder="{{ 'login.form_field.password.placeholder'|trans }}" />
 
-    <button id="revealPasswordButton" class="text-[#bbb] hover:text-slate-500 pointer-events-auto focus:outline-blue-500 absolute right-3" type="button" title="{{ 'reveal_password_button.title_reveal'|trans }}">
-      {{ ux_icon('mdi:eye', { 'id': 'revealPasswordButtonIconOff', 'font-size': '1.2rem' }) }}
-      {{ ux_icon('mdi:eye-off', { 'id': 'revealPasswordButtonIconOn', 'font-size': '1.2rem', class: 'hidden text-slate-500' }) }}
-      <span id="revealPasswordButtonTitle" class="sr-only">{{ 'login.form_field.reveal_password_button.title_reveal'|trans }}</span>
+  <div {{ stimulus_controller('reveal-password-input') }} data-reveal-password-input-hidden-class="hidden" class="relative flex items-center">
+    <input {{ stimulus_target('reveal-password-input', 'input') }} id="password" for="password" name="_password" type="password" autocomplete="current-password" spellcheck="false" required class="w-full text-gray-900 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600" placeholder="{{ 'login.form_field.password.placeholder'|trans }}" />
+
+    <button {{ stimulus_target('reveal-password-input', 'button') }} {{ stimulus_action('reveal-password-input', 'togglePassword') }} class="text-[#bbb] hover:text-slate-500 pointer-events-auto focus:outline-blue-500 absolute right-3" type="button" title="{{ 'login.form_field.reveal_password_button.title_reveal'|trans }}">
+      {{ ux_icon('mdi:eye', { 'font-size': '1.2rem', 'data-reveal-password-input-target': 'icon' }) }}
+      {{ ux_icon('mdi:eye-off', { 'font-size': '1.2rem', class: 'hidden text-slate-500', 'data-reveal-password-input-target': 'icon' }) }}
+      <span {{ stimulus_target('reveal-password-input', 'buttonLabel') }} class="sr-only">{{ 'login.form_field.reveal_password_button.title_reveal'|trans }}</span>
     </button>
   </div>
 
@@ -33,7 +34,7 @@
     </div> #}
   </div>
 
-  <input type="hidden" name="_csrf_token" {{stimulus_controller('csrf-protection')}} value="{{ csrf_token('authenticate') }}" />
+  <input type="hidden" name="_csrf_token" {{ stimulus_controller('csrf-protection') }} value="{{ csrf_token('authenticate') }}" />
 
   {# <input type="hidden" name="_target_path" value="{{ path('admin_dashboard') }}"> #}
 

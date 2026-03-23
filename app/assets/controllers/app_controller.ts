@@ -41,9 +41,11 @@ export default class App extends Controller {
   }
 
   sidebarVisibleMobileValueChanged(value: boolean, _: boolean): void {
-    this.sidebarTarget.setAttribute(
-      'data-sidebar-visible-mobile',
-      value ? 'true' : 'false',
-    );
+    if (this.hasSidebarTarget) {
+      this.sidebarTarget.setAttribute(
+        'data-sidebar-visible-mobile',
+        value ? 'true' : 'false',
+      );
+    }
   }
 }
