@@ -70,7 +70,8 @@
         "zyrong.node-modules",
         "codeandstuff.package-json-upgrade",
         "DEVSENSE.composer-php-vscode",
-        "AndresCevallos.vscode-symfonykd-devkit"
+        "AndresCevallos.vscode-symfonykd-devkit",
+        "marcoroth.stimulus-lsp"
       ],
       "settings": {
         "php.validate.executablePath": "/usr/local/bin/php",

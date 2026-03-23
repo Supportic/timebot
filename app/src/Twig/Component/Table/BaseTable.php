@@ -37,6 +37,26 @@ abstract class BaseTable
      */
     protected abstract function getRepository(): ServiceEntityRepository;
 
+    /**
+     * Define searchable fields for this table.
+     * Return an array of field names that should be searched when a query is provided.
+     * @example ['username', 'email', 'firstName', 'lastName']
+     *
+     * @return string[]
+     */
+    protected abstract function getSearchableFields(): array;
+
+    /**
+     * Override this in child classes to define which fields can be sorted.
+     * Use key-value pairs to map a frontend name to a backend Doctrine property.
+     * @example ['id', 'username', 'role' => 'roles']
+     *
+     * @return array<int|string, string>
+     */
+    protected function getSortableFields(): array
+    {
+        return [];
+    }
 
     /**
      * Adding null will display all available entries. (warning: performance)
@@ -44,15 +64,6 @@ abstract class BaseTable
      */
     #[LiveProp]
     public array $maxEntriesSelectionChoices = [10, 25, 50, 75, 100];
-
-    /**
-     * Define searchable fields for this table.
-     * Return an array of field names that should be searched when a query is provided.
-     * Example: ['username', 'email', 'firstName', 'lastName']
-     *
-     * @return string[]
-     */
-    protected abstract function getSearchableFields(): array;
 
     #[LiveProp(writable: true)]
     public ?int $maxEntries = 10;
@@ -114,6 +125,17 @@ abstract class BaseTable
     #[LiveProp(writable: true, url: new UrlMapping(as: self::DEFAULT_SEARCH_QUERY_ALIAS), onUpdated: 'onQueryUpdated')]
     public ?string $query = null;
 
+    // ##############################
+    // Sorting
+    // ##############################
+
+    #[LiveProp(writable: true, url: new UrlMapping(as: 'sort'))]
+    public ?string $sortField = null;
+
+    #[LiveProp(writable: true, url: new UrlMapping(as: 'sortOrder'))]
+    #[Assert\Choice(['ASC', 'DESC'])]
+    public string $sortOrder = 'ASC';
+
     // include params only when you want to validate them, simple setter not needed
     public function mount(
         bool $paginationEnabled = true,
@@ -159,7 +181,11 @@ abstract class BaseTable
             return $this->getSearchResults($this->maxEntries);
         }
 
-        return $this->getRepository()->findBy([], ['id' => 'ASC'], $this->maxEntries);
+        return $this->getRepository()->findBy(
+            [],
+            $this->getSortCriteria(),
+            $this->maxEntries
+        );
     }
 
     /**
@@ -218,7 +244,12 @@ abstract class BaseTable
             return $this->getSearchResults($limit, $offset);
         }
 
-        return $this->getRepository()->findBy([], ['id' => 'ASC'], $limit, $offset);
+        return $this->getRepository()->findBy(
+            [],
+            $this->getSortCriteria(),
+            $limit,
+            $offset
+        );
     }
 
     public function showPagination(): bool
@@ -348,7 +379,9 @@ abstract class BaseTable
     {
         $qb = $this->buildSearchQueryBuilder();
 
-        $qb->orderBy('entity.id', 'ASC');
+        foreach ($this->getSortCriteria() as $field => $order) {
+            $qb->addOrderBy('entity.' . $field, $order);
+        }
 
         if ($offset !== null) {
             $qb->setFirstResult($offset);
@@ -377,5 +410,66 @@ abstract class BaseTable
     public function exceedsPaginationDisplayLimit(): bool
     {
         return $this->getPaginationTotalPages() > 100;
+    }
+
+    /**
+     * Normalizes the sortable fields array so we always have [frontend_name => backend_property]
+     * @return array<string, string>
+     */
+    protected function getNormalizedSortableFields(): array
+    {
+        $normalized = [];
+        foreach ($this->getSortableFields() as $key => $value) {
+            if (is_int($key)) {
+                // e.g., 'username' => 'username'
+                $normalized[$value] = $value;
+            } else {
+                // e.g., 'role' => 'roles'
+                $normalized[$key] = $value;
+            }
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * Returns the array structure expected by Doctrine's ->findBy() or QueryBuilder
+     */
+    protected function getSortCriteria(): array
+    {
+        $fields = $this->getNormalizedSortableFields();
+
+        // Check against the frontend alias, but return the mapped backend property
+        if ($this->sortField && array_key_exists($this->sortField, $fields)) {
+            return [$fields[$this->sortField] => $this->sortOrder];
+        }
+
+        return ['id' => 'ASC']; // Fallback default sorting
+    }
+
+    #[LiveAction]
+    public function sortBy(#[LiveArg] string $field): void
+    {
+        // Check if the requested field exists in our normalized keys
+        if (!array_key_exists($field, $this->getNormalizedSortableFields())) {
+            return;
+        }
+
+        if ($this->sortField === $field) {
+            // Toggle direction or remove sort on the third click
+            if ($this->sortOrder === 'ASC') {
+                $this->sortOrder = 'DESC';
+            } else {
+                $this->sortField = null;
+                $this->sortOrder = 'ASC';
+            }
+        } else {
+            // Sort by a new field
+            $this->sortField = $field;
+            $this->sortOrder = 'ASC';
+        }
+
+        // Always return to page 1 when the user changes sorting
+        $this->paginationPage = 1;
     }
 }
