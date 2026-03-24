@@ -1,7 +1,7 @@
 {% extends 'components/Table/BaseTable.html.twig' %}
 {% trans_default_domain 'user_management' %}
 
-{% set table_head_classes = 'p-3 border-r border-slate-200 bg-slate-50 text-left font-semibold text-slate-900' %}
+{% set table_head_classes = 'border-r border-slate-200 bg-slate-50 text-left font-semibold text-slate-900' %}
 {% set table_row_classes = 'hover:bg-slate-50 transition-colors h-[53px]' %}
 {% set table_data_classes = 'p-3 border border-slate-200' %}
 {% set table_action_link_classes = 'inline-flex items-center justify-center rounded-md bg-white p-1.5 text-slate-500 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50' %}
@@ -9,42 +9,36 @@
 {% block table_head %}
 <tr>
   <th scope="col" class="{{ table_head_classes }}">
-    <div class="flex items-center justify-between">
-      <span class="mr-auto">ID</span>
-      <button type="button" class="hover:text-indigo-600 transition-colors" {{ live_action('sortBy', {field: 'id'}) }}>
+      <button type="button" class="p-3 flex items-center justify-between w-full hover:text-indigo-600 transition-colors" {{ live_action('sortBy', {field: 'id'}) }}>
+        <span class="mr-auto">ID</span>
         {% if this.sortField == 'id' %}
           {{ ux_icon(this.sortOrder == 'ASC' ? 'lucide:arrow-up-1-0' : 'lucide:arrow-down-0-1', {class: 'h-4 w-4 text-indigo-600'}) }}
         {% else %}
           {{ ux_icon('lucide:arrow-up-down', {class: 'h-4 w-4 text-slate-300'}) }}
         {% endif %}
       </button>
-    </div>
   </th>
   <th scope="col" class="{{ table_head_classes }}">
-    <div class="flex items-center justify-between">
+    <button type="button" class="p-3 flex items-center justify-between w-full hover:text-indigo-600 transition-colors" {{ live_action('sortBy', {field: 'username'}) }}>
       <span>{{ 'users.table.head.username'|trans }}</span>
-      <button type="button" class="hover:text-indigo-600 transition-colors" {{ live_action('sortBy', {field: 'username'}) }}>
-        {% if this.sortField == 'username' %}
-          {{ ux_icon(this.sortOrder == 'ASC' ? 'lucide:arrow-up-a-z' : 'lucide:arrow-down-z-a', {class: 'h-4 w-4 text-indigo-600'}) }}
-        {% else %}
-          {{ ux_icon('lucide:arrow-up-down', {class: 'h-4 w-4 text-slate-300'}) }}
-        {% endif %}
-      </button>
-    </div>
+      {% if this.sortField == 'username' %}
+        {{ ux_icon(this.sortOrder == 'ASC' ? 'lucide:arrow-up-a-z' : 'lucide:arrow-down-z-a', {class: 'h-4 w-4 text-indigo-600'}) }}
+      {% else %}
+        {{ ux_icon('lucide:arrow-up-down', {class: 'h-4 w-4 text-slate-300'}) }}
+      {% endif %}
+    </button>
   </th>
   <th scope="col" class="{{ table_head_classes }}">
-    <div class="flex items-center justify-between">
+    <button type="button" class="p-3 flex items-center justify-between w-full hover:text-indigo-600 transition-colors" {{ live_action('sortBy', {field: 'role'}) }}>
       <span>{{ 'users.table.head.role'|trans }}</span>
-      <button type="button" class="hover:text-indigo-600 transition-colors" {{ live_action('sortBy', {field: 'role'}) }}>
-        {% if this.sortField == 'role' %}
-          {{ ux_icon(this.sortOrder == 'ASC' ? 'lucide:arrow-up-a-z' : 'lucide:arrow-down-z-a', {class: 'h-4 w-4 text-indigo-600'}) }}
-        {% else %}
-          {{ ux_icon('lucide:arrow-up-down', {class: 'h-4 w-4 text-slate-300'}) }}
-        {% endif %}
-      </button>
-    </div>
+      {% if this.sortField == 'role' %}
+        {{ ux_icon(this.sortOrder == 'ASC' ? 'lucide:arrow-up-a-z' : 'lucide:arrow-down-z-a', {class: 'h-4 w-4 text-indigo-600'}) }}
+      {% else %}
+        {{ ux_icon('lucide:arrow-up-down', {class: 'h-4 w-4 text-slate-300'}) }}
+      {% endif %}
+    </button>
   </th>
-  <th scope="col" class="{{ table_head_classes }}"><span>{{ 'users.table.head.actions'|trans }}</span></th>
+  <th scope="col" class="{{ table_head_classes }} p-3"><span>{{ 'users.table.head.actions'|trans }}</span></th>
 </tr>
 {% endblock %}
 
