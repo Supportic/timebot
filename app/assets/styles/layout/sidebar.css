@@ -21,6 +21,13 @@
     @apply transition-transform duration-300 ease-in-out md:transition-none;
   }
 
+  #sidebar-app-name,
+  .sidebar__toggle-wrapper,
+  .nav-link span,
+  #sidebar-user-profile {
+    @apply duration-200;
+  }
+
   &[data-sidebar-visible-mobile='true'] {
     @apply pointer-events-auto;
 
