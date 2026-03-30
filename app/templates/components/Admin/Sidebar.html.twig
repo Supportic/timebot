@@ -48,10 +48,10 @@
 >
   <div class="sidebar__overlay" {{ stimulus_action('app', 'toggleSidebarMobile', 'click') }}></div>
   <nav class="sidebar__nav" {{ stimulus_target('sidebar', 'sidebarNav') }}>
-    <div class="navbar__header h-[60px] flex items-center px-4 overflow-hidden">
+    <div class="navbar__header h-[60px] flex items-center px-4 overflow-hidden justify-between">
       <span id="sidebar-app-name" class="w-0 text-xl overflow-hidden transition-all">{{ 'app.name'|trans(domain = 'app') }}</span>
 
-      <div class="sidebar__toggle-wrapper flex flex-1">
+      <div class="sidebar__toggle-wrapper">
         <button id="sidebar-toggle"
           {{stimulus_action('sidebar', 'toggleSidebarSize')}}
           class="hidden md:block p-1.5 rounded-lg shadow bg-gray-50 hover:bg-gray-100"
