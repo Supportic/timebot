@@ -1,10 +1,6 @@
 {% trans_default_domain 'login' %}
 {% extends 'base.html.twig' %}
 
-{%- block title_page -%}
-  {{ 'seo.title.page.login'|trans(domain: 'seo') }}
-{%- endblock -%}
-
 {% block stylesheets %}
   {{ parent() }}
   {{ vite_entry_link_tags('login_style') }}

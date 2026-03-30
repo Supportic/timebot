@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Frontend;
 
+use App\Component\Routing\Attributes\Seo;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +19,7 @@ class SecurityController extends AbstractController
     use TargetPathTrait;
 
     #[Route(path: '/login', name: 'app_login')]
+    #[Seo('seo.title.page.login', canonicalUrl: false)]
     public function login(
         #[CurrentUser] ?User $user,
         Request $request,
