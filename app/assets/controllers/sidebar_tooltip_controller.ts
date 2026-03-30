@@ -81,7 +81,7 @@ export default class SidebarTooltip extends Controller {
       // travel path to avoid early closing of tooltip
       this.tooltip.style.setProperty(
         '--bridge-width',
-        `${this.labelGapPxValue + 5}px`,
+        `${this.labelGapPxValue}px`,
       );
 
       requestAnimationFrame(() => {
@@ -94,10 +94,10 @@ export default class SidebarTooltip extends Controller {
   public hide = (): void => {
     this.hideTimeoutId = setTimeout(() => {
       if (this.tooltip) {
-        // 1. Isolate the dying tooltip
+        // Isolate the dying tooltip
         const expiringTooltip = this.tooltip;
 
-        // 2. Remove listeners so hovering a fading tooltip doesn't trigger anything
+        // Remove listeners so hovering a fading tooltip doesn't trigger anything
         if (this.stayOnHoverValue) {
           expiringTooltip.removeEventListener(
             'mouseenter',
@@ -109,17 +109,16 @@ export default class SidebarTooltip extends Controller {
           );
         }
 
-        // 3. Decouple it from the controller so a fresh one can be made if needed
+        // Decouple it from the controller so a fresh one can be made if needed
         this.tooltip = null;
 
-        // 4. Push to the stack
+        // Push to the stack
         this.fadingTooltips.push(expiringTooltip);
 
-        // 5. Trigger the fade out animation
         expiringTooltip.classList.remove(...this.TOOLTIP_VISIBLE_CLASSES);
         expiringTooltip.classList.add(...this.TOOLTIP_INVISIBLE_CLASSES);
 
-        // 6. Remove from DOM and stack after transition finishes (matching duration-200)
+        // Remove from DOM and stack after transition finishes (matching duration-200)
         setTimeout(() => {
           expiringTooltip.remove();
           this.fadingTooltips = this.fadingTooltips.filter(
@@ -134,7 +133,7 @@ export default class SidebarTooltip extends Controller {
     this.tooltip = document.createElement('div');
     this.tooltip.className = `
         ${this.TOOLTIP_STYLE}
-        absolute z-2 whitespace-nowrap transition-all duration-200 opacity-0 invisible -translate-x-3
+        absolute z-1 whitespace-nowrap transition-all duration-200 opacity-0 invisible -translate-x-3
         before:content-[''] before:absolute before:top-0 before:h-full
         before:w-[var(--bridge-width)] before:-left-[var(--bridge-width)]
     `
@@ -148,8 +147,8 @@ export default class SidebarTooltip extends Controller {
       this.tooltip.addEventListener('mouseleave', this.onTooltipLeave);
     }
 
-    document.body.appendChild(this.tooltip);
-  }
+    this.sidebarOutlet.sidebarNavTarget.appendChild(this.tooltip);
+  };
 
   private destroyTooltip = (): void => {
     if (this.tooltip) {
@@ -161,7 +160,7 @@ export default class SidebarTooltip extends Controller {
       this.tooltip = null;
     }
     clearTimeout(this.hideTimeoutId);
-  }
+  };
 
   public onTooltipEnter = (): void => {
     clearTimeout(this.hideTimeoutId);

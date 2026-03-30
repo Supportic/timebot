@@ -1,5 +1,4 @@
 import App from '@/controllers/app_controller';
-import SidebarTooltip from '@/controllers/sidebar_tooltip_controller';
 import { Controller } from '@hotwired/stimulus';
 import { getComponent, Component } from '@symfony/ux-live-component';
 
@@ -18,11 +17,15 @@ export default class Sidebar extends Controller {
   private resizeObserver: ResizeObserver | null = null;
   private resizeTimeout: number | null = null;
 
-  static targets: string[] = ['profileMenu'];
+  static targets: string[] = ['profileMenu', 'sidebarNav'];
 
   declare readonly hasProfileMenuTarget: boolean;
   declare readonly profileMenuTarget: HTMLElement;
   // declare readonly profileMenuTargets: HTMLElement[];
+
+  // necessary for tooltips
+  declare readonly hasSidebarNavTarget: boolean;
+  declare readonly sidebarNavTarget: HTMLElement;
 
   static values = {
     isExpanded: Boolean,
