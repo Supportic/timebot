@@ -38,6 +38,7 @@ FROM base AS develop
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 # order important - creates docker-php-ext-xdebug.ini
+# the docker-php-ext-xdebug.ini only sets 'zend_extension=xdebug.so' to enable xdebug, but we do this in xdebug.ini
 RUN install-php-extensions xdebug && rm "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"
 COPY xdebug.ini $PHP_INI_DIR/conf.d/xdebug.ini
 

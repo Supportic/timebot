@@ -10,14 +10,13 @@ Resolve imports for typescript language server: `tsconfig.json`
 ```json
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["assets/*"],
-      "@components/*": ["assets/vue/components/*"],
-      "types/*": ["assets/scripts/types/*"],
-      "interfaces/*": ["assets/scripts/interfaces/*"]
-      // "@assets/*": ["assets/vue/assets/*"],
-      // "@store/*": ["assets/vue/store/*"]
+      "@/*": ["./assets/*"],
+      "@components/*": ["./assets/vue/components/*"],
+      "types/*": ["./assets/scripts/types/*"],
+      "interfaces/*": ["./assets/scripts/interfaces/*"]
+      // "@assets/*": ["./assets/vue/assets/*"],
+      // "@store/*": ["./assets/vue/store/*"]
     }
   },
   "include": [
@@ -41,14 +40,14 @@ If you want to resolve Vue files, add `"allowJs": true`, in your tsconfig compil
 export default defineConfig({
   resolve: {
     alias: {
-      "@": fileURLToPath(new URL("./assets", import.meta.url)),
-      "@components": pathResolve("./assets/vue/components"),
-      "@styles": pathResolve("./assets/styles"),
-      "@fonts": pathResolve("./assets/fonts"),
-      types: pathResolve("./assets/scripts/types"),
-      interfaces: pathResolve("./assets/scripts/interfaces"),
+      '@': fileURLToPath(new URL('./assets', import.meta.url)),
+      '@components': pathResolve('./assets/vue/components'),
+      '@styles': pathResolve('./assets/styles'),
+      '@fonts': pathResolve('./assets/fonts'),
+      types: pathResolve('./assets/scripts/types'),
+      interfaces: pathResolve('./assets/scripts/interfaces'),
     },
-    extensions: [".js", ".json", ".jsx", ".mjs", ".ts", ".tsx", ".vue"],
+    extensions: ['.js', '.json', '.jsx', '.mjs', '.ts', '.tsx', '.vue'],
   },
 });
 ```

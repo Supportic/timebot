@@ -143,9 +143,12 @@ export default defineConfig((config: UserConfig): UserConfig => {
           entryFileNames: `assets/[name].[hash:8].js`,
           chunkFileNames: `assets/[name].[hash:8].js`,
           assetFileNames: `assets/[name].[hash:8].[ext]`,
-          compact: true,
-          manualChunks: {
-            vue: ['vue', 'pinia'],
+          manualChunks(id: string) {
+            if (id.includes('node_modules')) {
+              if (id.includes('vue') || id.includes('pinia')) {
+                return 'vue';
+              }
+            }
           },
           // manualChunks: (id: string) => {
           //   if (id.includes('node_modules')) {

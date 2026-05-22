@@ -43,7 +43,6 @@
         "nadim-vscode.symfony-code-snippets",
         "bmewburn.vscode-intelephense-client",
         "xdebug.php-debug",
-        "zobo.php-intellisense",
         "junstyle.twig-language",
         "esbenp.prettier-vscode",
         "stylelint.vscode-stylelint",
@@ -71,7 +70,10 @@
         "codeandstuff.package-json-upgrade",
         "DEVSENSE.composer-php-vscode",
         "AndresCevallos.vscode-symfonykd-devkit",
-        "marcoroth.stimulus-lsp"
+        "marcoroth.stimulus-lsp",
+        "redhat.vscode-xml",
+        "DotJoshJohnson.xml",
+        "redhat.vscode-yaml"
       ],
       "settings": {
         "php.validate.executablePath": "/usr/local/bin/php",
