@@ -1,5 +1,15 @@
 # Timebot
 
+## Install
+
+Create `.env.local` file:
+
+```bash
+DATABASE_URL="mysql://admin:admin@db:3306/timebot?serverVersion=12.2.2-MariaDB&charset=utf8mb4"
+APP_SECRET=ChangeMe
+MAILER_DSN=smtp://mailpit:1025
+```
+
 ## 3rd Party Packages
 
 Holidays: https://www.yasumi.dev/docs/getting-started/  

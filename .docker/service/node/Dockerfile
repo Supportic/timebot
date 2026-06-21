@@ -28,17 +28,13 @@ RUN set -ex \
 ENV NPM_CONFIG_PREFIX="/home/${UNAME}/.npm-global"
 ENV PATH="${PATH}:${NPM_CONFIG_PREFIX}/bin"
 
-# yarn
-RUN corepack enable \
-  && corepack prepare yarn@stable --activate
-
 USER ${UNAME}
 
 # shell alias
 RUN printf "PS1='\u@\h:\w\$ '" >> "${HOME}/.bashrc" \
   && printf "\nalias ll=\"ls -la\"" >> "${HOME}/.bashrc"
 
-RUN npm install -g npm@latest @types/node
+RUN npm install -g npm@latest @types/node yarn pnpm
 
 # remove default binary from node image to use the custom global npm binary
 
